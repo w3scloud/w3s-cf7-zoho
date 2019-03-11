@@ -67,8 +67,8 @@ class W3s_Cf7_Zoho {
 	 * @since    1.0.0
 	 */
 	public function __construct() {
-		if ( defined( 'PLUGIN_NAME_VERSION' ) ) {
-			$this->version = PLUGIN_NAME_VERSION;
+		if ( defined( 'W3S_CF7_ZOHO_VERSION' ) ) {
+			$this->version = W3S_CF7_ZOHO_VERSION;
 		} else {
 			$this->version = '1.0.0';
 		}
@@ -86,6 +86,7 @@ class W3s_Cf7_Zoho {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
+	 * - TitanFrameworkEmbedder. 
 	 * - W3s_Cf7_Zoho_Loader. Orchestrates the hooks of the plugin.
 	 * - W3s_Cf7_Zoho_i18n. Defines internationalization functionality.
 	 * - W3s_Cf7_Zoho_Admin. Defines all hooks for the admin area.
@@ -98,6 +99,12 @@ class W3s_Cf7_Zoho {
 	 * @access   private
 	 */
 	private function load_dependencies() {
+
+		/**
+		 * The class responsible for loading Titan framework to the
+		 * core plugin.
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/titan-framework/titan-framework-embedder.php';
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the

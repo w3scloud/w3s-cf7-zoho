@@ -52,6 +52,10 @@ class W3s_Cf7_Zoho_Admin {
 		$this->plugin_name = $plugin_name;
 		$this->version = $version;
 
+
+		// titan framework options
+		add_action( 'tf_create_options', array( $this, 'admin_options' ) );
+
 	}
 
 	/**
@@ -99,5 +103,50 @@ class W3s_Cf7_Zoho_Admin {
 		wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/w3s-cf7-zoho-admin.js', array( 'jquery' ), $this->version, false );
 
 	}
+
+
+	/**
+	 * Register the options for the admin area.
+	 *
+	 * @since    1.0.0
+	 */
+	public function admin_options(){
+		
+		// get instance of w3s-cf7-zoho
+		$titan = TitanFramework::getInstance( 'w3s-cf7-zoho' );
+
+		// create the admin panel
+		$panel = $titan->createAdminPanel( array(
+			'name' => 'Zoho with CF7',
+			'desc' => 'Zoho Leads with Contact Form 7 Integration form.',
+			'id' => 'w3s-cf7-zoho',
+			'icon' => 'dashicons-vault',
+			'position' => 58,
+		));
+
+		// Create Authentication Tab
+		$authTab = $panel->createTab( array(
+			'name' => 'Authentication',
+		));
+
+		// options for auth tab
+
+		$authTab->createOption( array(
+			'name' => 'Zoho Region',
+			'id' => 'zoho_region',
+			'type' => 'select',
+			'desc' => 'Select the zoho regional datacenter zone.',
+			'options' => array(
+				'com' => 'Global/US',
+				'eu' => 'Europe',
+				'cn' => 'China',
+				'in' => 'India',
+			),
+			'default' => 'com',
+		));
+
+
+	}
+
 
 }
