@@ -145,6 +145,67 @@ class W3s_Cf7_Zoho_Admin {
 			'default' => 'com',
 		));
 
+        $authTab->createOption( array(
+			'name' => 'Zoho Client ID',
+			'id' => 'zoho_client_id',
+			'type' => 'text',
+			'desc' => 'Your Zoho App Client ID. To Generate, Please follow <a href="https://www.zoho.com/crm/help/developer/api/register-client.html" target="_blank">this instructions.</a>',
+			'is_password' => false,
+		));
+
+        $authTab->createOption( array(
+			'name' => 'Zoho Client Secret',
+			'id' => 'zoho_client_secret',
+			'type' => 'text',
+			'desc' => 'Your Zoho App Client Secret. To Generate, Please follow <a href="https://www.zoho.com/crm/help/developer/api/register-client.html" target="_blank">this instructions.</a>',
+			'is_password' => true,
+		));
+
+        $authTab->createOption( array(
+            'name' => 'Zoho Grant Token',
+            'id' => 'zoho_grant_token',
+            'type' => 'text',
+            'desc' => 'Your Zoho App Self Client Grant Token. To Generate, Please follow <a href="https://www.zoho.com/crm/help/developer/api/auth-request.html#plink2" target="_blank">this instructions.</a><br>Use <code>ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,aaaserver.profile.READ</code> as Scope.',
+            'is_password' => true,
+        ));
+
+        $authTab->createOption( array(
+            'name' => 'Zoho User Email',
+            'id' => 'zoho_user_email',
+            'type' => 'text',
+            'desc' => 'Your Zoho login email address',
+            'is_password' => false,
+        ));
+
+        $authTab->createOption( array(
+            'type' => 'save',
+            'save' => 'Save ',
+            'use_reset' =>  false,
+        ));
+
+
+
+        // Create Integration Tab
+        $intTab = $panel->createTab( array(
+            'name' => 'Integration',
+        ));
+
+        $intTab->createOption( array(
+            'name' => 'Select Contact form',
+            'id' => 'cf7_form',
+            'type' => 'select-posts',
+            'desc' => 'Select Contact Form',
+            'post_type' => 'wpcf7_contact_form',
+        ));
+
+
+
+        // save options
+        $intTab->createOption( array(
+            'type' => 'save',
+            'save' => 'Save Options',
+            'use_reset' =>  false,
+        ));
 
 	}
 
