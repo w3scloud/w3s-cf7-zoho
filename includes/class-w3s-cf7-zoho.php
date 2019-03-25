@@ -129,7 +129,14 @@ class W3s_Cf7_Zoho {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-w3s-cf7-zoho-public.php';
 
-		$this->loader = new W3s_Cf7_Zoho_Loader();
+        /**
+         * This class include the Zoho related functionality
+         */
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-w3s-cf7-zoho-conn.php';
+
+
+
+        $this->loader = new W3s_Cf7_Zoho_Loader();
 
 	}
 

@@ -110,79 +110,98 @@ class W3s_Cf7_Zoho_Admin {
 	 *
 	 * @since    1.0.0
 	 */
-	public function admin_options(){
-		
-		// get instance of w3s-cf7-zoho
-		$titan = TitanFramework::getInstance( 'w3s-cf7-zoho' );
+	public function admin_options()
+    {
 
-		// create the admin panel
-		$panel = $titan->createAdminPanel( array(
-			'name' => 'Zoho with CF7',
-			'desc' => 'Zoho Leads with Contact Form 7 Integration form.',
-			'id' => 'w3s-cf7-zoho',
-			'icon' => 'dashicons-vault',
-			'position' => 58,
-		));
+        // get instance of w3s-cf7-zoho
+        $titan = TitanFramework::getInstance('w3s-cf7-zoho');
 
-		// Create Authentication Tab
-		$authTab = $panel->createTab( array(
-			'name' => 'Authentication',
-		));
-
-		// options for auth tab
-
-		$authTab->createOption( array(
-			'name' => 'Zoho Region',
-			'id' => 'zoho_region',
-			'type' => 'select',
-			'desc' => 'Select the zoho regional datacenter zone.',
-			'options' => array(
-				'com' => 'Global/US',
-				'eu' => 'Europe',
-				'cn' => 'China',
-				'in' => 'India',
-			),
-			'default' => 'com',
-		));
-
-        $authTab->createOption( array(
-			'name' => 'Zoho Client ID',
-			'id' => 'zoho_client_id',
-			'type' => 'text',
-			'desc' => 'Your Zoho App Client ID. To Generate, Please follow <a href="https://www.zoho.com/crm/help/developer/api/register-client.html" target="_blank">this instructions.</a>',
-			'is_password' => false,
-		));
-
-        $authTab->createOption( array(
-			'name' => 'Zoho Client Secret',
-			'id' => 'zoho_client_secret',
-			'type' => 'text',
-			'desc' => 'Your Zoho App Client Secret. To Generate, Please follow <a href="https://www.zoho.com/crm/help/developer/api/register-client.html" target="_blank">this instructions.</a>',
-			'is_password' => true,
-		));
-
-        $authTab->createOption( array(
-            'name' => 'Zoho Grant Token',
-            'id' => 'zoho_grant_token',
-            'type' => 'text',
-            'desc' => 'Your Zoho App Self Client Grant Token. To Generate, Please follow <a href="https://www.zoho.com/crm/help/developer/api/auth-request.html#plink2" target="_blank">this instructions.</a><br>Use <code>ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,aaaserver.profile.READ</code> as Scope.',
-            'is_password' => true,
+        // create the admin panel
+        $panel = $titan->createAdminPanel(array(
+            'name' => 'Zoho with CF7',
+            'desc' => 'Zoho Leads with Contact Form 7 Integration form.',
+            'id' => 'w3s-cf7-zoho',
+            'icon' => 'dashicons-vault',
+            'position' => 58,
         ));
 
-        $authTab->createOption( array(
-            'name' => 'Zoho User Email',
-            'id' => 'zoho_user_email',
-            'type' => 'text',
-            'desc' => 'Your Zoho login email address',
-            'is_password' => false,
+        // Create Authentication Tab
+        $authTab = $panel->createTab(array(
+            'name' => 'Authentication',
         ));
 
-        $authTab->createOption( array(
-            'type' => 'save',
-            'save' => 'Save ',
-            'use_reset' =>  false,
-        ));
+        // options for auth tab
+//
+//		$authTab->createOption( array(
+//			'name' => 'Zoho Region',
+//			'id' => 'zoho_region',
+//			'type' => 'select',
+//			'desc' => 'Select the zoho regional datacenter zone.',
+//			'options' => array(
+//				'com' => 'Global/US',
+//				'eu' => 'Europe',
+//				'cn' => 'China',
+//				'in' => 'India',
+//			),
+//			'default' => 'com',
+//		));
 
+        if (!$titan->getOption('zoho_client_id')) {
+            $authTab->createOption(array(
+                'name' => 'Zoho Client ID',
+                'id' => 'zoho_client_id',
+                'type' => 'text',
+                'desc' => 'Your Zoho App Client ID. To Generate, Please follow <a href="https://www.zoho.com/crm/help/developer/api/register-client.html" target="_blank">this instructions.</a>',
+                'is_password' => false,
+            ));
+
+            $authTab->createOption(array(
+                'name' => 'Zoho Client Secret',
+                'id' => 'zoho_client_secret',
+                'type' => 'text',
+                'desc' => 'Your Zoho App Client Secret. To Generate, Please follow <a href="https://www.zoho.com/crm/help/developer/api/register-client.html" target="_blank">this instructions.</a>',
+                'is_password' => true,
+            ));
+
+            $authTab->createOption(array(
+                'name' => 'Zoho User Email',
+                'id' => 'zoho_user_email',
+                'type' => 'text',
+                'desc' => 'Your Zoho login email address',
+                'is_password' => false,
+            ));
+        }
+        if ($titan->getOption('zoho_client_id')) {
+
+            $authTab->createOption(array(
+                'name' => 'Authorize Zoho Account',
+                'type' => 'custom',
+                'custom' => '<a href="https://zoho.com" class="button button-primary">Grant Access</a>',
+            ));
+
+        }
+
+        if ($titan->getOption('zoho_client_id') && $titan->getOption('zoho_authorised')) {
+
+            $authTab->createOption(array(
+                'name' => 'Revoke Access to Zoho',
+                'type' => 'ajax-button',
+                'action' => 'w3s_cf7_zoho_revoke_action',
+                'label' => array(
+                    __('Revoke Access', 'default'),
+                ),
+                'class' => 'button-secondary',
+            ));
+        }
+
+        if (!$titan->getOption('zoho_client_id')) {
+
+            $authTab->createOption(array(
+                'type' => 'save',
+                'save' => 'Save & Bring Grant Access',
+                'use_reset' => false,
+            ));
+        }
 
 
         // Create Integration Tab
@@ -198,12 +217,51 @@ class W3s_Cf7_Zoho_Admin {
             'post_type' => 'wpcf7_contact_form',
         ));
 
+        $intTab->createOption( array(
+            'name' => 'Zoho Module',
+            'id' => 'zoho_module',
+            'type' => 'select',
+            'desc' => 'Select the Zoho Module.',
+            'options' => array(
+                'Leads' => 'Leads',
+                'Account' => 'Account',
+            ),
+            'default' => 'Leads',
+        ));
 
 
         // save options
         $intTab->createOption( array(
             'type' => 'save',
-            'save' => 'Save Options',
+            'save' => 'Save & Reload Fields',
+            'use_reset' =>  false,
+        ));
+
+
+
+        // Create Fields Tab
+        $filedTab = $panel->createTab( array(
+            'name' => 'Fields',
+        ));
+
+/*
+        $filedTab->createOption( array(
+            'name' => 'Zoho Module',
+            'id' => 'zoho_field_',
+            'type' => 'select',
+            'desc' => 'Select the Zoho Module.',
+            'options' => array(
+                'Leads' => 'Leads',
+                'Account' => 'Account',
+            ),
+            'default' => 'Leads',
+        ));
+
+*/
+        // save options
+        $filedTab->createOption( array(
+            'type' => 'save',
+            'save' => 'Save Fields',
             'use_reset' =>  false,
         ));
 
