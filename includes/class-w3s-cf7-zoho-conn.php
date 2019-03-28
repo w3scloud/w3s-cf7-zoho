@@ -34,14 +34,14 @@ class W3s_Cf7_Zoho_Conn {
     private $auth = false;
 
     public function __construct(){
-        $this->include();
+        $this->include_zoho();
         $this->titanInstant = TitanFramework::getInstance( 'w3s-cf7-zoho' );
-        $this->auth = $this->titanInstant->getOption('zoho_auth_done', false);
+        $this->auth = $this->titanInstant->getOption('zoho_auth_done');
     }
 
 
-    private function include(){
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/vendor/autoload.php';
+    private function include_zoho(){
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . '/zoho-conn/vendor/autoload.php';
     }
 
     public function createRecord($dataAray){

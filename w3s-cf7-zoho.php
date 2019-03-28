@@ -7,7 +7,7 @@
  * @package           W3s_Cf7_Zoho
  *
  * @wordpress-plugin
- * Plugin Name:       Zoho Leads with Contact Form 7
+ * Plugin Name:       Zoho with Contact Form 7
  * Plugin URI:        https://w3scloud.com/cf7-zoho/
  * Description:       This is a short description of what the plugin does. It's displayed in the WordPress admin area.
  * Version:           1.0.0

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * This file generate user access tokens
  * just change $grantToken value
@@ -10,28 +11,72 @@
  */
 
 
+if (isset($_GET['code'])){
 
 # No need for the template engine
 define( 'WP_USE_THEMES', false );
 # Load WordPress Core
 // Assuming we're in a subdir: "~/wp-content/plugins/current_dir"
-require_once( '../../../../../wp-load.php' );
+    require_once dirname(__FILE__).'../../../../../../wp-load.php';
+
+    include_once 'includes.php';
+
+// get instance of w3s-cf7-zoho
+    $titan = TitanFramework::getInstance('w3s-cf7-zoho');
 
 
+    $apiBase = '';
+    if ($_GET['location'] == 'us'){
+        $apiBase = 'https://www.zohoapis.com';
+    } elseif ($_GET['location'] == 'europe'){
+        $apiBase = 'https://www.zohoapis.eu';
+    } elseif ($_GET['location'] == 'china'){
+        $apiBase = 'https://www.zohoapis.com.cn';
+    } elseif ($_GET['location'] == 'india'){
+        $apiBase = 'https://www.zohoapis.in';
+    } else {
+        $apiBase = 'https://www.zohoapis.com';
+    }
 
 
-include_once 'includes.php';
+    $titan->setOption('zoho_api_base_url', $apiBase);
+    $titan->setOption('zoho_account_url', $_GET['accounts-server']);
+
+    dd($titan);
+
+    $conf = array(
+        'apiBaseUrl' => $titan->getOption('zoho_api_base_url'),
+        'client_id'=> $titan->getOption('zoho_client_id'),
+        'client_secret'=> $titan->getOption('zoho_client_secret'),
+        'redirect_uri'=> $titan->getOption('zoho_redirect_url'),
+        'accounts_url'=> $titan->getOption('zoho_account_url'),
+        'currentUserEmail' => $titan->getOption('zoho_user_email'),
+        'token_persistence_path'=> dirname(__FILE__).'/log/',
+        'applicationLogFilePath'=> dirname(__FILE__).'/log/',
+    );
+
+    ZCRMRestClient::initialize($conf);
 
 // Assign the email id access
-$_SERVER['user_email_id'] = $conf['currentUserEmail'];
+    $_SERVER['user_email_id'] = $titan->getOption('zoho_user_email');
 
 //Generating access tokens
 try {
+
     $oAuthClient = ZohoOAuth::getClientInstance();
-    $grantToken = 'Grant token here';
+    $grantToken = $_GET['code'];
     $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);
     echo 'Token generated and app authorised successfully.';
 
+    $titan->setOption('zoho_authorised', true);
+
 } catch (Exception $e) {
     echo "Grant token did not generated:\n" . $e ;
+}
+
+
+/*
+ * ?code=1000.dd19d82ba3f95ea0db5613c4302a3a26.acb17973f2c784e521befefcb5257eff&location=us&accounts-server=https%3A%2F%2Faccounts.zoho.com&
+ */
+
 }
