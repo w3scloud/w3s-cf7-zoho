@@ -41,8 +41,9 @@ define( 'WP_USE_THEMES', false );
 
     $titan->setOption('zoho_api_base_url', $apiBase);
     $titan->setOption('zoho_account_url', $_GET['accounts-server']);
-
-    dd($titan);
+    // $titan->setOption('zoho_authorised', true);
+    // $titan->saveOptions();
+    // dd($titan);
 
     $conf = array(
         'apiBaseUrl' => $titan->getOption('zoho_api_base_url'),
@@ -59,20 +60,44 @@ define( 'WP_USE_THEMES', false );
 
 // Assign the email id access
     $_SERVER['user_email_id'] = $titan->getOption('zoho_user_email');
+    $redirectToAdmin = admin_url( 'admin.php?page=w3s-cf7-zoho');
+
+
 
 //Generating access tokens
-try {
+    try {
 
-    $oAuthClient = ZohoOAuth::getClientInstance();
-    $grantToken = $_GET['code'];
-    $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);
-    echo 'Token generated and app authorised successfully.';
+        $oAuthClient = ZohoOAuth::getClientInstance();
+        $grantToken = $_GET['code'];
+        $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);
+        // echo 'Token generated and app authorised successfully.';
 
-    $titan->setOption('zoho_authorised', true);
+        $titan->setOption('zoho_authorised', true);
+        //set admin notice
+        // Notice to admin
+        function w3s_cf7_zoho_admin_notice__success() {
+            ?>
+            <div class="notice notice-success is-dismissible">
+                <p><?php _e( 'Zoho Authentication Done!', 'w3s-cf7-zoho' ); ?></p>
+            </div>
+            <?php
+        }
+        add_action( 'admin_notices', 'w3s_cf7_zoho_admin_notice__success' );
+        header("Location: $redirectToAdmin");
+        
 
-} catch (Exception $e) {
-    echo "Grant token did not generated:\n" . $e ;
-}
+    } catch (Exception $e) {
+        
+        function w3s_cf7_zoho_admin_notice__error() {
+            ?>
+            <div class="notice notice-error is-dismissible">
+                <p><?php _e( 'Zoho Authentication Failed!', 'w3s-cf7-zoho' ); ?></p>
+            </div>
+            <?php
+        }
+        add_action( 'admin_notices', 'w3s_cf7_zoho_admin_notice__error' );
+        header("Location: $redirectToAdmin");
+    }
 
 
 /*

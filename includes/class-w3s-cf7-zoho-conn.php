@@ -36,7 +36,8 @@ class W3s_Cf7_Zoho_Conn {
     public function __construct(){
         $this->include_zoho();
         $this->titanInstant = TitanFramework::getInstance( 'w3s-cf7-zoho' );
-        $this->auth = $this->titanInstant->getOption('zoho_auth_done');
+        $this->auth = $this->titanInstant->getOption('zoho_authorised');
+        $this->setConfig();
     }
 
 
@@ -54,6 +55,21 @@ class W3s_Cf7_Zoho_Conn {
 
     public function getFields($dataAray){
         // ToDo # need to connect with zoho
+    }
+
+    private function setConfig(){
+        if ($this->auth) {
+            $this->zohoConfig = array(
+                'apiBaseUrl' => $this->titanInstant->getOption('zoho_api_base_url'),
+                'client_id'=> $this->titanInstant->getOption('zoho_client_id'),
+                'client_secret'=> $this->titanInstant->getOption('zoho_client_secret'),
+                'redirect_uri'=> $this->titanInstant->getOption('zoho_redirect_url'),
+                'accounts_url'=> $this->titanInstant->getOption('zoho_account_url'),
+                'currentUserEmail' => $this->titanInstant->getOption('zoho_user_email'),
+                'token_persistence_path'=> plugin_dir_path( dirname( __FILE__ ) ) .'/zoho-conn/log/',
+                'applicationLogFilePath'=>plugin_dir_path( dirname( __FILE__ ) ) .'/zoho-conn/log/',
+            );
+        }
     }
 
 

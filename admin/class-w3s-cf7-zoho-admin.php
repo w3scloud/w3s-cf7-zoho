@@ -199,12 +199,51 @@ class W3s_Cf7_Zoho_Admin {
             'is_password' => false,
         ));
 
+        $authTab->createOption(array(
+            'name' => 'Zoho redirect URL',
+            'id' => 'zoho_redirect_url',
+            'type' => 'text',
+            'desc' => 'Your wordpress redirect URL',
+            'is_password' => false,
+            'default' => $redirectURL,
+            'hidden' => true,
+        ));
+
+        $authTab->createOption(array(
+            'name' => 'Zoho redirecturl',
+            'id' => 'zoho_api_base_url',
+            'type' => 'text',
+            'desc' => 'Your Zoho login email address',
+            'is_password' => false,
+            'default' => '',
+            'hidden' => true,
+        ));
+        
+        $authTab->createOption(array(
+            'name' => 'Zoho Account URL',
+            'id' => 'zoho_account_url',
+            'type' => 'text',
+            'desc' => 'Your Zoho Account URL',
+            'is_password' => false,
+            'default' => '',
+            'hidden' => true,
+        ));
+        $authTab->createOption(array(
+            'name' => 'Zoho Authorised',
+            'id' => 'zoho_authorised',
+            'type' => 'enable',
+            'desc' => 'Is ZOHO Auth Complete?',
+            'is_password' => false,
+            'default' => false,
+            'hidden' => true,
+        ));
+
 
         // appair auth button when app id ,secret and email present
         if ($titan->getOption('zoho_client_id') && $titan->getOption('zoho_client_secret') && $titan->getOption('zoho_user_email')) {
 
 
-            $titan->getOption('zoho_redirect_url', $redirectURL);
+            $titan->setOption('zoho_redirect_url', $redirectURL);
 
             $zcid = $titan->getOption('zoho_client_id');
             $authURL = "<a href='https://accounts.zoho.com/oauth/v2/auth?scope=ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,aaaserver.profile.READ&client_id=$zcid&response_type=code&access_type=offline&redirect_uri=$redirectURL' class='button button-primary'>Grant Access</a>";
