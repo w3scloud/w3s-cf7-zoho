@@ -19,7 +19,8 @@ define( 'WP_USE_THEMES', false );
 // Assuming we're in a subdir: "~/wp-content/plugins/current_dir"
     require_once dirname(__FILE__).'../../../../../../wp-load.php';
 
-    include_once 'includes.php';
+include_once 'vendor/autoload.php';
+// include_once 'includes.php';
 
 // get instance of w3s-cf7-zoho
     $titan = TitanFramework::getInstance('w3s-cf7-zoho');
@@ -28,11 +29,11 @@ define( 'WP_USE_THEMES', false );
     $apiBase = '';
     if ($_GET['location'] == 'us'){
         $apiBase = 'https://www.zohoapis.com';
-    } elseif ($_GET['location'] == 'europe'){
+    } elseif ($_GET['location'] == 'eu'){
         $apiBase = 'https://www.zohoapis.eu';
-    } elseif ($_GET['location'] == 'china'){
+    } elseif ($_GET['location'] == 'cn'){
         $apiBase = 'https://www.zohoapis.com.cn';
-    } elseif ($_GET['location'] == 'india'){
+    } elseif ($_GET['location'] == 'in'){
         $apiBase = 'https://www.zohoapis.in';
     } else {
         $apiBase = 'https://www.zohoapis.com';
@@ -45,6 +46,8 @@ define( 'WP_USE_THEMES', false );
     // $titan->saveOptions();
     // dd($titan);
 
+
+
     $conf = array(
         'apiBaseUrl' => $titan->getOption('zoho_api_base_url'),
         'client_id'=> $titan->getOption('zoho_client_id'),
@@ -56,21 +59,44 @@ define( 'WP_USE_THEMES', false );
         'applicationLogFilePath'=> dirname(__FILE__).'/log/',
     );
 
-    ZCRMRestClient::initialize($conf);
+
+    $configContent = "<?php
+    // Zoho CRM API Required Configuration
+    \$conf = array(
+        'apiBaseUrl' => '{$titan->getOption('zoho_api_base_url')}',
+        'client_id' => '{$titan->getOption('zoho_client_id')}',
+        'client_secret' => '{$titan->getOption('zoho_client_secret')}',
+        'redirect_uri' => '{$titan->getOption('zoho_redirect_url')}',
+        'accounts_url' => '{$titan->getOption('zoho_account_url')}',
+        'currentUserEmail' => '{$titan->getOption('zoho_user_email')}',
+        'token_persistence_path' => dirname(__FILE__).'/authlog/',
+        'applicationLogFilePath' => dirname(__FILE__).'/authlog/'
+    );
+    
+    if (\$conf['client_id'] == \"\"){
+        return array();
+    } else {
+        return \$conf;
+    }"; 
+
+    // dd($conf);
+
+    
 
 // Assign the email id access
     $_SERVER['user_email_id'] = $titan->getOption('zoho_user_email');
     $redirectToAdmin = admin_url( 'admin.php?page=w3s-cf7-zoho');
-
+    $redirectToAdminTab = admin_url( 'admin.php?page=w3s-cf7-zoho&tab=integration');
+    
 
 
 //Generating access tokens
     try {
-
+        ZCRMRestClient::initialize($conf);
         $oAuthClient = ZohoOAuth::getClientInstance();
         $grantToken = $_GET['code'];
         $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);
-        // echo 'Token generated and app authorised successfully.';
+        echo 'Token generated and app authorised successfully.';
 
         $titan->setOption('zoho_authorised', true);
         //set admin notice
@@ -83,7 +109,16 @@ define( 'WP_USE_THEMES', false );
             <?php
         }
         add_action( 'admin_notices', 'w3s_cf7_zoho_admin_notice__success' );
-        header("Location: $redirectToAdmin");
+
+
+        //Write config file with correct credentials
+        $fp = fopen('config.php', 'w');
+        fwrite($fp, $configContent);
+        fclose($fp);
+
+// die();
+        // redirect to admin page
+        header("Location: $redirectToAdminTab");
         
 
     } catch (Exception $e) {
@@ -96,7 +131,9 @@ define( 'WP_USE_THEMES', false );
             <?php
         }
         add_action( 'admin_notices', 'w3s_cf7_zoho_admin_notice__error' );
-        header("Location: $redirectToAdmin");
+        // header("Location: $redirectToAdmin");
+
+        var_dump($e);
     }
 
 

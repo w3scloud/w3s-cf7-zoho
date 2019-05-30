@@ -34,7 +34,7 @@ class W3s_Cf7_Zoho_Conn {
     private $auth = false;
 
     public function __construct(){
-        $this->include_zoho();
+     
         $this->titanInstant = TitanFramework::getInstance( 'w3s-cf7-zoho' );
         $this->auth = $this->titanInstant->getOption('zoho_authorised');
         $this->setConfig();
@@ -42,7 +42,8 @@ class W3s_Cf7_Zoho_Conn {
 
 
     private function include_zoho(){
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . '/zoho-conn/vendor/autoload.php';
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/vendor/autoload.php';
+        
     }
 
     public function createRecord($dataAray){
@@ -53,11 +54,45 @@ class W3s_Cf7_Zoho_Conn {
         // ToDo # need to connect with zoho
     }
 
-    public function getFields($dataAray){
-        // ToDo # need to connect with zoho
+    public function getZohoFields(){
+        
+        try{
+            $this->include_zoho();
+            // require plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/config.php';
+            // ZCRMRestClient::initialize($conf);
+            ZCRMRestClient::initialize($this->zohoConfig);
+            $zcrmModuleIns = ZCRMModule::getInstance("leads");
+            $bulkAPIResponse=$zcrmModuleIns->getRecords();
+            $recordsArray = $bulkAPIResponse->getData();            
+            
+            return $recordsArray;
+            // foreach ($fields as $field){
+            //     echo $field->getApiName().", ";
+            //     echo $field->getLength().", ";
+            //     echo $field->IsVisible().", ";
+            //     echo $field->getFieldLabel().", ";
+            //     echo $field->getCreatedSource().", ";
+            //     echo $field->isMandatory().", ";
+            //     echo $field->getDataType().", ";
+            // }
+        } catch (ZCRMException $e) {
+            echo $e->getCode();
+            echo $e->getMessage();
+            echo $e->getExceptionCode();
+        }
+
+
     }
 
+
+    public function getCF7Fields()
+    {
+        die(var_dump($this->titanInstant->getOption('cf7_form')));
+    }
+
+
     private function setConfig(){
+        /*
         if ($this->auth) {
             $this->zohoConfig = array(
                 'apiBaseUrl' => $this->titanInstant->getOption('zoho_api_base_url'),
@@ -70,6 +105,18 @@ class W3s_Cf7_Zoho_Conn {
                 'applicationLogFilePath'=>plugin_dir_path( dirname( __FILE__ ) ) .'/zoho-conn/log/',
             );
         }
+        */
+
+        $conf = include plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/config.php';
+
+
+        if(!empty($conf)){
+            $this->auth = true;
+            $this->zohoConfig = $conf;
+        }
+
+    
+
     }
 
 
