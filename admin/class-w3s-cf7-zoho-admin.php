@@ -246,7 +246,7 @@ class W3s_Cf7_Zoho_Admin {
             $titan->setOption('zoho_redirect_url', $redirectURL);
 
             $zcid = $titan->getOption('zoho_client_id');
-            $authURL = "<a href='https://accounts.zoho.com/oauth/v2/auth?scope=ZohoCRM.modules.ALL,ZohoCRM.users.ALL,ZohoCRM.settings.ALL,aaaserver.profile.READ&client_id=$zcid&response_type=code&access_type=offline&redirect_uri=$redirectURL' class='button button-primary'>Grant Access</a>";
+            $authURL = "<a href='https://accounts.zoho.com/oauth/v2/auth?scope=ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,aaaserver.profile.READ&client_id=$zcid&response_type=code&access_type=offline&redirect_uri=$redirectURL' class='button button-primary'>Grant Access</a>";
 
             $authTab->createOption(array(
                 'name' => 'Authorize Zoho Account',
@@ -317,9 +317,9 @@ class W3s_Cf7_Zoho_Admin {
             'name' => 'Fields',
         ));
 
-        // $zohoCon = new W3s_Cf7_Zoho_Conn();
+         $zohoCon = new W3s_Cf7_Zoho_Conn();
 
-        // die(var_dump($zohoCon->getZohoFields()));
+         die(var_dump($zohoCon->getZohoFields()));
 
         /*
                 $filedTab->createOption( array(

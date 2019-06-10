@@ -5,8 +5,12 @@
  */
 
  // file includes
-include_once 'includes.php';
 
+require_once realpath(dirname(__FILE__) ). '/vendor/autoload.php';
+
+$conf =  include 'config.php';
+
+ZCRMRestClient::initialize($conf);
 
 
 

@@ -28,15 +28,15 @@ include_once 'vendor/autoload.php';
 
     $apiBase = '';
     if ($_GET['location'] == 'us'){
-        $apiBase = 'https://www.zohoapis.com';
+        $apiBase = 'www.zohoapis.com';
     } elseif ($_GET['location'] == 'eu'){
-        $apiBase = 'https://www.zohoapis.eu';
+        $apiBase = 'www.zohoapis.eu';
     } elseif ($_GET['location'] == 'cn'){
-        $apiBase = 'https://www.zohoapis.com.cn';
+        $apiBase = 'www.zohoapis.com.cn';
     } elseif ($_GET['location'] == 'in'){
-        $apiBase = 'https://www.zohoapis.in';
+        $apiBase = 'www.zohoapis.in';
     } else {
-        $apiBase = 'https://www.zohoapis.com';
+        $apiBase = 'www.zohoapis.com';
     }
 
 
@@ -48,15 +48,15 @@ include_once 'vendor/autoload.php';
 
 
 
-    $conf = array(
+    $config = array(
         'apiBaseUrl' => $titan->getOption('zoho_api_base_url'),
         'client_id'=> $titan->getOption('zoho_client_id'),
         'client_secret'=> $titan->getOption('zoho_client_secret'),
         'redirect_uri'=> $titan->getOption('zoho_redirect_url'),
         'accounts_url'=> $titan->getOption('zoho_account_url'),
         'currentUserEmail' => $titan->getOption('zoho_user_email'),
-        'token_persistence_path'=> dirname(__FILE__).'/log/',
-        'applicationLogFilePath'=> dirname(__FILE__).'/log/',
+        'token_persistence_path'=> dirname(__FILE__).'/authlog/',
+        'applicationLogFilePath'=> dirname(__FILE__).'/authlog/',
     );
 
 
@@ -72,12 +72,12 @@ include_once 'vendor/autoload.php';
         'token_persistence_path' => dirname(__FILE__).'/authlog/',
         'applicationLogFilePath' => dirname(__FILE__).'/authlog/'
     );
-    
-    if (\$conf['client_id'] == \"\"){
+    if(\$conf['client_id'] == ''){
         return array();
     } else {
         return \$conf;
-    }"; 
+    }
+    ";
 
     // dd($conf);
 
@@ -92,7 +92,7 @@ include_once 'vendor/autoload.php';
 
 //Generating access tokens
     try {
-        ZCRMRestClient::initialize($conf);
+        ZCRMRestClient::initialize($config);
         $oAuthClient = ZohoOAuth::getClientInstance();
         $grantToken = $_GET['code'];
         $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);

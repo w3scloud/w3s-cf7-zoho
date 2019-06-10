@@ -1,0 +1,5 @@
+<?php
+
+echo "Server Opening at http://localhost:900 \n";
+shell_exec("php -S localhost:900");
+
