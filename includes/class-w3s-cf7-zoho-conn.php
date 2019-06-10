@@ -43,7 +43,13 @@ class W3s_Cf7_Zoho_Conn {
 
     private function include_zoho(){
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/vendor/autoload.php';
+        $this->init_zoho();
         
+    }
+
+    private function init_zoho(){
+        ZCRMRestClient::initialize($this->zohoConfig);
+
     }
 
     public function createRecord($dataAray){
@@ -58,24 +64,22 @@ class W3s_Cf7_Zoho_Conn {
         
         try{
             $this->include_zoho();
-            // require plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/config.php';
-            // ZCRMRestClient::initialize($conf);
-            ZCRMRestClient::initialize($this->zohoConfig);
-            $zcrmModuleIns = ZCRMModule::getInstance("leads");
-            $bulkAPIResponse=$zcrmModuleIns->getRecords();
-            $recordsArray = $bulkAPIResponse->getData();            
-            
-            return $recordsArray;
-            // foreach ($fields as $field){
-            //     echo $field->getApiName().", ";
-            //     echo $field->getLength().", ";
-            //     echo $field->IsVisible().", ";
-            //     echo $field->getFieldLabel().", ";
-            //     echo $field->getCreatedSource().", ";
-            //     echo $field->isMandatory().", ";
-            //     echo $field->getDataType().", ";
-            // }
-        } catch (ZCRMException $e) {
+
+            $moduleIns=ZCRMModule::getInstance("Leads");
+            $apiResponse=$moduleIns->getAllFields();
+            $fields=$apiResponse->getData();
+
+            $formatedFields = array();
+
+            foreach ($fields as $field) {
+                $formatedFields[$field->getApiName()] = $field->getDataType();
+            }
+
+            return $formatedFields;
+
+        }
+        catch (ZCRMException $e)
+        {
             echo $e->getCode();
             echo $e->getMessage();
             echo $e->getExceptionCode();
@@ -87,35 +91,26 @@ class W3s_Cf7_Zoho_Conn {
 
     public function getCF7Fields()
     {
-        die(var_dump($this->titanInstant->getOption('cf7_form')));
+
+        $current_cf7 =  WPCF7_ContactForm::get_instance($this->titanInstant->getOption('cf7_form'));
+
+        $submission = $current_cf7->scan_form_tags('name');
+
+//        return $submission;
+
+        // ToDo # need to find the fields from contact form
+
     }
 
 
     private function setConfig(){
-        /*
-        if ($this->auth) {
-            $this->zohoConfig = array(
-                'apiBaseUrl' => $this->titanInstant->getOption('zoho_api_base_url'),
-                'client_id'=> $this->titanInstant->getOption('zoho_client_id'),
-                'client_secret'=> $this->titanInstant->getOption('zoho_client_secret'),
-                'redirect_uri'=> $this->titanInstant->getOption('zoho_redirect_url'),
-                'accounts_url'=> $this->titanInstant->getOption('zoho_account_url'),
-                'currentUserEmail' => $this->titanInstant->getOption('zoho_user_email'),
-                'token_persistence_path'=> plugin_dir_path( dirname( __FILE__ ) ) .'/zoho-conn/log/',
-                'applicationLogFilePath'=>plugin_dir_path( dirname( __FILE__ ) ) .'/zoho-conn/log/',
-            );
-        }
-        */
 
         $conf = include plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/config.php';
-
-
         if(!empty($conf)){
             $this->auth = true;
             $this->zohoConfig = $conf;
         }
 
-    
 
     }
 
