@@ -10,6 +10,10 @@
  * ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,aaaserver.profile.READ
  */
 
+use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
+use zcrmsdk\crm\crud\ZCRMModule;
+use zcrmsdk\oauth\ZohoOAuthClient;
+use zcrmsdk\oauth\ZohoOAuth;
 
 if (isset($_GET['code'])){
 
@@ -131,7 +135,7 @@ include_once 'vendor/autoload.php';
             <?php
         }
         add_action( 'admin_notices', 'w3s_cf7_zoho_admin_notice__error' );
-        // header("Location: $redirectToAdmin");
+//         header("Location: $redirectToAdmin");
 
         var_dump($e);
     }

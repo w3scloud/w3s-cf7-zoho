@@ -317,9 +317,9 @@ class W3s_Cf7_Zoho_Admin {
             'name' => 'Fields',
         ));
 
-         $zohoCon = new W3s_Cf7_Zoho_Conn();
-
-         die(var_dump($zohoCon->getCF7Fields()));
+//         $zohoCon = new W3s_Cf7_Zoho_Conn();
+//
+//         die(var_dump($zohoCon->getCF7Fields()));
 
         /*
                 $filedTab->createOption( array(

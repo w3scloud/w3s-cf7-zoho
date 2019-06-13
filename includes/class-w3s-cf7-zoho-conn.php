@@ -27,6 +27,12 @@
  * @subpackage W3s_Cf7_Zoho/includes
  * @author     W3S Cloud Technology, shohag121 <info@w3scloud.com>
  */
+
+use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
+use zcrmsdk\crm\crud\ZCRMModule;
+
+
+
 class W3s_Cf7_Zoho_Conn {
 
     private $titanInstant;
@@ -44,12 +50,10 @@ class W3s_Cf7_Zoho_Conn {
     private function include_zoho(){
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/vendor/autoload.php';
         $this->init_zoho();
-        
     }
 
     private function init_zoho(){
         ZCRMRestClient::initialize($this->zohoConfig);
-
     }
 
     public function createRecord($dataAray){
@@ -65,7 +69,7 @@ class W3s_Cf7_Zoho_Conn {
         try{
             $this->include_zoho();
 
-            $moduleIns=ZCRMModule::getInstance("Leads");
+            $moduleIns = ZCRMModule::getInstance("Leads");
             $apiResponse=$moduleIns->getAllFields();
             $fields=$apiResponse->getData();
 

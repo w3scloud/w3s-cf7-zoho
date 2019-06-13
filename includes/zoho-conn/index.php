@@ -4,20 +4,21 @@
  * main Zoho operation file
  */
 
- // file includes
-
 require_once realpath(dirname(__FILE__) ). '/vendor/autoload.php';
+use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
+use zcrmsdk\crm\crud\ZCRMModule;
+use zcrmsdk\oauth\ZohoOAuthClient;
 
-$conf =  include 'config.php';
+$conf =  include_once 'config.php';
+
 
 ZCRMRestClient::initialize($conf);
 
 
+$moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("Leads"); // To get module instance
+$response = $moduleIns->getRecords(); // to get the field
+$recordsArray = $response->getData();
 
-
-$zcrmModuleIns = ZCRMModule::getInstance("Leads");
-$bulkAPIResponse=$zcrmModuleIns->getRecords();
-$recordsArray = $bulkAPIResponse->getData(); // $recordsArray - array of ZCRMRecord instances
 
 
  //dd($recordsArray[0]);
