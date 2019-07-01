@@ -53,7 +53,9 @@ class W3s_Cf7_Zoho_Conn {
     }
 
     private function init_zoho(){
-        ZCRMRestClient::initialize($this->zohoConfig);
+        if ($this->auth) {
+            ZCRMRestClient::initialize($this->zohoConfig);
+        }
     }
 
     public function createRecord($dataAray){
@@ -65,7 +67,7 @@ class W3s_Cf7_Zoho_Conn {
     }
 
     public function getZohoFields(){
-        
+
         try{
             $this->include_zoho();
 
@@ -76,7 +78,7 @@ class W3s_Cf7_Zoho_Conn {
             $formatedFields = array();
 
             foreach ($fields as $field) {
-                $formatedFields[$field->getApiName()] = $field->getDataType();
+                $formatedFields[$field->getApiName()] = "{$field->getApiName()} ({$field->getDataType()})" ;
             }
 
             return $formatedFields;
@@ -84,36 +86,59 @@ class W3s_Cf7_Zoho_Conn {
         }
         catch (ZCRMException $e)
         {
-            echo $e->getCode();
-            echo $e->getMessage();
-            echo $e->getExceptionCode();
+            return array();
         }
 
 
     }
 
 
-    public function getCF7Fields()
+    public function getCF7Fields($cf7_id)
     {
 
-        $current_cf7 =  WPCF7_ContactForm::get_instance($this->titanInstant->getOption('cf7_form'));
 
-        $submission = $current_cf7->scan_form_tags('name');
+        if ($cf7_id == null ){
+            return array();
+        }
 
-//        return $submission;
+        $current_cf7 =  WPCF7_ContactForm::get_instance($cf7_id);
 
-        // ToDo # need to find the fields from contact form
+        $form = $current_cf7->prop('form');
+
+
+        $re = '/(?<=\[)([^\]]+)/';
+        preg_match_all($re, $form, $matches, PREG_SET_ORDER, 0);
+
+
+        $cf7Fields = array();
+
+        foreach ($matches as $match){
+            $field =  explode(" ", str_replace("*","", $match[0]) );
+
+            if ($field[0] == 'submit') continue;
+
+            $cf7Fields[$field[1]] = "{$field[1]} ({$field[0]})";
+        }
+
+
+        return $cf7Fields;
+
 
     }
 
 
     private function setConfig(){
+        if (file_exists(plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/config.php')){
 
-        $conf = include plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/config.php';
-        if(!empty($conf)){
-            $this->auth = true;
-            $this->zohoConfig = $conf;
+            $conf = require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/config.php';
+            if(!empty($conf)){
+                $this->auth = true;
+                $this->zohoConfig = $conf;
+            }
+        } else {
+            $this->auth = false;
         }
+
 
 
     }

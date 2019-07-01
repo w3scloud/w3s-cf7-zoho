@@ -8,7 +8,9 @@
         'accounts_url' => 'https://accounts.zoho.com',
         'currentUserEmail' => 'shohag@w3scloud.com',
         'token_persistence_path' => dirname(__FILE__).'/authlog/',
-        'applicationLogFilePath' => dirname(__FILE__).'/authlog/'
+        'applicationLogFilePath' => dirname(__FILE__).'/authlog/',
+        'access_type'=> 'offline',
+        'apiVersion' => 'v2'
     );
     if($conf['client_id'] == ''){
         return array();

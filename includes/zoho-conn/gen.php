@@ -61,6 +61,8 @@ include_once 'vendor/autoload.php';
         'currentUserEmail' => $titan->getOption('zoho_user_email'),
         'token_persistence_path'=> dirname(__FILE__).'/authlog/',
         'applicationLogFilePath'=> dirname(__FILE__).'/authlog/',
+        'access_type'=> 'offline',
+        'apiVersion' => 'v2'
     );
 
 
@@ -74,7 +76,9 @@ include_once 'vendor/autoload.php';
         'accounts_url' => '{$titan->getOption('zoho_account_url')}',
         'currentUserEmail' => '{$titan->getOption('zoho_user_email')}',
         'token_persistence_path' => dirname(__FILE__).'/authlog/',
-        'applicationLogFilePath' => dirname(__FILE__).'/authlog/'
+        'applicationLogFilePath' => dirname(__FILE__).'/authlog/',
+        'access_type'=> 'offline',
+        'apiVersion' => 'v2'
     );
     if(\$conf['client_id'] == ''){
         return array();
@@ -89,8 +93,8 @@ include_once 'vendor/autoload.php';
 
 // Assign the email id access
     $_SERVER['user_email_id'] = $titan->getOption('zoho_user_email');
-    $redirectToAdmin = admin_url( 'admin.php?page=w3s-cf7-zoho');
-    $redirectToAdminTab = admin_url( 'admin.php?page=w3s-cf7-zoho&tab=integration');
+    $redirectToAdmin = admin_url( 'edit.php?post_type=w3s_cf7&page=w3s-cf7-zoho');
+    $redirectToAdminTab = admin_url( 'edit.php?post_type=w3s_cf7&page=w3s-cf7-zoho&tab=integration');
     
 
 

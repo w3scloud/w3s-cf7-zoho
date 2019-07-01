@@ -40,6 +40,11 @@ class W3s_Cf7_Zoho_Admin {
      */
     private $version;
 
+
+
+
+
+
     /**
      * Initialize the class and set its properties.
      *
@@ -53,8 +58,12 @@ class W3s_Cf7_Zoho_Admin {
         $this->version = $version;
 
 
+
+        add_action( 'init', array( $this, 'w3s_cf7_post_type' ), 0 );
         // titan framework options
         add_action( 'tf_create_options', array( $this, 'admin_options' ) );
+
+        add_action( 'load-post.php', array( $this, 'w3s_cf7_post_action_for_metabox' ) , 0 );
 
     }
 
@@ -117,12 +126,11 @@ class W3s_Cf7_Zoho_Admin {
         $titan = TitanFramework::getInstance('w3s-cf7-zoho');
 
         // create the admin panel
-        $panel = $titan->createAdminPanel(array(
-            'name' => 'Zoho with CF7',
+        $panel = $titan->createAdminPage(array(
+            'name' => 'Zoho Auth Settings',
             'desc' => 'Zoho Leads with Contact Form 7 Integration form.',
             'id' => 'w3s-cf7-zoho',
-            'icon' => 'dashicons-vault',
-            'position' => 58,
+            'parent' => 'edit.php?post_type=w3s_cf7'
         ));
 
         // Create Authentication Tab
@@ -282,13 +290,7 @@ class W3s_Cf7_Zoho_Admin {
             'name' => 'Integration',
         ));
 
-        $intTab->createOption( array(
-            'name' => 'Select Contact form',
-            'id' => 'cf7_form',
-            'type' => 'select-posts',
-            'desc' => 'Select Contact Form',
-            'post_type' => 'wpcf7_contact_form',
-        ));
+
 
         $intTab->createOption( array(
             'name' => 'Zoho Module',
@@ -310,39 +312,140 @@ class W3s_Cf7_Zoho_Admin {
             'use_reset' =>  false,
         ));
 
-
-
-        // Create Fields Tab
-        $filedTab = $panel->createTab( array(
-            'name' => 'Fields',
+        $metaBox = $titan->createMetaBox( array(
+            'name' => 'Integration',
+            'post_type' => 'w3s_cf7',
         ));
 
-//         $zohoCon = new W3s_Cf7_Zoho_Conn();
-//
-//         die(var_dump($zohoCon->getCF7Fields()));
-
-        /*
-                $filedTab->createOption( array(
-                    'name' => 'Zoho Module',
-                    'id' => 'zoho_field_',
-                    'type' => 'select',
-                    'desc' => 'Select the Zoho Module.',
-                    'options' => array(
-                        'Leads' => 'Leads',
-                        'Account' => 'Account',
-                    ),
-                    'default' => 'Leads',
-                ));
-
-        */
-        // save options
-        $filedTab->createOption( array(
-            'type' => 'save',
-            'save' => 'Save Fields',
-            'use_reset' =>  false,
+        $metaBox->createOption( array(
+            'name' => 'Enable Integration',
+            'id' => 'is_enabled',
+            'type' => 'enable',
+            'default' => true,
+            'desc' => 'Enable or disable this integration',
         ));
+
+        $metaBox->createOption( array(
+            'name' => 'Select Contact form',
+            'id' => 'cf7_form',
+            'type' => 'select-posts',
+            'desc' => 'Select Contact Form',
+            'post_type' => 'wpcf7_contact_form',
+        ));
+
 
     }
+
+    public function w3s_cf7_post_action_for_metabox( ) {
+        $post_id = $_GET[ 'post' ];
+
+        if( get_post_type($post_id) == 'w3s_cf7' ) {
+
+
+            $titan = TitanFramework::getInstance('w3s-cf7-zoho');
+
+
+            $zoho_conn = new W3s_Cf7_Zoho_Conn();
+            $cf7fields = $zoho_conn->getCF7Fields( $titan->getOption( 'cf7_form' , $post_id )); // need to
+            $zohoFields = $zoho_conn->getZohoFields();
+
+
+//            die(var_dump($cf7fields));
+
+
+
+            $metaBox = $titan->createMetaBox( array(
+                'name' => 'Field Mapping',
+                'post_type' => 'w3s_cf7',
+            ));
+            $metaBox->createOption( array(
+                'name' => 'Contact Form 7 Field 1',
+                'id' => 'cf7_field_1',
+                'type' => 'select',
+                'desc' => 'Select the Contact form 7 field.',
+                'options' => $cf7fields,
+            ));
+
+            $metaBox->createOption( array(
+                'name' => 'Match Zoho Field',
+                'id' => 'zoho_field_1',
+                'type' => 'select',
+                'desc' => 'Select the Zoho field.',
+                'options' => $zohoFields,
+            ));
+
+
+        }
+
+    }
+
+
+
+
+
+
+    // Register Custom Post Type
+    public function w3s_cf7_post_type() {
+
+        $labels = array(
+            'name'                  => _x( 'Integrations', 'Post Type General Name', 'w3s_cf7' ),
+            'singular_name'         => _x( 'Integration', 'Post Type Singular Name', 'w3s_cf7' ),
+            'menu_name'             => __( 'Zoho with CF7', 'w3s_cf7' ),
+            'name_admin_bar'        => __( 'Integration', 'w3s_cf7' ),
+            'archives'              => __( 'Integration Archives', 'w3s_cf7' ),
+            'attributes'            => __( 'Integration Attributes', 'w3s_cf7' ),
+            'parent_item_colon'     => __( 'Parent Integration:', 'w3s_cf7' ),
+            'all_items'             => __( 'All Integrations', 'w3s_cf7' ),
+            'add_new_item'          => __( 'Add New Integration', 'w3s_cf7' ),
+            'add_new'               => __( 'Add New', 'w3s_cf7' ),
+            'new_item'              => __( 'New Integration', 'w3s_cf7' ),
+            'edit_item'             => __( 'Edit Integration', 'w3s_cf7' ),
+            'update_item'           => __( 'Update Integration', 'w3s_cf7' ),
+            'view_item'             => __( 'View Integration', 'w3s_cf7' ),
+            'view_items'            => __( 'View Integrations', 'w3s_cf7' ),
+            'search_items'          => __( 'Search Integration', 'w3s_cf7' ),
+            'not_found'             => __( 'Not found', 'w3s_cf7' ),
+            'not_found_in_trash'    => __( 'Not found in Trash', 'w3s_cf7' ),
+            'featured_image'        => __( 'Featured Image', 'w3s_cf7' ),
+            'set_featured_image'    => __( 'Set featured image', 'w3s_cf7' ),
+            'remove_featured_image' => __( 'Remove featured image', 'w3s_cf7' ),
+            'use_featured_image'    => __( 'Use as featured image', 'w3s_cf7' ),
+            'insert_into_item'      => __( 'Insert into integration', 'w3s_cf7' ),
+            'uploaded_to_this_item' => __( 'Uploaded to this item', 'w3s_cf7' ),
+            'items_list'            => __( 'Items list', 'w3s_cf7' ),
+            'items_list_navigation' => __( 'Items list navigation', 'w3s_cf7' ),
+            'filter_items_list'     => __( 'Filter items list', 'w3s_cf7' ),
+        );
+        $args = array(
+            'label'                 => __( 'Integration', 'w3s_cf7' ),
+            'description'           => __( 'Integration to Zoho with Contact Form 7', 'w3s_cf7' ),
+            'labels'                => $labels,
+            'supports'              => array( 'title'),
+            'hierarchical'          => false,
+            'public'                => true,
+            'show_ui'               => true,
+            'show_in_menu'          => true,
+            'menu_position'         => 40,
+            'menu_icon'             => 'dashicons-vault',
+            'show_in_admin_bar'     => false,
+            'show_in_nav_menus'     => false,
+            'can_export'            => false,
+            'has_archive'           => false,
+            'exclude_from_search'   => true,
+            'publicly_queryable'    => true,
+            'rewrite'               => false,
+            'capability_type'       => 'post',
+            'show_in_rest'          => true,
+        );
+        register_post_type( 'w3s_cf7', $args );
+
+    }
+
+
+
+
+
+
 
 
 }

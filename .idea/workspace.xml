@@ -2,12 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6b60b1ce-874e-48c1-af83-39a38f8388d5" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/includes/zoho-conn/authlog/ZCRMClientLibrary.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/zoho-conn/authlog/zcrm_oauthtokens.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/zoho-conn/composer.lock" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/includes/zoho-conn/fix.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin/class-w3s-cf7-zoho-admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/class-w3s-cf7-zoho-admin.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/class-w3s-cf7-zoho-conn.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/class-w3s-cf7-zoho-conn.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/zoho-conn/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/includes/zoho-conn/composer.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/zoho-conn/config.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/zoho-conn/config.php" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/includes/zoho-conn/gen.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/zoho-conn/gen.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/includes/zoho-conn/index.php" beforeDir="false" afterPath="$PROJECT_DIR$/includes/zoho-conn/index.php" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,29 +28,17 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/admin/class-w3s-cf7-zoho-admin.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="248">
-              <caret line="319" column="46" lean-forward="true" selection-start-line="319" selection-start-column="46" selection-end-line="321" selection-end-column="51" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../contact-form-7/includes/contact-form.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="12460">
-              <caret line="623" column="52" selection-start-line="623" selection-start-column="52" selection-end-line="623" selection-end-column="52" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../contact-form-7/includes/form-tags-manager.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4360">
-              <caret line="218" column="49" selection-start-line="218" selection-start-column="45" selection-end-line="218" selection-end-column="49" />
+            <state relative-caret-position="584">
+              <caret line="378" column="33" selection-start-line="378" selection-start-column="33" selection-end-line="378" selection-end-column="33" />
+              <folding>
+                <element signature="e#7#191#0#PHP" expanded="true" />
+                <element signature="n#enqueue_styles#0;n#W3s_Cf7_Zoho_Admin#0;n#!!top" />
+                <element signature="n#enqueue_scripts#0;n#W3s_Cf7_Zoho_Admin#0;n#!!top" />
+                <element signature="n#admin_options#0;n#W3s_Cf7_Zoho_Admin#0;n#!!top" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -55,45 +46,11 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/includes/class-w3s-cf7-zoho-conn.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-278">
-              <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
+            <state relative-caret-position="200">
+              <caret line="93" lean-forward="true" selection-start-line="93" selection-end-line="93" />
               <folding>
                 <element signature="e#7#329#0#PHP" expanded="true" />
                 <element signature="e#740#788#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/includes/zoho-conn/gen.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="140">
-              <caret line="15" column="28" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
-              <folding>
-                <element signature="e#271#319#0#PHP" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/includes/zoho-conn/config.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="11" column="6" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/includes/zoho-conn/index.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="10" lean-forward="true" selection-start-line="10" selection-end-line="10" />
-              <folding>
-                <element signature="e#7#42#0#PHP" expanded="true" />
-                <element signature="e#111#159#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -105,6 +62,7 @@
     <findStrings>
       <find>scan_form_tags</find>
       <find>scanned_form_tags</find>
+      <find>$editor</find>
     </findStrings>
   </component>
   <component name="Git.Settings">
@@ -122,10 +80,10 @@
         <option value="$PROJECT_DIR$/includes/zoho-conn/config.php" />
         <option value="$PROJECT_DIR$/includes/zoho-conn/composer.json" />
         <option value="$PROJECT_DIR$/includes/zoho-conn/index.php" />
-        <option value="$PROJECT_DIR$/admin/class-w3s-cf7-zoho-admin.php" />
         <option value="$PROJECT_DIR$/includes/zoho-conn/authlog/zcrm_oauthtokens.txt" />
-        <option value="$PROJECT_DIR$/includes/class-w3s-cf7-zoho-conn.php" />
         <option value="$PROJECT_DIR$/includes/zoho-conn/gen.php" />
+        <option value="$PROJECT_DIR$/includes/class-w3s-cf7-zoho-conn.php" />
+        <option value="$PROJECT_DIR$/admin/class-w3s-cf7-zoho-admin.php" />
       </list>
     </option>
   </component>
@@ -149,6 +107,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -159,6 +118,11 @@
             <path>
               <item name="w3s-cf7-zoho" type="b2602c69:ProjectViewProjectNode" />
               <item name="w3s-cf7-zoho" type="462c0819:PsiDirectoryNode" />
+              <item name="admin" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="w3s-cf7-zoho" type="b2602c69:ProjectViewProjectNode" />
+              <item name="w3s-cf7-zoho" type="462c0819:PsiDirectoryNode" />
               <item name="includes" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
@@ -166,13 +130,6 @@
               <item name="w3s-cf7-zoho" type="462c0819:PsiDirectoryNode" />
               <item name="includes" type="462c0819:PsiDirectoryNode" />
               <item name="zoho-conn" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="w3s-cf7-zoho" type="b2602c69:ProjectViewProjectNode" />
-              <item name="w3s-cf7-zoho" type="462c0819:PsiDirectoryNode" />
-              <item name="includes" type="462c0819:PsiDirectoryNode" />
-              <item name="zoho-conn" type="462c0819:PsiDirectoryNode" />
-              <item name="authlog" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="w3s-cf7-zoho" type="b2602c69:ProjectViewProjectNode" />
@@ -183,36 +140,12 @@
             </path>
             <path>
               <item name="w3s-cf7-zoho" type="b2602c69:ProjectViewProjectNode" />
-              <item name="w3s-cf7-zoho" type="462c0819:PsiDirectoryNode" />
-              <item name="includes" type="462c0819:PsiDirectoryNode" />
-              <item name="zoho-conn" type="462c0819:PsiDirectoryNode" />
-              <item name="vendor" type="462c0819:PsiDirectoryNode" />
-              <item name="zohocrm" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="w3s-cf7-zoho" type="b2602c69:ProjectViewProjectNode" />
-              <item name="w3s-cf7-zoho" type="462c0819:PsiDirectoryNode" />
-              <item name="includes" type="462c0819:PsiDirectoryNode" />
-              <item name="zoho-conn" type="462c0819:PsiDirectoryNode" />
-              <item name="vendor" type="462c0819:PsiDirectoryNode" />
-              <item name="zohocrm" type="462c0819:PsiDirectoryNode" />
-              <item name="php-sdk" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="w3s-cf7-zoho" type="b2602c69:ProjectViewProjectNode" />
-              <item name="w3s-cf7-zoho" type="462c0819:PsiDirectoryNode" />
-              <item name="includes" type="462c0819:PsiDirectoryNode" />
-              <item name="zoho-conn" type="462c0819:PsiDirectoryNode" />
-              <item name="vendor" type="462c0819:PsiDirectoryNode" />
-              <item name="zohocrm" type="462c0819:PsiDirectoryNode" />
-              <item name="php-sdk" type="462c0819:PsiDirectoryNode" />
-              <item name="samplecodes" type="462c0819:PsiDirectoryNode" />
+              <item name="External Libraries" type="bcb0276e:PhpExternalLibrariesNodePatcher$PatchedExternalLibrariesNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -274,7 +207,13 @@
       <workItem from="1560235184013" duration="4232000" />
       <workItem from="1560261388879" duration="599000" />
       <workItem from="1560408109448" duration="342000" />
-      <workItem from="1560411627612" duration="352000" />
+      <workItem from="1560411627612" duration="7850000" />
+      <workItem from="1560425065371" duration="2450000" />
+      <workItem from="1560668249371" duration="7509000" />
+      <workItem from="1560760515893" duration="600000" />
+      <workItem from="1561796631184" duration="7505000" />
+      <workItem from="1561893342082" duration="7626000" />
+      <workItem from="1561976963789" duration="6880000" />
     </task>
     <task id="LOCAL-00001" summary="Option page options added.">
       <created>1553008570127</created>
@@ -294,7 +233,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="75080000" />
+    <option name="totallyTimeSpent" value="115148000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -309,8 +248,8 @@
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.47606727" visible="true" weight="0.21896644" />
-      <window_info id="Structure" order="1" sideWeight="0.52393275" side_tool="true" visible="true" weight="0.21896644" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.46959898" visible="true" weight="0.17101759" />
+      <window_info id="Structure" order="1" sideWeight="0.53040105" side_tool="true" visible="true" weight="0.17101759" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -322,7 +261,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.2260128" />
-      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49920085" visible="true" weight="0.17590618" />
+      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49920085" visible="true" weight="0.17590618" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5007991" side_tool="true" weight="0.17590618" />
       <window_info anchor="bottom" id="Services" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -358,36 +297,6 @@
     <wordpressPath>D:\xampp\htdocs\work\plugin.wp</wordpressPath>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/includes/zoho-conn/log/zcrm_oauthtokens.txt" />
-    <entry file="file://$PROJECT_DIR$/includes/zoho-conn/log/ZCRMClientLibrary.log" />
-    <entry file="file://$PROJECT_DIR$/includes/zoho-conn/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="168">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../wp-includes/plugin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="323">
-          <caret line="748" column="55" lean-forward="true" selection-start-line="748" selection-start-column="55" selection-end-line="748" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../../../wp-config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="611">
-          <caret line="85" column="20" selection-start-line="85" selection-start-column="13" selection-end-line="85" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/w3s-cf7-zoho.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="216">
-          <caret line="9" column="46" lean-forward="true" selection-start-line="9" selection-start-column="46" selection-end-line="9" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/uninstall.php">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -395,13 +304,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="480">
           <caret line="24" column="20" lean-forward="true" selection-start-line="24" selection-start-column="20" selection-end-line="24" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/titan-framework/lib/class-titan-framework.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="539">
-          <caret line="581" column="20" selection-start-line="581" selection-start-column="20" selection-end-line="581" selection-end-column="20" />
         </state>
       </provider>
     </entry>
@@ -440,13 +342,6 @@
           <folding>
             <element signature="e#6#43#0#PHP" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/zoho-conn/fix.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="3" column="35" lean-forward="true" selection-start-line="3" selection-start-column="35" selection-end-line="3" selection-end-column="35" />
         </state>
       </provider>
     </entry>
@@ -598,37 +493,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../contact-form-7/includes/contact-form.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="12460">
-          <caret line="623" column="52" selection-start-line="623" selection-start-column="52" selection-end-line="623" selection-end-column="52" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../contact-form-7/includes/form-tags-manager.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4360">
-          <caret line="218" column="49" selection-start-line="218" selection-start-column="45" selection-end-line="218" selection-end-column="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/zoho-conn/config.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="11" column="6" selection-start-line="11" selection-start-column="6" selection-end-line="11" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/includes/zoho-conn/authlog/zcrm_oauthtokens.txt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/admin/class-w3s-cf7-zoho-admin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="248">
-          <caret line="319" column="46" lean-forward="true" selection-start-line="319" selection-start-column="46" selection-end-line="321" selection-end-column="51" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/includes/zoho-conn/index.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="200">
@@ -659,10 +523,96 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../contact-form-7/admin/edit-contact-form.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="745">
+          <caret line="271" column="23" lean-forward="true" selection-start-line="271" selection-start-column="23" selection-end-line="271" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../contact-form-7/admin/includes/help-tabs.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="40">
+          <caret line="2" column="6" selection-start-line="2" selection-start-column="6" selection-end-line="2" selection-end-column="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../contact-form-7/admin/includes/admin-functions.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="15" column="58" lean-forward="true" selection-start-line="15" selection-start-column="58" selection-end-line="15" selection-end-column="58" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../contact-form-7/admin/includes/editor.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="76" column="34" lean-forward="true" selection-start-line="76" selection-start-column="4" selection-end-line="76" selection-end-column="34" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../contact-form-7/includes/form-tags-manager.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="740">
+          <caret line="37" selection-start-line="37" selection-end-line="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$APPLICATION_HOME_DIR$/plugins/php/lib/php.jar!/stubs/pcre/pcre.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1720">
+          <caret line="86" column="36" selection-start-line="86" selection-start-column="36" selection-end-line="86" selection-end-column="36" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../contact-form-7/includes/contact-form.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3920">
+          <caret line="196" column="24" selection-start-line="196" selection-start-column="20" selection-end-line="196" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/zoho-conn/config.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="8" column="52" lean-forward="true" selection-start-line="8" selection-start-column="52" selection-end-line="8" selection-end-column="52" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/titan-framework/titan-framework-embedder.php">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/zoho-conn/fix.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="3" column="35" selection-start-line="3" selection-start-column="35" selection-end-line="3" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/zoho-conn/authlog/zcrm_oauthtokens.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/zoho-conn/gen.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-373">
+          <caret line="95" column="79" selection-start-line="95" selection-start-column="79" selection-end-line="95" selection-end-column="79" />
+          <folding>
+            <element signature="e#271#319#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/includes/titan-framework/lib/class-titan-framework.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="415">
+          <caret line="376" column="35" selection-start-line="376" selection-start-column="20" selection-end-line="376" selection-end-column="35" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/includes/class-w3s-cf7-zoho-conn.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-278">
-          <caret line="70" lean-forward="true" selection-start-line="70" selection-end-line="70" />
+        <state relative-caret-position="200">
+          <caret line="93" lean-forward="true" selection-start-line="93" selection-end-line="93" />
           <folding>
             <element signature="e#7#329#0#PHP" expanded="true" />
             <element signature="e#740#788#0#PHP" expanded="true" />
@@ -670,12 +620,15 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/includes/zoho-conn/gen.php">
+    <entry file="file://$PROJECT_DIR$/admin/class-w3s-cf7-zoho-admin.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="140">
-          <caret line="15" column="28" selection-start-line="15" selection-start-column="28" selection-end-line="15" selection-end-column="28" />
+        <state relative-caret-position="584">
+          <caret line="378" column="33" selection-start-line="378" selection-start-column="33" selection-end-line="378" selection-end-column="33" />
           <folding>
-            <element signature="e#271#319#0#PHP" expanded="true" />
+            <element signature="e#7#191#0#PHP" expanded="true" />
+            <element signature="n#enqueue_styles#0;n#W3s_Cf7_Zoho_Admin#0;n#!!top" />
+            <element signature="n#enqueue_scripts#0;n#W3s_Cf7_Zoho_Admin#0;n#!!top" />
+            <element signature="n#admin_options#0;n#W3s_Cf7_Zoho_Admin#0;n#!!top" />
           </folding>
         </state>
       </provider>
