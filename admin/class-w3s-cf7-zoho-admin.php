@@ -529,7 +529,7 @@ class W3s_Cf7_Zoho_Admin {
         $titan = TitanFramework::getInstance('w3s-cf7-zoho');
 
 
-        die(var_dump($titan->getOption( 'cf7_form' , '14')));
+        die(var_dump($titan->getOption( 'cf7_field_1' , '14')));
 
 
         $contact_form = WPCF7_Submission::get_instance();
@@ -568,7 +568,7 @@ class W3s_Cf7_Zoho_Admin {
                     $cf7_field_1 = $titan->getOption( 'cf7_field_1' , get_the_ID() );
                     $zoho_field_1 = $titan->getOption( 'zoho_field_1' , get_the_ID() );
 
-                    if (( $cf7_field_1 != null ) && $zoho_field_1 != null){
+                    if (( $cf7_field_1 != null ) && ($zoho_field_1 != null)){
                         $record->setFieldValue($zoho_field_1, $formData[$cf7_field_1]);
                     }
 
