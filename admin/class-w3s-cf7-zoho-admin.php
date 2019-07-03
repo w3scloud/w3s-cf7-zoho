@@ -43,6 +43,8 @@ class W3s_Cf7_Zoho_Admin {
 
 
 
+    private $titan;
+
 
 
     /**
@@ -57,22 +59,9 @@ class W3s_Cf7_Zoho_Admin {
         $this->plugin_name = $plugin_name;
         $this->version = $version;
 
-
-
         add_action( 'init', array( $this, 'w3s_cf7_post_type' ), 0 );
-        // titan framework options
-        add_action( 'tf_create_options', array( $this, 'admin_options' ) );
-        add_action( 'tf_create_options', array( $this, 'dry_run_metabox' ) );
-
-        add_action( 'load-post.php', array( $this, 'w3s_cf7_post_action_for_metabox' ) , 0 );
-        // add the action
-        // add_action( 'wpcf7_before_send_mail', array( $this,'run_on_cf7_submit'), 10, 1 );
-
-    
-        
+        add_action('plugins_loaded', array($this, 'plugins_loaded'));
         add_filter('plugin_action_links_w3s-cf7-zoho/w3s-cf7-zoho.php', array( $this,'w3s_cf7_add_plugin_page_settings_link'));
-
-
     }
 
     /**
@@ -122,6 +111,18 @@ class W3s_Cf7_Zoho_Admin {
     }
 
 
+    public function plugins_loaded(){
+        // titan framework options
+        add_action( 'after_setup_theme', array( $this, 'after_setup_theme_add_titan' ), 5 );
+        add_action( 'tf_create_options', array( $this, 'admin_options' ), 0);
+        add_action( 'tf_create_options', array( $this, 'dry_run_metabox' ),0 );
+        add_action( 'load-post.php', array( $this, 'w3s_cf7_post_action_for_metabox' ) , 10 );
+        // add the action
+        // add_action( 'wpcf7_before_send_mail', array( $this,'run_on_cf7_submit'), 10, 1 );
+
+    }
+
+
     /**
      * Register the options for the admin area.
      *
@@ -131,7 +132,9 @@ class W3s_Cf7_Zoho_Admin {
     {
 
         // get instance of w3s-cf7-zoho
-        $titan = TitanFramework::getInstance('w3s-cf7-zoho');
+//        $titan = TitanFramework::getInstance('w3s-cf7-zoho');
+
+        $titan = $this->titan;
 
         // create the admin panel
         $panel = $titan->createAdminPage(array(
@@ -345,21 +348,25 @@ class W3s_Cf7_Zoho_Admin {
     }
 
     public function w3s_cf7_post_action_for_metabox( ) {
+
+
+        $check = has_action( 'tf_create_options', array( $this, 'dry_run_metabox' ));
+
+        die(var_dump($check));
+
+        remove_action( 'tf_create_options', array( $this, 'dry_run_metabox' ));
+
         $post_id = $_GET[ 'post' ];
 
         if( get_post_type($post_id) == 'w3s_cf7' ) {
 
 
-            $titan = TitanFramework::getInstance('w3s-cf7-zoho');
+            $titan = $this->titan;
 
 
             $zoho_conn = new W3s_Cf7_Zoho_Conn();
             $cf7fields = $zoho_conn->getCF7Fields( $titan->getOption( 'cf7_form' , $post_id )); // need to
             $zohoFields = $zoho_conn->getZohoFields();
-
-
-//            die(var_dump($cf7fields));
-
 
 
             $metaBox = $titan->createMetaBox( array(
@@ -477,6 +484,11 @@ class W3s_Cf7_Zoho_Admin {
     }
 
 
+    public function after_setup_theme_add_titan(){
+        $this->titan = TitanFramework::getInstance('w3s-cf7-zoho');
+    }
+
+
 
     // Register Custom Post Type
     public function w3s_cf7_post_type() {
@@ -537,16 +549,8 @@ class W3s_Cf7_Zoho_Admin {
 
 
     public function run_on_cf7_submit( $contact ) {
-        // remove previous metaa box
-        remove_action( 'tf_create_options', array( $this, 'dry_run_metabox' ), 20 );
 
-//        die(var_dump($contact->id()));
-
-        $titan = TitanFramework::getInstance('w3s-cf7-zoho');
-
-
-        die(var_dump($titan->getOption( 'cf7_field_1' , '14')));
-
+        $titan = $this->titan;
 
         $contact_form = WPCF7_Submission::get_instance();
         if ( $contact_form ){
@@ -560,6 +564,7 @@ class W3s_Cf7_Zoho_Admin {
             'post_type' => 'w3s_cf7',
             'posts_per_page' => -1
         );
+
         // The Query for getting all integrations
         $the_query = new WP_Query( $args );
 
@@ -572,14 +577,11 @@ class W3s_Cf7_Zoho_Admin {
                 $the_query->the_post();
 
                 //check if the integration is for this contact form
-                if ( ( $contact->id() == $titan->getOption( 'cf7_form' , get_the_ID()) ) && ($titan->getOption( 'is_enabled' , get_the_ID() == true ) ) ){
-
-
+                if ( ( $contact->id() == $titan->getOption( 'cf7_form' , get_the_ID()) ) && ($titan->getOption( 'is_enabled' , get_the_ID() )  == true ) ){
 
                     // initiate a blank Lead Instant
                     $record = ZCRMRecord::getInstance("Leads",null);
                     // populate fields
-
 
                     $cf7_field_1 = $titan->getOption( 'cf7_field_1' , get_the_ID() );
                     $zoho_field_1 = $titan->getOption( 'zoho_field_1' , get_the_ID() );
@@ -620,117 +622,111 @@ class W3s_Cf7_Zoho_Admin {
 
 
 public function dry_run_metabox(){
-    $titan = TitanFramework::getInstance('w3s-cf7-zoho');
 
+    $titan = $this->titan;
+    $cf7fields = array();
+    $zohoFields = array();
 
-            
-            $cf7fields = array();
-            $zohoFields = array();
+    $metaBox = $titan->createMetaBox( array(
+        'name' => 'Field Mapping',
+        'post_type' => 'w3s_cf7',
+    ));
+    $metaBox->createOption( array(
+        'name' => 'Field Map 1',
+        'type' => 'heading',
+    ) );
+    $metaBox->createOption( array(
+        'name' => 'Contact Form 7 Field',
+        'id' => 'cf7_field_1',
+        'type' => 'select',
+        'desc' => 'Select the Contact form 7 field.',
+        'options' => $cf7fields,
+    ));
 
+    $metaBox->createOption( array(
+        'name' => 'Match Zoho Field',
+        'id' => 'zoho_field_1',
+        'type' => 'select',
+        'desc' => 'Select the Zoho field.',
+        'options' => $zohoFields,
+    ));
+    $metaBox->createOption( array(
+        'name' => 'Field Map 2',
+        'type' => 'heading',
+    ) );
+    $metaBox->createOption( array(
+        'name' => 'Contact Form 7 Field',
+        'id' => 'cf7_field_2',
+        'type' => 'select',
+        'desc' => 'Select the Contact form 7 field.',
+        'options' => $cf7fields,
+    ));
 
-//            die(var_dump($cf7fields));
+    $metaBox->createOption( array(
+        'name' => 'Match Zoho Field',
+        'id' => 'zoho_field_2',
+        'type' => 'select',
+        'desc' => 'Select the Zoho field.',
+        'options' => $zohoFields,
+    ));
+    $metaBox->createOption( array(
+        'name' => 'Field Map 3',
+        'type' => 'heading',
+    ) );
+    $metaBox->createOption( array(
+        'name' => 'Contact Form 7 Field',
+        'id' => 'cf7_field_3',
+        'type' => 'select',
+        'desc' => 'Select the Contact form 7 field.',
+        'options' => $cf7fields,
+    ));
 
+    $metaBox->createOption( array(
+        'name' => 'Match Zoho Field',
+        'id' => 'zoho_field_3',
+        'type' => 'select',
+        'desc' => 'Select the Zoho field.',
+        'options' => $zohoFields,
+    ));
+    $metaBox->createOption( array(
+        'name' => 'Field Map 4',
+        'type' => 'heading',
+    ) );
+    $metaBox->createOption( array(
+        'name' => 'Contact Form 7 Field',
+        'id' => 'cf7_field_4',
+        'type' => 'select',
+        'desc' => 'Select the Contact form 7 field.',
+        'options' => $cf7fields,
+    ));
 
+    $metaBox->createOption( array(
+        'name' => 'Match Zoho Field',
+        'id' => 'zoho_field_4',
+        'type' => 'select',
+        'desc' => 'Select the Zoho field.',
+        'options' => $zohoFields,
+    ));
+    $metaBox->createOption( array(
+        'name' => 'Field Map 5',
+        'type' => 'heading',
+    ) );
+    $metaBox->createOption( array(
+        'name' => 'Contact Form 7 Field',
+        'id' => 'cf7_field_5',
+        'type' => 'select',
+        'desc' => 'Select the Contact form 7 field.',
+        'options' => $cf7fields,
+    ));
 
-            $metaBox = $titan->createMetaBox( array(
-                'name' => 'Field Mapping',
-                'post_type' => 'w3s_cf7',
-            ));
-            $metaBox->createOption( array(
-                'name' => 'Field Map 1',
-                'type' => 'heading',
-            ) );
-            $metaBox->createOption( array(
-                'name' => 'Contact Form 7 Field',
-                'id' => 'cf7_field_1',
-                'type' => 'select',
-                'desc' => 'Select the Contact form 7 field.',
-                'options' => $cf7fields,
-            ));
+    $metaBox->createOption( array(
+        'name' => 'Match Zoho Field',
+        'id' => 'zoho_field_5',
+        'type' => 'select',
+        'desc' => 'Select the Zoho field.',
+        'options' => $zohoFields,
+    ));
 
-            $metaBox->createOption( array(
-                'name' => 'Match Zoho Field',
-                'id' => 'zoho_field_1',
-                'type' => 'select',
-                'desc' => 'Select the Zoho field.',
-                'options' => $zohoFields,
-            ));
-            $metaBox->createOption( array(
-                'name' => 'Field Map 2',
-                'type' => 'heading',
-            ) );
-            $metaBox->createOption( array(
-                'name' => 'Contact Form 7 Field',
-                'id' => 'cf7_field_2',
-                'type' => 'select',
-                'desc' => 'Select the Contact form 7 field.',
-                'options' => $cf7fields,
-            ));
-
-            $metaBox->createOption( array(
-                'name' => 'Match Zoho Field',
-                'id' => 'zoho_field_2',
-                'type' => 'select',
-                'desc' => 'Select the Zoho field.',
-                'options' => $zohoFields,
-            ));
-            $metaBox->createOption( array(
-                'name' => 'Field Map 3',
-                'type' => 'heading',
-            ) );
-            $metaBox->createOption( array(
-                'name' => 'Contact Form 7 Field',
-                'id' => 'cf7_field_3',
-                'type' => 'select',
-                'desc' => 'Select the Contact form 7 field.',
-                'options' => $cf7fields,
-            ));
-
-            $metaBox->createOption( array(
-                'name' => 'Match Zoho Field',
-                'id' => 'zoho_field_3',
-                'type' => 'select',
-                'desc' => 'Select the Zoho field.',
-                'options' => $zohoFields,
-            ));
-            $metaBox->createOption( array(
-                'name' => 'Field Map 4',
-                'type' => 'heading',
-            ) );
-            $metaBox->createOption( array(
-                'name' => 'Contact Form 7 Field',
-                'id' => 'cf7_field_4',
-                'type' => 'select',
-                'desc' => 'Select the Contact form 7 field.',
-                'options' => $cf7fields,
-            ));
-
-            $metaBox->createOption( array(
-                'name' => 'Match Zoho Field',
-                'id' => 'zoho_field_4',
-                'type' => 'select',
-                'desc' => 'Select the Zoho field.',
-                'options' => $zohoFields,
-            ));
-            $metaBox->createOption( array(
-                'name' => 'Field Map 5',
-                'type' => 'heading',
-            ) );
-            $metaBox->createOption( array(
-                'name' => 'Contact Form 7 Field',
-                'id' => 'cf7_field_5',
-                'type' => 'select',
-                'desc' => 'Select the Contact form 7 field.',
-                'options' => $cf7fields,
-            ));
-
-            $metaBox->createOption( array(
-                'name' => 'Match Zoho Field',
-                'id' => 'zoho_field_5',
-                'type' => 'select',
-                'desc' => 'Select the Zoho field.',
-                'options' => $zohoFields,
-            ));
 }
 
 

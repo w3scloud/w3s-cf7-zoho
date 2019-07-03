@@ -4,6 +4,7 @@
     <list default="true" id="6b60b1ce-874e-48c1-af83-39a38f8388d5" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/admin/class-w3s-cf7-zoho-admin.php" beforeDir="false" afterPath="$PROJECT_DIR$/admin/class-w3s-cf7-zoho-admin.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/includes/zoho-conn/authlog/zcrm_oauthtokens.txt" beforeDir="false" afterPath="$PROJECT_DIR$/includes/zoho-conn/authlog/zcrm_oauthtokens.txt" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -24,26 +25,10 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/admin/class-w3s-cf7-zoho-admin.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="171">
-              <caret line="531" column="52" selection-start-line="531" selection-start-column="52" selection-end-line="531" selection-end-column="52" />
+            <state relative-caret-position="435">
+              <caret line="356" column="34" selection-start-line="356" selection-start-column="34" selection-end-line="356" selection-end-column="34" />
               <folding>
                 <element signature="e#7#191#0#PHP" expanded="true" />
-                <element signature="n#enqueue_styles#0;n#W3s_Cf7_Zoho_Admin#0;n#!!top" />
-                <element signature="n#enqueue_scripts#0;n#W3s_Cf7_Zoho_Admin#0;n#!!top" />
-                <element signature="n#w3s_cf7_post_type#0;n#W3s_Cf7_Zoho_Admin#0;n#!!top" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/includes/class-w3s-cf7-zoho-conn.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1620">
-              <caret line="93" selection-start-line="93" selection-end-line="93" />
-              <folding>
-                <element signature="e#7#329#0#PHP" expanded="true" />
-                <element signature="e#740#788#0#PHP" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -112,28 +97,6 @@
               <item name="w3s-cf7-zoho" type="b2602c69:ProjectViewProjectNode" />
               <item name="w3s-cf7-zoho" type="462c0819:PsiDirectoryNode" />
               <item name="admin" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="w3s-cf7-zoho" type="b2602c69:ProjectViewProjectNode" />
-              <item name="w3s-cf7-zoho" type="462c0819:PsiDirectoryNode" />
-              <item name="includes" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="w3s-cf7-zoho" type="b2602c69:ProjectViewProjectNode" />
-              <item name="w3s-cf7-zoho" type="462c0819:PsiDirectoryNode" />
-              <item name="includes" type="462c0819:PsiDirectoryNode" />
-              <item name="zoho-conn" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="w3s-cf7-zoho" type="b2602c69:ProjectViewProjectNode" />
-              <item name="w3s-cf7-zoho" type="462c0819:PsiDirectoryNode" />
-              <item name="includes" type="462c0819:PsiDirectoryNode" />
-              <item name="zoho-conn" type="462c0819:PsiDirectoryNode" />
-              <item name="vendor" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="w3s-cf7-zoho" type="b2602c69:ProjectViewProjectNode" />
-              <item name="External Libraries" type="bcb0276e:PhpExternalLibrariesNodePatcher$PatchedExternalLibrariesNode" />
             </path>
           </expand>
           <select />
@@ -209,6 +172,7 @@
       <workItem from="1561976963789" duration="7457000" />
       <workItem from="1562062551487" duration="8199000" />
       <workItem from="1562081642290" duration="146000" />
+      <workItem from="1562148805424" duration="6590000" />
     </task>
     <task id="LOCAL-00001" summary="Option page options added.">
       <created>1553008570127</created>
@@ -228,7 +192,7 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="124070000" />
+    <option name="totallyTimeSpent" value="130660000" />
   </component>
   <component name="TodoView">
     <todo-panel id="selected-file">
@@ -241,9 +205,10 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.46701163" visible="true" weight="0.11720831" />
-      <window_info id="Structure" order="1" sideWeight="0.53298837" side_tool="true" visible="true" weight="0.11720831" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.46588486" visible="true" weight="0.11827384" />
+      <window_info active="true" id="Structure" order="1" sideWeight="0.53411514" side_tool="true" visible="true" weight="0.11827384" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
@@ -255,7 +220,7 @@
       <window_info anchor="bottom" id="Docker" order="7" show_stripe_button="false" />
       <window_info anchor="bottom" id="Database Changes" order="8" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.2260128" />
-      <window_info active="true" anchor="bottom" id="Terminal" order="10" sideWeight="0.49920085" visible="true" weight="0.17590618" />
+      <window_info anchor="bottom" id="Terminal" order="10" sideWeight="0.49920085" weight="0.17590618" />
       <window_info anchor="bottom" id="Event Log" order="11" sideWeight="0.5007991" side_tool="true" weight="0.17590618" />
       <window_info anchor="bottom" id="Services" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
@@ -607,26 +572,23 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/admin/class-w3s-cf7-zoho-admin.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="531" column="52" selection-start-line="531" selection-start-column="52" selection-end-line="531" selection-end-column="52" />
-          <folding>
-            <element signature="e#7#191#0#PHP" expanded="true" />
-            <element signature="n#enqueue_styles#0;n#W3s_Cf7_Zoho_Admin#0;n#!!top" />
-            <element signature="n#enqueue_scripts#0;n#W3s_Cf7_Zoho_Admin#0;n#!!top" />
-            <element signature="n#w3s_cf7_post_type#0;n#W3s_Cf7_Zoho_Admin#0;n#!!top" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/includes/class-w3s-cf7-zoho-conn.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1620">
+        <state relative-caret-position="682">
           <caret line="93" selection-start-line="93" selection-end-line="93" />
           <folding>
             <element signature="e#7#329#0#PHP" expanded="true" />
             <element signature="e#740#788#0#PHP" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/admin/class-w3s-cf7-zoho-admin.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="435">
+          <caret line="356" column="34" selection-start-line="356" selection-start-column="34" selection-end-line="356" selection-end-column="34" />
+          <folding>
+            <element signature="e#7#191#0#PHP" expanded="true" />
           </folding>
         </state>
       </provider>
