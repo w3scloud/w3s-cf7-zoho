@@ -59,7 +59,10 @@ class W3s_Cf7_Zoho_Conn {
     }
 
     public function createRecord($dataAray){
-        // ToDo # need to connect with zoho
+        // initiate a blank Lead Instant
+            die(var_dump($dataAray));
+        // populate fields
+
     }
 
     public function upsertRecord($dataAray){
