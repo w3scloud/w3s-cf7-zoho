@@ -29,7 +29,9 @@
  */
 
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
+use zcrmsdk\crm\exception\ZCRMException;
 use zcrmsdk\crm\crud\ZCRMModule;
+use zcrmsdk\crm\crud\ZCRMRecord;
 
 
 
@@ -59,14 +61,43 @@ class W3s_Cf7_Zoho_Conn {
     }
 
     public function createRecord($dataAray){
-        // initiate a blank Lead Instant
-            die(var_dump($dataAray));
-        // populate fields
+        $this->include_zoho();
 
+        $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("leads");
+        $records=array();
+
+
+        foreach ($dataAray as $data){
+            $record = ZCRMRecord::getInstance("leads",null);
+
+            foreach ($data as $key => $value){
+                $record->setFieldValue( $key, $value );
+            }
+
+            array_push($records, $record);
+        }
+
+        $responseIn = $moduleIns->createRecords($records);
     }
 
     public function upsertRecord($dataAray){
-        // ToDo # need to connect with zoho
+        $this->include_zoho();
+
+        $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("leads");
+        $records=array();
+
+
+        foreach ($dataAray as $data){
+            $record = ZCRMRecord::getInstance("leads",null);
+
+            foreach ($data as $key => $value){
+                $record->setFieldValue( $key, $value );
+            }
+
+            array_push($records, $record);
+        }
+
+        $responseIn = $moduleIns->upsertRecords($records);
     }
 
     public function getZohoFields(){
@@ -85,48 +116,30 @@ class W3s_Cf7_Zoho_Conn {
             }
 
             return $formatedFields;
-
         }
         catch (ZCRMException $e)
         {
             return array();
         }
-
-
     }
 
 
     public function getCF7Fields($cf7_id)
     {
-
-
         if ($cf7_id == null ){
             return array();
         }
-
         $current_cf7 =  WPCF7_ContactForm::get_instance($cf7_id);
-
         $form = $current_cf7->prop('form');
-
-
         $re = '/(?<=\[)([^\]]+)/';
         preg_match_all($re, $form, $matches, PREG_SET_ORDER, 0);
-
-
         $cf7Fields = array();
-
         foreach ($matches as $match){
             $field =  explode(" ", str_replace("*","", $match[0]) );
-
             if ($field[0] == 'submit') continue;
-
             $cf7Fields[$field[1]] = "{$field[1]} ({$field[0]})";
         }
-
-
         return $cf7Fields;
-
-
     }
 
 
@@ -141,8 +154,6 @@ class W3s_Cf7_Zoho_Conn {
         } else {
             $this->auth = false;
         }
-
-
 
     }
 
