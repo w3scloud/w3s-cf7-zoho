@@ -56,7 +56,12 @@ class W3s_Cf7_Zoho_Conn {
 
     private function init_zoho(){
         if ($this->auth) {
-            ZCRMRestClient::initialize($this->zohoConfig);
+            try{
+                ZCRMRestClient::initialize($this->zohoConfig);
+            }catch (ZCRMException $exception){
+                die($exception);
+            }
+
         }
     }
 
