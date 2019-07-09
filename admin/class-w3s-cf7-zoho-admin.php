@@ -553,8 +553,6 @@ class W3s_Cf7_Zoho_Admin {
 
         $titan = $this->titan;
         $recordsArray = array();
-
-//        die(var_dump($recordsArray));
         $args = array(
             'post_type' => 'w3s_cf7',
             'posts_per_page' => -1
@@ -567,18 +565,22 @@ class W3s_Cf7_Zoho_Admin {
 
 
 
+                $formData = array();
+
                 //check if the integration is for this contact form
                 if (  $contact->id() == $titan->getOption( 'cf7_form' , get_the_ID()) ){
 
                     $contact_form = WPCF7_Submission::get_instance();
-                    if ( $contact_form ){
-                        $formData = $contact_form->get_posted_data();
-                    }
+                    $formData = $contact_form->get_posted_data();
+
 
                     $entries = get_post_meta( get_the_ID(), 'w3s_cf7_fields_repeat_group', true );
 
+                    $record = array();
+                    foreach ( $entries as $entry ) {
 
-                    foreach ( $entries as $key => $entry ) {
+                        $custom = $cf7_field = $zohoField = '';
+
 
                         if ( isset( $entry['manual_value'] ) ) {
                             $custom = esc_html( $entry['manual_value'] );
@@ -588,20 +590,20 @@ class W3s_Cf7_Zoho_Admin {
                         }
                         if ( isset( $entry['zoho_select'] ) ) {
                             $zohoField = $entry['zoho_select'];
-                        }
-                        if (!isset($zohoField)){
+                        } else {
                             continue;
                         }
+
                         // if we are entering manual value
-                        if (!isset($custom)){
-                            $recordsArray[$zohoField] = $formData[$cf7_field];
+                        if ( $custom != ''){
+                            $record[$zohoField] = $custom;
                         } else {
-                            $recordsArray[$zohoField] = $custom;
+                            $record[$zohoField] = $formData[$cf7_field];
                         }
 
                     }
 
-
+                array_push($recordsArray, $record);
 
                 }
 
@@ -610,8 +612,7 @@ class W3s_Cf7_Zoho_Admin {
         }
         /* Restore original Post Data */
         wp_reset_postdata();
-//
-        die(var_dump($formData));
+
 
         if (!empty($recordsArray)){
             $zoho = new W3s_Cf7_Zoho_Conn();
