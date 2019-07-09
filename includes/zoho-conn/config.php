@@ -10,7 +10,8 @@
         'token_persistence_path' => dirname(__FILE__).'/authlog/',
         'applicationLogFilePath' => dirname(__FILE__).'/authlog/',
         'access_type'=> 'offline',
-        'apiVersion' => 'v2'
+        'apiVersion' => 'v2',
+        'persistence_handler_class' => 'zcrmsdk\oauth\persistence\ZohoOAuthPersistenceByFile'
     );
     if($conf['client_id'] == ''){
         return array();
