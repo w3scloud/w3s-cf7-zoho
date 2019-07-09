@@ -61,43 +61,53 @@ class W3s_Cf7_Zoho_Conn {
     }
 
     public function createRecord($dataAray){
-        $this->include_zoho();
+        try{
 
-        $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("leads");
-        $records=array();
+            $this->include_zoho();
+
+            $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("leads");
+            $records=array();
 
 
-        foreach ($dataAray as $data){
-            $record = ZCRMRecord::getInstance("leads",null);
+            foreach ($dataAray as $data){
+                $record = ZCRMRecord::getInstance("leads",null);
 
-            foreach ($data as $key => $value){
-                $record->setFieldValue( $key, $value );
+                foreach ($data as $key => $value){
+                    $record->setFieldValue( $key, $value );
+                }
+
+                array_push($records, $record);
             }
 
-            array_push($records, $record);
-        }
+            $responseIn = $moduleIns->createRecords($records);
+        } catch (ZCRMException $exception){
 
-        $responseIn = $moduleIns->createRecords($records);
+        }
     }
 
     public function upsertRecord($dataAray){
-        $this->include_zoho();
+        try{
 
-        $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("leads");
-        $records=array();
+            $this->include_zoho();
+
+            $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("leads");
+            $records=array();
 
 
-        foreach ($dataAray as $data){
-            $record = ZCRMRecord::getInstance("leads",null);
+            foreach ($dataAray as $data){
+                $record = ZCRMRecord::getInstance("leads",null);
 
-            foreach ($data as $key => $value){
-                $record->setFieldValue( $key, $value );
+                foreach ($data as $key => $value){
+                    $record->setFieldValue( $key, $value );
+                }
+
+                array_push($records, $record);
             }
 
-            array_push($records, $record);
-        }
+            $responseIn = $moduleIns->upsertRecords($records);
+        } catch (ZCRMException $exception){
 
-        $responseIn = $moduleIns->upsertRecords($records);
+        }
     }
 
     public function getZohoFields(){
