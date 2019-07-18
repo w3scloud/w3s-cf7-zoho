@@ -28,6 +28,7 @@
  * @author     W3S Cloud Technology, shohag121 <info@w3scloud.com>
  */
 
+
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 use zcrmsdk\crm\exception\ZCRMException;
 use zcrmsdk\crm\crud\ZCRMModule;
@@ -38,7 +39,7 @@ use zcrmsdk\crm\crud\ZCRMRecord;
 class W3s_Cf7_Zoho_Conn {
 
     private $titanInstant;
-    private $zohoConfig = array();
+    public $zohoConfig = array();
     private $auth = false;
 
     public function __construct(){
@@ -59,7 +60,10 @@ class W3s_Cf7_Zoho_Conn {
             try{
                 ZCRMRestClient::initialize($this->zohoConfig);
             }catch (ZCRMException $exception){
-                die($exception);
+                $this->auth = false;
+
+                add_action('admin_notices', array($this, 'noticeAdmin'));
+//                die($exception);
             }
 
         }
@@ -170,6 +174,14 @@ class W3s_Cf7_Zoho_Conn {
             $this->auth = false;
         }
 
+    }
+
+    public function noticeAdmin(){
+        ?>
+        <div class="notice notice-error is-dismissible">
+            <p><?php _e('Problem in your Zoho Authentication.', 'w3s-cf7-zoho'); ?></p>
+        </div>
+        <?php
     }
 
 

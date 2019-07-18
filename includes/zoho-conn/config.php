@@ -7,11 +7,10 @@
         'redirect_uri' => 'https://plugin.wp/wp-content/plugins/w3s-cf7-zoho/includes/zoho-conn/gen.php',
         'accounts_url' => 'https://accounts.zoho.com',
         'currentUserEmail' => 'shohag@w3scloud.com',
-        'token_persistence_path' => dirname(__FILE__).'/authlog/',
-        'applicationLogFilePath' => dirname(__FILE__).'/authlog/',
+        'token_persistence_path' => 'D:\xampp\htdocs\work\plugin.wp\wp-content\plugins\w3s-cf7-zoho\includes\zoho-conn/authlog/',
+        'applicationLogFilePath' => 'D:\xampp\htdocs\work\plugin.wp\wp-content\plugins\w3s-cf7-zoho\includes\zoho-conn/authlog/ZCRMClientLibrary.log',
         'access_type'=> 'offline',
-        'apiVersion' => 'v2',
-        'persistence_handler_class' => 'zcrmsdk\oauth\persistence\ZohoOAuthPersistenceByFile'
+        'apiVersion' => 'v2'
     );
     if($conf['client_id'] == ''){
         return array();

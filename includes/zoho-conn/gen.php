@@ -50,7 +50,7 @@ include_once 'vendor/autoload.php';
     // $titan->saveOptions();
     // dd($titan);
 
-
+    $authLog = dirname(__FILE__).'/authlog/';
 
     $config = array(
         'apiBaseUrl' => $titan->getOption('zoho_api_base_url'),
@@ -59,11 +59,10 @@ include_once 'vendor/autoload.php';
         'redirect_uri'=> $titan->getOption('zoho_redirect_url'),
         'accounts_url'=> $titan->getOption('zoho_account_url'),
         'currentUserEmail' => $titan->getOption('zoho_user_email'),
-        'token_persistence_path'=> dirname(__FILE__).'/authlog/',
-        'applicationLogFilePath'=> dirname(__FILE__).'/authlog/',
+        'token_persistence_path'=> $authLog,
+        'applicationLogFilePath'=> $authLog.'ZCRMClientLibrary.log',
         'access_type'=> 'offline',
-        'apiVersion' => 'v2',
-        'persistence_handler_class' => 'zcrmsdk\oauth\persistence\ZohoOAuthPersistenceByFile'
+        'apiVersion' => 'v2'
     );
 
 
@@ -76,11 +75,10 @@ include_once 'vendor/autoload.php';
         'redirect_uri' => '{$titan->getOption('zoho_redirect_url')}',
         'accounts_url' => '{$titan->getOption('zoho_account_url')}',
         'currentUserEmail' => '{$titan->getOption('zoho_user_email')}',
-        'token_persistence_path' => dirname(__FILE__).'/authlog/',
-        'applicationLogFilePath' => dirname(__FILE__).'/authlog/',
+        'token_persistence_path' => '{$authLog}',
+        'applicationLogFilePath' => '{$authLog}ZCRMClientLibrary.log',
         'access_type'=> 'offline',
-        'apiVersion' => 'v2',
-        'persistence_handler_class' => 'zcrmsdk\oauth\persistence\ZohoOAuthPersistenceByFile'
+        'apiVersion' => 'v2'
     );
     if(\$conf['client_id'] == ''){
         return array();
@@ -91,7 +89,7 @@ include_once 'vendor/autoload.php';
 
     // dd($conf);
 
-    
+
 
 // Assign the email id access
     $_SERVER['user_email_id'] = $titan->getOption('zoho_user_email');

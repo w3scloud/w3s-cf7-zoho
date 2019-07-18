@@ -13,10 +13,10 @@ $_SERVER['user_email_id'] = $conf['currentUserEmail'];
 try {
     ZCRMRestClient::initialize($conf);
     $oAuthClient = ZohoOAuth::getClientInstance();
-    $grantToken = '1000.12f392b5bb3f428e767a67ee46fcf2a2.dab32cc64ec76bda039a75a63436b0cf';
+    $grantToken = '1000.86f63945fbfdb797bc70db29ee7314f0.9d23faaef6cfa2d61ba584ed3ad614a6';
     $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);
     echo 'Token generated and app authorised successfully.';
 
 } catch (Exception $e) {
-    echo "Grant token did not generated:\n" . $e ;
+    echo "Token did not generated:\n" . $e ;
 }

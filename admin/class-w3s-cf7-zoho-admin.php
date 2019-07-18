@@ -359,7 +359,7 @@ class W3s_Cf7_Zoho_Admin {
 
                 $cmb = new_cmb2_box( array(
                     'id'            => 'w3s_cf7_fields_metabox',
-                    'title'         => esc_html__( 'Field Mapping', 'w3s-cf7' ),
+                    'title'         => esc_html__( 'Field Mapping', 'w3s-cf7-zoho' ),
                     'object_types'  => array( 'w3s_cf7' ),
                     'context'    => 'normal',
                     'priority'   => 'high',
@@ -371,17 +371,19 @@ class W3s_Cf7_Zoho_Admin {
                 $zohoFields = $zoho_conn->getZohoFields();
 
 
+//                die(var_dump($zoho_conn->zohoConfig));
+
                 $group_field_id = $cmb->add_field( array(
                     'id'          => 'w3s_cf7_fields_repeat_group',
                     'type'        => 'group',
-                    'description' => __( 'Map Contact form 7 fields to Zoho fields', 'w3s-cf7' ),
+                    'description' => __( 'Map Contact form 7 fields to Zoho fields', 'w3s-cf7-zoho' ),
                     // 'repeatable'  => false, // use false if you want non-repeatable group
                     'options'     => array(
-                        'group_title'       => __( 'Field Map {#}', 'w3s-cf7' ), // since version 1.1.4, {#} gets replaced by row number
-                        'add_button'        => __( 'Map Another Field', 'w3s-cf7' ),
-                        'remove_button'     => __( 'Remove Map', 'w3s-cf7' ),
+                        'group_title'       => __( 'Field Map {#}', 'w3s-cf7-zoho' ), // since version 1.1.4, {#} gets replaced by row number
+                        'add_button'        => __( 'Map Another Field', 'w3s-cf7-zoho' ),
+                        'remove_button'     => __( 'Remove Map', 'w3s-cf7-zoho' ),
                         'sortable'          => true,
-                        'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'w3s-cf7' ), // Performs confirmation before removing group.
+                        'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'w3s-cf7-zoho' ), // Performs confirmation before removing group.
                     ),
                 ) );
 
@@ -418,7 +420,7 @@ class W3s_Cf7_Zoho_Admin {
         } else {
             $cmb = new_cmb2_box( array(
                 'id'            => 'w3s_cf7_fields_metabox',
-                'title'         => esc_html__( 'Field Mapping', 'w3s-cf7' ),
+                'title'         => esc_html__( 'Field Mapping', 'w3s-cf7-zoho' ),
                 'object_types'  => array( 'w3s_cf7' ),
                 'context'    => 'normal',
                 'priority'   => 'high',
@@ -432,14 +434,14 @@ class W3s_Cf7_Zoho_Admin {
             $group_field_id = $cmb->add_field( array(
                 'id'          => 'w3s_cf7_fields_repeat_group',
                 'type'        => 'group',
-                'description' => __( 'Map Contact form 7 fields to Zoho fields', 'w3s-cf7' ),
+                'description' => __( 'Map Contact form 7 fields to Zoho fields', 'w3s-cf7-zoho' ),
                 // 'repeatable'  => false, // use false if you want non-repeatable group
                 'options'     => array(
-                    'group_title'       => __( 'Field Map {#}', 'w3s-cf7' ), // since version 1.1.4, {#} gets replaced by row number
-                    'add_button'        => __( 'Map Another Field', 'w3s-cf7' ),
-                    'remove_button'     => __( 'Remove Map', 'w3s-cf7' ),
+                    'group_title'       => __( 'Field Map {#}', 'w3s-cf7-zoho' ), // since version 1.1.4, {#} gets replaced by row number
+                    'add_button'        => __( 'Map Another Field', 'w3s-cf7-zoho' ),
+                    'remove_button'     => __( 'Remove Map', 'w3s-cf7-zoho' ),
                     'sortable'          => true,
-                    'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'w3s-cf7' ), // Performs confirmation before removing group.
+                    'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'w3s-cf7-zoho' ), // Performs confirmation before removing group.
                 ),
             ) );
 
