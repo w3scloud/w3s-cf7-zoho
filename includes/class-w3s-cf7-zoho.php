@@ -110,7 +110,7 @@ class W3s_Cf7_Zoho {
 		 * The class responsible for loading CMB2 to the
 		 * core plugin.
 		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/cmb2/init.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/cmb2-framework/init.php';
 
 		/**
 		 * The class responsible for orchestrating the actions and filters of the
