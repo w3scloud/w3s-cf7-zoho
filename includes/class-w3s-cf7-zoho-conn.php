@@ -33,7 +33,7 @@ use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
 use zcrmsdk\crm\exception\ZCRMException;
 use zcrmsdk\crm\crud\ZCRMModule;
 use zcrmsdk\crm\crud\ZCRMRecord;
-
+use zcrmsdk\oauth\ZohoOAuth;
 
 
 class W3s_Cf7_Zoho_Conn {
@@ -61,9 +61,7 @@ class W3s_Cf7_Zoho_Conn {
                 ZCRMRestClient::initialize($this->zohoConfig);
             }catch (ZCRMException $exception){
                 $this->auth = false;
-
-                add_action('admin_notices', array($this, 'noticeAdmin'));
-//                die($exception);
+                return;
             }
 
         }
@@ -90,7 +88,7 @@ class W3s_Cf7_Zoho_Conn {
 
             $responseIn = $moduleIns->createRecords($records);
         } catch (ZCRMException $exception){
-
+            add_action('admin_notices', array($this, 'noticeAdmin'));
         }
     }
 
@@ -115,7 +113,7 @@ class W3s_Cf7_Zoho_Conn {
 
             $responseIn = $moduleIns->upsertRecords($records);
         } catch (ZCRMException $exception){
-
+            add_action('admin_notices', array($this, 'noticeAdmin'));
         }
     }
 
@@ -138,6 +136,7 @@ class W3s_Cf7_Zoho_Conn {
         }
         catch (ZCRMException $e)
         {
+            add_action('admin_notices', array($this, 'noticeAdmin'));
             return array();
         }
     }
@@ -182,6 +181,19 @@ class W3s_Cf7_Zoho_Conn {
             <p><?php _e('Problem in your Zoho Authentication.', 'w3s-cf7-zoho'); ?></p>
         </div>
         <?php
+    }
+
+    public function genToken($grantToken){
+
+        try {
+            $this->include_zoho();
+            $oAuthClient = ZohoOAuth::getClientInstance();
+            $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);
+        }catch (ZCRMException $exception){
+            die($exception);
+        }
+
+
     }
 
 

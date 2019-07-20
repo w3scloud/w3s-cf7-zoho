@@ -62,6 +62,7 @@ class W3s_Cf7_Zoho_Admin {
         add_action( 'init', array( $this, 'w3s_cf7_post_type' ), 0 );
         add_action('plugins_loaded', array($this, 'plugins_loaded'));
         add_action( 'cmb2_admin_init', array($this, 'w3s_cf7_post_action_for_metabox') );
+        add_action( 'load-w3s_cf7_page_w3s-cf7-zoho', array($this, 'processTokenGeneration'), 0 );
         add_filter('plugin_action_links_w3s-cf7-zoho/w3s-cf7-zoho.php', array( $this,'w3s_cf7_add_plugin_page_settings_link'));
         add_action( 'wpcf7_before_send_mail', array( $this,'run_on_cf7_submit'), 10, 1);
     }
@@ -350,6 +351,16 @@ class W3s_Cf7_Zoho_Admin {
     public function w3s_cf7_post_action_for_metabox( ) {
 
 
+        $cmb = new_cmb2_box( array(
+            'id'            => 'w3s_cf7_fields_metabox',
+            'title'         => esc_html__( 'Field Mapping', 'w3s-cf7-zoho' ),
+            'object_types'  => array( 'w3s_cf7' ),
+            'context'    => 'normal',
+            'priority'   => 'high',
+            'show_names' => true, // Show field names on the left
+        ));
+
+
         if (isset($_GET[ 'post' ])){
             $post_id = $_GET[ 'post' ];
 
@@ -357,121 +368,62 @@ class W3s_Cf7_Zoho_Admin {
 
                 $titan = $this->titan;
 
-                $cmb = new_cmb2_box( array(
-                    'id'            => 'w3s_cf7_fields_metabox',
-                    'title'         => esc_html__( 'Field Mapping', 'w3s-cf7-zoho' ),
-                    'object_types'  => array( 'w3s_cf7' ),
-                    'context'    => 'normal',
-                    'priority'   => 'high',
-                    'show_names' => true, // Show field names on the left
-                ));
+
 
                 $zoho_conn = new W3s_Cf7_Zoho_Conn();
                 $cf7fields = $zoho_conn->getCF7Fields( $titan->getOption( 'cf7_form' , $post_id )); // need to
                 $zohoFields = $zoho_conn->getZohoFields();
 
-
-//                die(var_dump($zoho_conn->zohoConfig));
-
-                $group_field_id = $cmb->add_field( array(
-                    'id'          => 'w3s_cf7_fields_repeat_group',
-                    'type'        => 'group',
-                    'description' => __( 'Map Contact form 7 fields to Zoho fields', 'w3s-cf7-zoho' ),
-                    // 'repeatable'  => false, // use false if you want non-repeatable group
-                    'options'     => array(
-                        'group_title'       => __( 'Field Map {#}', 'w3s-cf7-zoho' ), // since version 1.1.4, {#} gets replaced by row number
-                        'add_button'        => __( 'Map Another Field', 'w3s-cf7-zoho' ),
-                        'remove_button'     => __( 'Remove Map', 'w3s-cf7-zoho' ),
-                        'sortable'          => true,
-                        'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'w3s-cf7-zoho' ), // Performs confirmation before removing group.
-                    ),
-                ) );
-
-
-                // Id's for group's fields only need to be unique for the group. Prefix is not needed.
-                $cmb->add_group_field( $group_field_id, array(
-                    'name' => 'Manual Value',
-                    'id'   => 'manual_value',
-                    'type' => 'text',
-                ) );
-
-                $cmb->add_group_field( $group_field_id, array(
-                    'name'             => 'CF7 Field Select',
-                    'desc'             => 'Select an option',
-                    'id'               => 'cf7_select',
-                    'type'             => 'select',
-                    'show_option_none' => true,
-                    'options'          => $cf7fields,
-                ));
-
-
-                $cmb->add_group_field( $group_field_id, array(
-                    'name'             => 'Zoho Field Select',
-                    'desc'             => 'Select an option',
-                    'id'               => 'zoho_select',
-                    'type'             => 'select',
-                    'show_option_none' => true,
-                    'options'          => $zohoFields,
-                ));
-
-
             }
 
         } else {
-            $cmb = new_cmb2_box( array(
-                'id'            => 'w3s_cf7_fields_metabox',
-                'title'         => esc_html__( 'Field Mapping', 'w3s-cf7-zoho' ),
-                'object_types'  => array( 'w3s_cf7' ),
-                'context'    => 'normal',
-                'priority'   => 'high',
-                'show_names' => true, // Show field names on the left
-            ));
-
 
             $cf7fields = array();
             $zohoFields = array();
-
-            $group_field_id = $cmb->add_field( array(
-                'id'          => 'w3s_cf7_fields_repeat_group',
-                'type'        => 'group',
-                'description' => __( 'Map Contact form 7 fields to Zoho fields', 'w3s-cf7-zoho' ),
-                // 'repeatable'  => false, // use false if you want non-repeatable group
-                'options'     => array(
-                    'group_title'       => __( 'Field Map {#}', 'w3s-cf7-zoho' ), // since version 1.1.4, {#} gets replaced by row number
-                    'add_button'        => __( 'Map Another Field', 'w3s-cf7-zoho' ),
-                    'remove_button'     => __( 'Remove Map', 'w3s-cf7-zoho' ),
-                    'sortable'          => true,
-                    'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'w3s-cf7-zoho' ), // Performs confirmation before removing group.
-                ),
-            ) );
-
-
-            // Id's for group's fields only need to be unique for the group. Prefix is not needed.
-            $cmb->add_group_field( $group_field_id, array(
-                'name' => 'Manual Value',
-                'id'   => 'manual_value',
-                'type' => 'text',
-            ) );
-
-            $cmb->add_group_field( $group_field_id, array(
-                'name'             => 'CF7 Field Select',
-                'desc'             => 'Select an option',
-                'id'               => 'cf7_select',
-                'type'             => 'select',
-                'show_option_none' => true,
-                'options'          => $cf7fields,
-            ));
-
-
-            $cmb->add_group_field( $group_field_id, array(
-                'name'             => 'Zoho Field Select',
-                'desc'             => 'Select an option',
-                'id'               => 'zoho_select',
-                'type'             => 'select',
-                'show_option_none' => true,
-                'options'          => $zohoFields,
-            ));
         }
+
+
+
+        $group_field_id = $cmb->add_field( array(
+            'id'          => 'w3s_cf7_fields_repeat_group',
+            'type'        => 'group',
+            'description' => __( 'Map Contact form 7 fields to Zoho fields', 'w3s-cf7-zoho' ),
+            // 'repeatable'  => false, // use false if you want non-repeatable group
+            'options'     => array(
+                'group_title'       => __( 'Field Map {#}', 'w3s-cf7-zoho' ), // since version 1.1.4, {#} gets replaced by row number
+                'add_button'        => __( 'Map Another Field', 'w3s-cf7-zoho' ),
+                'remove_button'     => __( 'Remove Map', 'w3s-cf7-zoho' ),
+                'sortable'          => true,
+                'remove_confirm' => esc_html__( 'Are you sure you want to remove?', 'w3s-cf7-zoho' ), // Performs confirmation before removing group.
+            ),
+        ) );
+
+
+        // Id's for group's fields only need to be unique for the group. Prefix is not needed.
+        $cmb->add_group_field( $group_field_id, array(
+            'name' => 'Manual Value',
+            'id'   => 'manual_value',
+            'type' => 'text',
+        ) );
+
+        $cmb->add_group_field( $group_field_id, array(
+            'name'             => 'CF7 Field Select',
+            'desc'             => 'Select an option',
+            'id'               => 'cf7_select',
+            'type'             => 'select',
+            'show_option_none' => true,
+            'options'          => $cf7fields,
+        ));
+
+
+        $cmb->add_group_field( $group_field_id, array(
+            'name'             => 'Zoho Field Select',
+            'desc'             => 'Select an option',
+            'id'               => 'zoho_select',
+            'type'             => 'select',
+            'show_option_none' => true,
+            'options'          => $zohoFields,
+        ));
 
     }
 
@@ -559,7 +511,6 @@ class W3s_Cf7_Zoho_Admin {
             'post_type' => 'w3s_cf7',
             'posts_per_page' => -1
         );
-        // The Query for getting all integrations
         $the_query = new WP_Query( $args );
         if ( $the_query->have_posts() ) {
             while ( $the_query->have_posts() ) {
@@ -621,7 +572,16 @@ class W3s_Cf7_Zoho_Admin {
             $zoho->createRecord($recordsArray);
         }
 
+    }
 
+    public function processTokenGeneration(){
+
+            if (isset($_GET[ 'code' ])){
+                die(var_dump($_GET));
+                $zoho_conn = new W3s_Cf7_Zoho_Conn();
+                $zoho_conn->genToken($_GET['code']);
+
+            }
 
     }
 

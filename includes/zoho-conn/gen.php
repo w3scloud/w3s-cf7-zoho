@@ -46,9 +46,7 @@ include_once 'vendor/autoload.php';
 
     $titan->setOption('zoho_api_base_url', $apiBase);
     $titan->setOption('zoho_account_url', $_GET['accounts-server']);
-    // $titan->setOption('zoho_authorised', true);
-    // $titan->saveOptions();
-    // dd($titan);
+
 
     $authLog = dirname(__FILE__).'/authlog/';
 
