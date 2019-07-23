@@ -31,6 +31,16 @@ class W3s_Cf7_Zoho_Activator {
 	 */
 	public static function activate() {
 
+        $upload = wp_upload_dir();
+        $upload_dir = $upload['basedir'];
+        $upload_dir = $upload_dir . '/w3s-cf7-zoho';
+        if(!file_exists($upload_dir)) wp_mkdir_p($upload_dir);
+
+        $filename = $upload_dir.'/zcrm_oauthtokens.txt';
+
+        if(!file_exists($filename)) touch($filename);
+
+
 	}
 
 }

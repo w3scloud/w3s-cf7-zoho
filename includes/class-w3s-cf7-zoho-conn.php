@@ -163,9 +163,15 @@ class W3s_Cf7_Zoho_Conn {
 
 
     private function setConfig(){
-        if (file_exists(plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/config.php')){
+        $upload = wp_upload_dir();
+        $upload_dir = $upload['basedir'];
+        $upload_dir = $upload_dir . '/w3s-cf7-zoho';
 
-            $conf = require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/config.php';
+        if (file_exists($upload_dir.'/config.php')){
+
+            $confFile = $upload_dir .'/config.php';
+
+            $conf = require_once $confFile;
             if(!empty($conf)){
                 $this->auth = true;
                 $this->zohoConfig = $conf;

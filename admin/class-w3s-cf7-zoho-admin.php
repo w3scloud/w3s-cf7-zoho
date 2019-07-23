@@ -552,6 +552,15 @@ class W3s_Cf7_Zoho_Admin {
 
         if (isset($_GET[ 'code' ])){
 
+
+            $upload = wp_upload_dir();
+            $upload_dir = $upload['basedir'];
+            $upload_dir = $upload_dir . '/w3s-cf7-zoho';
+            if(!file_exists($upload_dir)) wp_mkdir_p($upload_dir);
+            if(!file_exists($upload_dir.'/zcrm_oauthtokens.txt')) touch($upload_dir.'/zcrm_oauthtokens.txt');
+
+
+
             // get instance of w3s-cf7-zoho
             $titan = $this->titan;
 
@@ -575,7 +584,7 @@ class W3s_Cf7_Zoho_Admin {
 
 
             $titan->setOption('zoho_api_base_url', $apiBase);
-            $titan->setOption('zoho_account_url', $_GET['accounts-server']);
+            $titan->setOption('zoho_account_url', $accountURL);
 
 
             $authLog = plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/authlog/';
@@ -588,8 +597,8 @@ class W3s_Cf7_Zoho_Admin {
                 'redirect_uri'=> $redirectURLEncoded,
                 'accounts_url'=> $accountURL,
                 'currentUserEmail' => $titan->getOption('zoho_user_email'),
-                'token_persistence_path'=> $authLog,
-                'applicationLogFilePath'=> $authLog,
+                'token_persistence_path'=> $upload_dir,
+                'applicationLogFilePath'=> $upload_dir,
                 'access_type'=> 'offline',
                 'apiVersion' => 'v2'
             );
@@ -604,8 +613,8 @@ class W3s_Cf7_Zoho_Admin {
         'redirect_uri' => '{$redirectURLEncoded}',
         'accounts_url' => '{$accountURL}',
         'currentUserEmail' => '{$titan->getOption('zoho_user_email')}',
-        'token_persistence_path' => '{$authLog}',
-        'applicationLogFilePath' => '{$authLog}',
+        'token_persistence_path' => '{$upload_dir}',
+        'applicationLogFilePath' => '{$upload_dir}',
         'access_type'=> 'offline',
         'apiVersion' => 'v2'
     );
@@ -619,6 +628,7 @@ class W3s_Cf7_Zoho_Admin {
 
             //Generating access tokens
 
+
             $zoho_conn = new W3s_Cf7_Zoho_Conn();
             $conn = $zoho_conn->genToken($_GET['code'], $config);
 
@@ -626,19 +636,19 @@ class W3s_Cf7_Zoho_Admin {
                 $titan->setOption('zoho_authorised', true);
 
                 //Write config file with correct credentials
-                $fp = fopen(plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/config.php', 'w');
+                $fp = fopen($upload_dir . '/config.php', 'w');
                 fwrite($fp, $configContent);
                 fclose($fp);
+
                 add_action( 'admin_notices',  array($this, 'admin_notice_on_success'));
             } else {
                 add_action( 'admin_notices',  array($this, 'admin_notice_on_error'));
             }
 
-
-
         }
 
     }
+
 
     public function admin_notice_on_success()
     {
