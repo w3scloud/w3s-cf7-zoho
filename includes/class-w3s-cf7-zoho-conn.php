@@ -61,7 +61,8 @@ class W3s_Cf7_Zoho_Conn {
                 ZCRMRestClient::initialize($this->zohoConfig);
             }catch (ZCRMException $exception){
                 $this->auth = false;
-                return;
+                add_action('admin_notices', array($this, 'noticeAdmin'));
+                exit;
             }
 
         }
@@ -183,14 +184,18 @@ class W3s_Cf7_Zoho_Conn {
         <?php
     }
 
-    public function genToken($grantToken){
+    public function genToken($grantToken, $config){
+
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/vendor/autoload.php';
 
         try {
-            $this->include_zoho();
+            ZCRMRestClient::initialize($config);
             $oAuthClient = ZohoOAuth::getClientInstance();
             $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);
+            return true;
         }catch (ZCRMException $exception){
-            die($exception);
+            add_action('admin_notices', array($this, 'noticeAdmin'));
+            return false;
         }
 
 

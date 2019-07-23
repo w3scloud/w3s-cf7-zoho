@@ -131,8 +131,6 @@ class W3s_Cf7_Zoho_Admin {
     public function admin_options()
     {
 
-        // get instance of w3s-cf7-zoho
-//        $titan = TitanFramework::getInstance('w3s-cf7-zoho');
 
         $titan = $this->titan;
 
@@ -158,7 +156,9 @@ class W3s_Cf7_Zoho_Admin {
             'type' => 'heading',
         ) );
         // redirect url for Zoho Client
-        $redirectURL = plugins_url( 'includes/zoho-conn/gen.php', dirname(__FILE__) );
+//        $redirectURL = plugins_url( 'includes/zoho-conn/gen.php', dirname(__FILE__) );
+        $redirectURL = admin_url('edit.php?post_type=w3s_cf7&page=w3s-cf7-zoho');
+        $redirectURLEncoded = urlencode_deep(admin_url('edit.php?post_type=w3s_cf7&page=w3s-cf7-zoho'));
         // Site url for zoho client
         $siteURL = parse_url(site_url())['host'];
 
@@ -265,7 +265,7 @@ class W3s_Cf7_Zoho_Admin {
             $titan->setOption('zoho_redirect_url', $redirectURL);
 
             $zcid = $titan->getOption('zoho_client_id');
-            $authURL = "<a href='https://accounts.zoho.com/oauth/v2/auth?scope=ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,aaaserver.profile.READ&client_id=$zcid&response_type=code&access_type=offline&redirect_uri=$redirectURL&prompt=consent' class='button button-primary'>Grant Access</a>";
+            $authURL = "<a href='https://accounts.zoho.com/oauth/v2/auth?scope=ZohoCRM.modules.ALL,ZohoCRM.settings.ALL,aaaserver.profile.READ&client_id=$zcid&response_type=code&access_type=offline&prompt=consent&redirect_uri=$redirectURLEncoded' class='button button-primary'>Grant Access</a>";
 
             $authTab->createOption(array(
                 'name' => 'Authorize Zoho Account',
@@ -282,7 +282,7 @@ class W3s_Cf7_Zoho_Admin {
                 'type' => 'ajax-button',
                 'action' => 'w3s_cf7_zoho_revoke_action',
                 'label' => array(
-                    __('Revoke Access', 'default'),
+                    __('Revoke Access', 'w3s-cf7-zoho'),
                 ),
                 'class' => 'button-secondary',
             ));
@@ -295,33 +295,6 @@ class W3s_Cf7_Zoho_Admin {
             'use_reset' => false,
         ));
 
-
-        // Create Integration Tab
-        $intTab = $panel->createTab( array(
-            'name' => 'Integration',
-        ));
-
-
-
-        $intTab->createOption( array(
-            'name' => 'Zoho Module',
-            'id' => 'zoho_module',
-            'type' => 'select',
-            'desc' => 'Select the Zoho Module.',
-            'options' => array(
-                'Leads' => 'Leads',
-                // 'Account' => 'Account',
-            ),
-            'default' => 'Leads',
-        ));
-
-
-        // save options
-        $intTab->createOption( array(
-            'type' => 'save',
-            'save' => 'Save & Reload Fields',
-            'use_reset' =>  false,
-        ));
 
         $metaBox = $titan->createMetaBox( array(
             'name' => 'Integration',
@@ -576,13 +549,113 @@ class W3s_Cf7_Zoho_Admin {
 
     public function processTokenGeneration(){
 
-            if (isset($_GET[ 'code' ])){
-                die(var_dump($_GET));
-                $zoho_conn = new W3s_Cf7_Zoho_Conn();
-                $zoho_conn->genToken($_GET['code']);
 
+        if (isset($_GET[ 'code' ])){
+
+            // get instance of w3s-cf7-zoho
+            $titan = $this->titan;
+
+
+
+            $apiBase = '';
+
+            if ($_GET['location'] == 'us'){
+                $apiBase = 'www.zohoapis.com';
+            } elseif ($_GET['location'] == 'eu'){
+                $apiBase = 'www.zohoapis.eu';
+            } elseif ($_GET['location'] == 'cn'){
+                $apiBase = 'www.zohoapis.com.cn';
+            } elseif ($_GET['location'] == 'in'){
+                $apiBase = 'www.zohoapis.in';
+            } else {
+                $apiBase = 'www.zohoapis.com';
             }
 
+            $accountURL = $_GET['accounts-server'];
+
+
+            $titan->setOption('zoho_api_base_url', $apiBase);
+            $titan->setOption('zoho_account_url', $_GET['accounts-server']);
+
+
+            $authLog = plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/authlog/';
+            $redirectURLEncoded = urlencode_deep(admin_url('edit.php?post_type=w3s_cf7&page=w3s-cf7-zoho'));
+
+            $config = array(
+                'apiBaseUrl' => $apiBase,
+                'client_id'=> $titan->getOption('zoho_client_id'),
+                'client_secret'=> $titan->getOption('zoho_client_secret'),
+                'redirect_uri'=> $redirectURLEncoded,
+                'accounts_url'=> $accountURL,
+                'currentUserEmail' => $titan->getOption('zoho_user_email'),
+                'token_persistence_path'=> $authLog,
+                'applicationLogFilePath'=> $authLog,
+                'access_type'=> 'offline',
+                'apiVersion' => 'v2'
+            );
+
+
+            $configContent = "<?php
+    // Zoho CRM API Required Configuration
+    \$conf = array(
+        'apiBaseUrl' => '{$apiBase}',
+        'client_id' => '{$titan->getOption('zoho_client_id')}',
+        'client_secret' => '{$titan->getOption('zoho_client_secret')}',
+        'redirect_uri' => '{$redirectURLEncoded}',
+        'accounts_url' => '{$accountURL}',
+        'currentUserEmail' => '{$titan->getOption('zoho_user_email')}',
+        'token_persistence_path' => '{$authLog}',
+        'applicationLogFilePath' => '{$authLog}',
+        'access_type'=> 'offline',
+        'apiVersion' => 'v2'
+    );
+    if(\$conf['client_id'] == ''){
+        return array();
+    } else {
+        return \$conf;
+    }
+    ";
+
+
+            //Generating access tokens
+
+            $zoho_conn = new W3s_Cf7_Zoho_Conn();
+            $conn = $zoho_conn->genToken($_GET['code'], $config);
+
+            if ($conn){
+                $titan->setOption('zoho_authorised', true);
+
+                //Write config file with correct credentials
+                $fp = fopen(plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/config.php', 'w');
+                fwrite($fp, $configContent);
+                fclose($fp);
+                add_action( 'admin_notices',  array($this, 'admin_notice_on_success'));
+            } else {
+                add_action( 'admin_notices',  array($this, 'admin_notice_on_error'));
+            }
+
+
+
+        }
+
+    }
+
+    public function admin_notice_on_success()
+    {
+        ?>
+        <div class="notice notice-success is-dismissible">
+            <p><?php _e( 'Zoho Authentication Successful!', 'w3s-cf7-zoho' ); ?></p>
+        </div>
+        <?php
+    }
+
+    public function admin_notice_on_error()
+    {
+        ?>
+        <div class="notice notice-error is-dismissible">
+            <p><?php _e( 'Zoho Authentication Error! Please check your credentials. ', 'w3s-cf7-zoho' ); ?></p>
+        </div>
+        <?php
     }
 
 
