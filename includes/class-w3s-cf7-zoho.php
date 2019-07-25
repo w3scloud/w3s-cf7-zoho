@@ -73,11 +73,13 @@ class W3s_Cf7_Zoho {
 			$this->version = '1.0.0';
 		}
 		$this->plugin_name = 'w3s-cf7-zoho';
+        $this->load_dependencies();
 
-		$this->load_dependencies();
-		$this->set_locale();
-		$this->define_admin_hooks();
-		$this->define_public_hooks();
+        if ($this->cf7_dependency_check()){
+            $this->set_locale();
+            $this->define_admin_hooks();
+            $this->define_public_hooks();
+        }
 
 	}
 
@@ -201,7 +203,7 @@ class W3s_Cf7_Zoho {
 	 * @since    1.0.0
 	 */
 	public function run() {
-		$this->loader->run();
+	    $this->loader->run();
 	}
 
 	/**
@@ -234,5 +236,28 @@ class W3s_Cf7_Zoho {
 	public function get_version() {
 		return $this->version;
 	}
+
+    private function cf7_dependency_check()
+    {
+        include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
+        if ( is_plugin_active( 'contact-form-7/wp-contact-form-7.php' ) ) {
+            return true;
+        } else {
+            add_action( 'admin_notices', array($this, 'admin_notice' ));
+            return false;
+
+        }
+    }
+
+    public function admin_notice()
+    {
+        ?>
+        <div class="notice notice-error is-dismissible">
+            <p><?php _e( 'Whoops! Zoho with Contact Form 7 Plugin needs  <strong><em>Contact Form 7</em></strong> to work.', 'w3s-cf7-zoho' ); ?></p>
+        </div>
+        <?php
+    }
+
+
 
 }
