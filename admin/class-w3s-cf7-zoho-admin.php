@@ -163,6 +163,11 @@ class W3s_Cf7_Zoho_Admin {
         $siteURL = parse_url(site_url())['host'];
 
         $authTab->createOption(array(
+            'name' => 'Try Zoho CRM',
+            'type' => 'custom',
+            'custom' => '<a target="_blank" href="https://payments.zoho.com/ResellerCustomerSignUp.do?id=4c1e927246825d26d1b5d89b9b8472de" class="button button-primary">Create FREE Account!</a>',
+        ));
+        $authTab->createOption(array(
             'name' => 'Information',
             'type' => 'custom',
             'custom' => "<table class='form-table' colspan='2'>
