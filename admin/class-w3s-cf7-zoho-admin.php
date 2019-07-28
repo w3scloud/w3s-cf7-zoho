@@ -333,6 +333,8 @@ class W3s_Cf7_Zoho_Admin {
             'show_names' => true, // Show field names on the left
         ));
 
+        $cf7fields = array();
+        $zohoFields = array();
 
         if (isset($_GET[ 'post' ])){
             $post_id = $_GET[ 'post' ];
@@ -340,19 +342,12 @@ class W3s_Cf7_Zoho_Admin {
             if( get_post_type($post_id) == 'w3s_cf7' ) {
 
                 $titan = $this->titan;
-
-
-
                 $zoho_conn = new W3s_Cf7_Zoho_Conn();
                 $cf7fields = $zoho_conn->getCF7Fields( $titan->getOption( 'cf7_form' , $post_id )); // need to
                 $zohoFields = $zoho_conn->getZohoFields();
 
             }
 
-        } else {
-
-            $cf7fields = array();
-            $zohoFields = array();
         }
 
 
