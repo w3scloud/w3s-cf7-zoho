@@ -18,7 +18,7 @@ This plugin integrate Zoho CRM with Contact Form 7 plugin. Whenever user submit 
 
 == Installation ==
 
-Zoho CRM with Contact Form 7 plugin require "Contact Form 7" plugin to work. Please install and activate "Contact Form 7" before installation.
+Zoho CRM for Contact Form 7 plugin require "Contact Form 7" plugin to work. Please install and activate "Contact Form 7" before installation.
 
 follow the instruction below:
 

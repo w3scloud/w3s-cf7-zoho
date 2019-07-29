@@ -7,7 +7,7 @@
  * @package           W3s_Cf7_Zoho
  *
  * @wordpress-plugin
- * Plugin Name:       Zoho CRM with Contact Form 7
+ * Plugin Name:       Zoho CRM for Contact Form 7
  * Plugin URI:        https://w3scloud.com/cf7-zoho/
  * Description:       Zoho CRM Integration with Contact Form 7. Add Leads from Contact form 7 form entry.
  * Version:           1.0.0

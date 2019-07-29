@@ -86,7 +86,7 @@ class W3s_Cf7_Zoho_Admin {
          * class.
          */
 
-        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/w3s-cf7-zoho-admin.css', array(), $this->version, 'all' );
+//        wp_enqueue_style( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'css/w3s-cf7-zoho-admin.css', array(), $this->version, 'all' );
 
     }
 
@@ -109,7 +109,7 @@ class W3s_Cf7_Zoho_Admin {
          * class.
          */
 
-        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/w3s-cf7-zoho-admin.js', array( 'jquery' ), $this->version, false );
+//        wp_enqueue_script( $this->plugin_name, plugin_dir_url( __FILE__ ) . 'js/w3s-cf7-zoho-admin.js', array( 'jquery' ), $this->version, false );
 
     }
 
@@ -137,7 +137,7 @@ class W3s_Cf7_Zoho_Admin {
         // create the admin panel
         $panel = $titan->createAdminPage(array(
             'name' => 'Zoho Auth Settings',
-            'desc' => 'Zoho Leads with Contact Form 7 Integration form.',
+            'desc' => 'Zoho CRM Authentication Settings',
             'id' => 'w3s-cf7-zoho',
             'parent' => 'edit.php?post_type=w3s_cf7'
         ));
@@ -149,21 +149,18 @@ class W3s_Cf7_Zoho_Admin {
 
         // options for auth tab
 
-        // REDIRECT URL
-
         $authTab->createOption( array(
             'name' => 'Information to create Zoho Client',
             'type' => 'heading',
         ) );
-        // redirect url for Zoho Client
-//        $redirectURL = plugins_url( 'includes/zoho-conn/gen.php', dirname(__FILE__) );
+
         $redirectURL = admin_url('edit.php?post_type=w3s_cf7&page=w3s-cf7-zoho');
         $redirectURLEncoded = urlencode_deep(admin_url('edit.php?post_type=w3s_cf7&page=w3s-cf7-zoho'));
         // Site url for zoho client
         $siteURL = parse_url(site_url())['host'];
 
         $authTab->createOption(array(
-            'name' => 'Try Zoho CRM',
+            'name' => 'No Zoho CRM Account?',
             'type' => 'custom',
             'custom' => '<a target="_blank" href="https://payments.zoho.com/ResellerCustomerSignUp.do?id=4c1e927246825d26d1b5d89b9b8472de" class="button button-primary">Create FREE Account!</a>',
         ));
