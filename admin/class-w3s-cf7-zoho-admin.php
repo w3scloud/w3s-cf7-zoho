@@ -339,7 +339,7 @@ class W3s_Cf7_Zoho_Admin {
         $zohoFields = array();
 
         if (isset($_GET[ 'post' ])){
-            $post_id = $_GET[ 'post' ];
+            $post_id = intval(sanitize_text_field($_GET[ 'post' ]));
 
             if( get_post_type($post_id) == 'w3s_cf7' ) {
 
@@ -357,7 +357,7 @@ class W3s_Cf7_Zoho_Admin {
         $group_field_id = $cmb->add_field( array(
             'id'          => 'w3s_cf7_fields_repeat_group',
             'type'        => 'group',
-            'description' => __( 'Map Contact form 7 fields to Zoho fields', 'w3s-cf7-zoho' ),
+            'description' => __( 'Map Contact form 7 fields to Zoho CRM fields', 'w3s-cf7-zoho' ),
             // 'repeatable'  => false, // use false if you want non-repeatable group
             'options'     => array(
                 'group_title'       => __( 'Field Map {#}', 'w3s-cf7-zoho' ), // since version 1.1.4, {#} gets replaced by row number
@@ -419,51 +419,51 @@ class W3s_Cf7_Zoho_Admin {
     public function w3s_cf7_post_type() {
 
         $labels = array(
-            'name'                  => _x( 'Integrations', 'Post Type General Name', 'w3s_cf7' ),
-            'singular_name'         => _x( 'Integration', 'Post Type Singular Name', 'w3s_cf7' ),
-            'menu_name'             => __( 'Zoho with CF7', 'w3s_cf7' ),
-            'name_admin_bar'        => __( 'Integration', 'w3s_cf7' ),
-            'archives'              => __( 'Integration Archives', 'w3s_cf7' ),
-            'attributes'            => __( 'Integration Attributes', 'w3s_cf7' ),
-            'parent_item_colon'     => __( 'Parent Integration:', 'w3s_cf7' ),
-            'all_items'             => __( 'All Integrations', 'w3s_cf7' ),
-            'add_new_item'          => __( 'Add New Integration', 'w3s_cf7' ),
-            'add_new'               => __( 'Add New', 'w3s_cf7' ),
-            'new_item'              => __( 'New Integration', 'w3s_cf7' ),
-            'edit_item'             => __( 'Edit Integration', 'w3s_cf7' ),
-            'update_item'           => __( 'Update Integration', 'w3s_cf7' ),
-            'view_item'             => __( 'View Integration', 'w3s_cf7' ),
-            'view_items'            => __( 'View Integrations', 'w3s_cf7' ),
-            'search_items'          => __( 'Search Integration', 'w3s_cf7' ),
-            'not_found'             => __( 'Not found', 'w3s_cf7' ),
-            'not_found_in_trash'    => __( 'Not found in Trash', 'w3s_cf7' ),
-            'featured_image'        => __( 'Featured Image', 'w3s_cf7' ),
-            'set_featured_image'    => __( 'Set featured image', 'w3s_cf7' ),
-            'remove_featured_image' => __( 'Remove featured image', 'w3s_cf7' ),
-            'use_featured_image'    => __( 'Use as featured image', 'w3s_cf7' ),
-            'insert_into_item'      => __( 'Insert into integration', 'w3s_cf7' ),
-            'uploaded_to_this_item' => __( 'Uploaded to this item', 'w3s_cf7' ),
-            'items_list'            => __( 'Items list', 'w3s_cf7' ),
-            'items_list_navigation' => __( 'Items list navigation', 'w3s_cf7' ),
-            'filter_items_list'     => __( 'Filter items list', 'w3s_cf7' ),
+            'name'                  => _x( 'Integrations', 'Post Type General Name', 'w3s-cf7-zoho' ),
+            'singular_name'         => _x( 'Integration', 'Post Type Singular Name', 'w3s-cf7-zoho' ),
+            'menu_name'             => __( 'Integrations', 'w3s-cf7-zoho' ),
+            'name_admin_bar'        => __( 'Integration', 'w3s-cf7-zoho' ),
+            'archives'              => __( 'Integration Archives', 'w3s-cf7-zoho' ),
+            'attributes'            => __( 'Integration Attributes', 'w3s-cf7-zoho' ),
+            'parent_item_colon'     => __( 'Parent Integration:', 'w3s-cf7-zoho' ),
+            'all_items'             => __( 'All Integrations', 'w3s-cf7-zoho' ),
+            'add_new_item'          => __( 'Add New Integration', 'w3s-cf7-zoho' ),
+            'add_new'               => __( 'Add New', 'w3s-cf7-zoho' ),
+            'new_item'              => __( 'New Integration', 'w3s-cf7-zoho' ),
+            'edit_item'             => __( 'Edit Integration', 'w3s-cf7-zoho' ),
+            'update_item'           => __( 'Update Integration', 'w3s-cf7-zoho' ),
+            'view_item'             => __( 'View Integration', 'w3s-cf7-zoho' ),
+            'view_items'            => __( 'View Integrations', 'w3s-cf7-zoho' ),
+            'search_items'          => __( 'Search Integration', 'w3s-cf7-zoho' ),
+            'not_found'             => __( 'Not found', 'w3s-cf7-zoho' ),
+            'not_found_in_trash'    => __( 'Not found in Trash', 'w3s-cf7-zoho' ),
+            'featured_image'        => __( 'Featured Image', 'w3s-cf7-zoho' ),
+            'set_featured_image'    => __( 'Set featured image', 'w3s-cf7-zoho' ),
+            'remove_featured_image' => __( 'Remove featured image', 'w3s-cf7-zoho' ),
+            'use_featured_image'    => __( 'Use as featured image', 'w3s-cf7-zoho' ),
+            'insert_into_item'      => __( 'Insert into integration', 'w3s-cf7-zoho' ),
+            'uploaded_to_this_item' => __( 'Uploaded to this item', 'w3s-cf7-zoho' ),
+            'items_list'            => __( 'Items list', 'w3s-cf7-zoho' ),
+            'items_list_navigation' => __( 'Items list navigation', 'w3s-cf7-zoho' ),
+            'filter_items_list'     => __( 'Filter items list', 'w3s-cf7-zoho' ),
         );
         $args = array(
-            'label'                 => __( 'Integration', 'w3s_cf7' ),
-            'description'           => __( 'Integration to Zoho with Contact Form 7', 'w3s_cf7' ),
+            'label'                 => __( 'Integration', 'w3s-cf7-zoho' ),
+            'description'           => __( 'Integration to Zoho CRM with Contact Form 7', 'w3s-cf7-zoho' ),
             'labels'                => $labels,
             'supports'              => array( 'title'),
             'hierarchical'          => false,
-            'public'                => true,
+            'public'                => false,
             'show_ui'               => true,
             'show_in_menu'          => true,
             'menu_position'         => 40,
             'menu_icon'             => 'dashicons-vault',
-            'show_in_admin_bar'     => false,
+            'show_in_admin_bar'     => true,
             'show_in_nav_menus'     => false,
             'can_export'            => false,
             'has_archive'           => false,
             'exclude_from_search'   => true,
-            'publicly_queryable'    => true,
+            'publicly_queryable'    => false,
             'rewrite'               => false,
             'capability_type'       => 'post',
             'show_in_rest'          => true,
@@ -509,10 +509,10 @@ class W3s_Cf7_Zoho_Admin {
                             $custom = esc_html( $entry['manual_value'] );
                         }
                         if ( isset( $entry['cf7_select'] ) ) {
-                            $cf7_field = $entry['cf7_select'];
+                            $cf7_field = esc_html($entry['cf7_select']);
                         }
                         if ( isset( $entry['zoho_select'] ) ) {
-                            $zohoField = $entry['zoho_select'];
+                            $zohoField = esc_html($entry['zoho_select']);
                         } else {
                             continue;
                         }
@@ -577,14 +577,13 @@ class W3s_Cf7_Zoho_Admin {
                 $apiBase = 'www.zohoapis.com';
             }
 
-            $accountURL = $_GET['accounts-server'];
+            $accountURL = esc_url($_GET['accounts-server']);
 
 
             $titan->setOption('zoho_api_base_url', $apiBase);
             $titan->setOption('zoho_account_url', $accountURL);
 
 
-            $authLog = plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/authlog/';
             $redirectURLEncoded = urlencode_deep(admin_url('edit.php?post_type=w3s_cf7&page=w3s-cf7-zoho'));
 
             $config = array(
@@ -627,7 +626,7 @@ class W3s_Cf7_Zoho_Admin {
 
 
             $zoho_conn = new W3s_Cf7_Zoho_Conn();
-            $conn = $zoho_conn->genToken($_GET['code'], $config);
+            $conn = $zoho_conn->genToken(sanitize_text_field($_GET['code']), $config);
 
             if ($conn){
                 $titan->setOption('zoho_authorised', true);

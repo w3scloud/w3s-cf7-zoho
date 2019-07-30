@@ -1,7 +1,7 @@
-=== Zoho CRM with Contact Form 7 ===
+=== W3SCLOUD Integration for Zoho CRM with Contact Form 7 ===
 Contributors: w3scloud, shohag121
 Donate link: https://w3scloud.com/contact/
-Tags: Zoho CRM, Zoho, Contact form 7, API, Lead
+Tags: Zoho CRM, Zoho, Contact form 7, API, Leads
 Requires at least: 4.5
 Tested up to: 5.2.2
 Stable tag: trunk
@@ -24,7 +24,7 @@ follow the instruction below:
 
 1. Upload the plugin files to the `/wp-content/plugins/w3s-cf7-zoho` directory, or install the plugin through the WordPress plugins screen directly.
 1. Activate the plugin through the 'Plugins' screen in WordPress
-1. Use the Zoho With CF7->Zoho Auth Settings screen to authenticate Zoho CRM
+1. Use the Integrations->Zoho Auth Settings screen to authenticate Zoho CRM
 1. Create and insert Zoho Credentials using displayed Information then save.
 1. Press Grant Access button to authorize Zoho CRM For this Integration.
 
