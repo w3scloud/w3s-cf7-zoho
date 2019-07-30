@@ -1,4 +1,4 @@
-=== W3SCLOUD Integration for Zoho CRM with Contact Form 7 ===
+=== W3SCloud Contact Form 7 to Zoho CRM ===
 Contributors: w3scloud, shohag121
 Donate link: https://w3scloud.com/contact/
 Tags: Zoho CRM, Zoho, Contact form 7, API, Leads
