@@ -307,6 +307,22 @@ class W3s_Cf7_Zoho_Admin {
             'desc' => 'Enable or disable this integration',
         ));
 
+        $zohoModules = array(
+            'Leads' => 'Leads',
+        );
+
+        $zohoModules = apply_filters('w3s_cf7_zoho_module_filter', $zohoModules );
+
+        $metaBox->createOption( array(
+            'name' => 'Zoho CRM Module',
+            'id' => 'zoho_module',
+            'type' => 'select',
+            'desc' => 'Select Zoho CRM module to enter data.',
+            'options' => $zohoModules,
+            'default' => 'Leads',
+        ) );
+
+
         $metaBox->createOption( array(
             'name' => 'Select Contact form',
             'id' => 'cf7_form',
@@ -315,6 +331,7 @@ class W3s_Cf7_Zoho_Admin {
             'post_type' => 'wpcf7_contact_form',
         ));
 
+        apply_filters('w3s_cf7_zoho_after_first_metabox_filter', $metaBox );
 
     }
 
@@ -342,7 +359,7 @@ class W3s_Cf7_Zoho_Admin {
                 $titan = TitanFramework::getInstance('w3s-cf7-zoho');
                 $zoho_conn = new W3s_Cf7_Zoho_Conn();
                 $cf7fields = $zoho_conn->getCF7Fields( $titan->getOption( 'cf7_form' , $post_id )); // need to
-                $zohoFields = $zoho_conn->getZohoFields();
+                $zohoFields = $zoho_conn->getZohoFields($titan->getOption( 'zoho_module' , $post_id ));
 
             }
 
@@ -469,7 +486,7 @@ class W3s_Cf7_Zoho_Admin {
     public function run_on_cf7_submit( $contact ) {
 
         $titan = TitanFramework::getInstance('w3s-cf7-zoho');
-        $recordsArray = array();
+        $zoho = new W3s_Cf7_Zoho_Conn();
         $args = array(
             'post_type' => 'w3s_cf7',
             'posts_per_page' => -1
@@ -493,6 +510,7 @@ class W3s_Cf7_Zoho_Admin {
                     $entries = get_post_meta( get_the_ID(), 'w3s_cf7_fields_repeat_group', true );
 
                     $record = array();
+                    $recordsArray = array();
                     foreach ( $entries as $entry ) {
 
                         $custom = $cf7_field = $zohoField = '';
@@ -519,7 +537,18 @@ class W3s_Cf7_Zoho_Admin {
 
                     }
 
-                array_push($recordsArray, $record);
+                    array_push($recordsArray, $record);
+
+                    // check if its upsert
+                    $upsert = $titan->getOption( 'is_upsert' , get_the_ID());
+
+                    if ($upsert){
+                        $zoho->upsertRecord($recordsArray);
+                    }else {
+                        $zoho->createRecord($recordsArray);
+                    }
+
+
 
                 }
 
@@ -530,10 +559,6 @@ class W3s_Cf7_Zoho_Admin {
         wp_reset_postdata();
 
 
-        if (!empty($recordsArray)){
-            $zoho = new W3s_Cf7_Zoho_Conn();
-            $zoho->createRecord($recordsArray);
-        }
 
     }
 

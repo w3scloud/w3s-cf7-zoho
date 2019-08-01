@@ -18,7 +18,7 @@ This plugin integrate Zoho CRM with Contact Form 7 plugin. Whenever user submit 
 
 == Installation ==
 
-Zoho CRM for Contact Form 7 plugin require "Contact Form 7" plugin to work. Please install and activate "Contact Form 7" before installation.
+W3SCloud Contact Form 7 to Zoho CRM plugin require "Contact Form 7" plugin to work. Please install and activate "Contact Form 7" before installation.
 
 follow the instruction below:
 
@@ -49,6 +49,9 @@ At this moment we only support inserting into the "Leads" module.
 2. This is the second screen shot
 
 == Changelog ==
+
+= 1.0.1 =
+Minor Bug fixed.
 
 = 1.0.0 =
 Initial release of the plugin.

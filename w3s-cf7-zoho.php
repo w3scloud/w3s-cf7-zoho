@@ -10,7 +10,7 @@
  * Plugin Name:       W3SCloud Contact Form 7 to Zoho CRM
  * Plugin URI:        https://w3scloud.com/cf7-zoho/
  * Description:       Zoho CRM Integration with Contact Form 7. Add Leads from Contact form 7 form entry.
- * Version:           1.0.0
+ * Version:           1.1.0
  * Author:            W3SCloud Technology
  * Author URI:        https://w3scloud.com/
  * License:           GPL-2.0+
@@ -28,7 +28,7 @@ if ( ! defined( 'WPINC' ) ) {
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  */
-define( 'W3S_CF7_ZOHO_VERSION', '1.0.0' );
+define( 'W3S_CF7_ZOHO_VERSION', '1.1.0' );
 
 /**
  * The code that runs during plugin activation.

@@ -68,16 +68,16 @@ class W3s_Cf7_Zoho_Conn {
         }
     }
 
-    public function createRecord($dataAray){
+    public function createRecord($dataArray, $module = 'Leads'){
         try{
 
             $this->include_zoho();
 
-            $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("leads");
+            $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module);
             $records=array();
 
 
-            foreach ($dataAray as $data){
+            foreach ($dataArray as $data){
                 $record = ZCRMRecord::getInstance("leads",null);
 
                 foreach ($data as $key => $value){
@@ -93,16 +93,16 @@ class W3s_Cf7_Zoho_Conn {
         }
     }
 
-    public function upsertRecord($dataAray){
+    public function upsertRecord($dataArray, $module = 'Leads'){
         try{
 
             $this->include_zoho();
 
-            $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance("leads");
+            $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module);
             $records=array();
 
 
-            foreach ($dataAray as $data){
+            foreach ($dataArray as $data){
                 $record = ZCRMRecord::getInstance("leads",null);
 
                 foreach ($data as $key => $value){
@@ -118,19 +118,19 @@ class W3s_Cf7_Zoho_Conn {
         }
     }
 
-    public function getZohoFields(){
+    public function getZohoFields($module = 'Leads'){
 
         try{
             $this->include_zoho();
 
-            $moduleIns = ZCRMModule::getInstance("Leads");
+            $moduleIns = ZCRMModule::getInstance($module);
             $apiResponse=$moduleIns->getAllFields();
             $fields=$apiResponse->getData();
 
             $formatedFields = array();
 
             foreach ($fields as $field) {
-                $formatedFields[$field->getApiName()] = "{$field->getApiName()} ({$field->getDataType()})" ;
+                $formatedFields[$field->getApiName()] = "{$field->getApiName()} ({$field->getDataType()})";
             }
 
             return $formatedFields;
