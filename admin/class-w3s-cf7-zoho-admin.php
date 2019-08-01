@@ -43,8 +43,6 @@ class W3s_Cf7_Zoho_Admin {
 
 
 
-    private $titan;
-
 
 
     /**
@@ -60,7 +58,7 @@ class W3s_Cf7_Zoho_Admin {
         $this->version = $version;
 
         add_action( 'init', array( $this, 'w3s_cf7_post_type' ), 0 );
-        add_action('plugins_loaded', array($this, 'plugins_loaded'));
+        add_action( 'tf_create_options', array( $this, 'admin_options' ));
         add_action( 'cmb2_admin_init', array($this, 'w3s_cf7_post_action_for_metabox') );
         add_action( 'load-w3s_cf7_page_w3s-cf7-zoho', array($this, 'processTokenGeneration'), 0 );
         add_filter('plugin_action_links_w3s-cf7-zoho/w3s-cf7-zoho.php', array( $this,'w3s_cf7_add_plugin_page_settings_link'));
@@ -115,9 +113,7 @@ class W3s_Cf7_Zoho_Admin {
 
 
     public function plugins_loaded(){
-        // titan framework options
-        add_action( 'after_setup_theme', array( $this, 'after_setup_theme_add_titan' ), 5 );
-        add_action( 'tf_create_options', array( $this, 'admin_options' ), 0);
+
 
 
     }
@@ -132,7 +128,7 @@ class W3s_Cf7_Zoho_Admin {
     {
 
 
-        $titan = $this->titan;
+        $titan = TitanFramework::getInstance('w3s-cf7-zoho');
 
         // create the admin panel
         $panel = $titan->createAdminPage(array(
@@ -343,7 +339,7 @@ class W3s_Cf7_Zoho_Admin {
 
             if( get_post_type($post_id) == 'w3s_cf7' ) {
 
-                $titan = $this->titan;
+                $titan = TitanFramework::getInstance('w3s-cf7-zoho');
                 $zoho_conn = new W3s_Cf7_Zoho_Conn();
                 $cf7fields = $zoho_conn->getCF7Fields( $titan->getOption( 'cf7_form' , $post_id )); // need to
                 $zohoFields = $zoho_conn->getZohoFields();
@@ -409,9 +405,6 @@ class W3s_Cf7_Zoho_Admin {
     }
 
 
-    public function after_setup_theme_add_titan(){
-        $this->titan = TitanFramework::getInstance('w3s-cf7-zoho');
-    }
 
 
 
@@ -475,7 +468,7 @@ class W3s_Cf7_Zoho_Admin {
 
     public function run_on_cf7_submit( $contact ) {
 
-        $titan = $this->titan;
+        $titan = TitanFramework::getInstance('w3s-cf7-zoho');
         $recordsArray = array();
         $args = array(
             'post_type' => 'w3s_cf7',
@@ -559,7 +552,7 @@ class W3s_Cf7_Zoho_Admin {
 
 
             // get instance of w3s-cf7-zoho
-            $titan = $this->titan;
+            $titan = TitanFramework::getInstance('w3s-cf7-zoho');
 
 
 
