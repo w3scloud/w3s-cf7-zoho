@@ -88,6 +88,9 @@ class W3s_Cf7_Zoho_Conn {
             }
 
             $responseIn = $moduleIns->createRecords($records);
+
+            do_action('w3s_cf7_zoho_on_create_record', $responseIn);
+
         } catch (ZCRMException $exception){
             add_action('admin_notices', array($this, 'noticeAdmin'));
         }
@@ -113,11 +116,18 @@ class W3s_Cf7_Zoho_Conn {
             }
 
             $responseIn = $moduleIns->upsertRecords($records);
+
+            do_action('w3s_cf7_zoho_on_update_record', $responseIn);
+
         } catch (ZCRMException $exception){
             add_action('admin_notices', array($this, 'noticeAdmin'));
         }
     }
 
+    /**
+     * @param string $module
+     * @return array
+     */
     public function getZohoFields($module = 'Leads'){
 
         try{
@@ -158,6 +168,9 @@ class W3s_Cf7_Zoho_Conn {
             if ($field[0] == 'submit') continue;
             $cf7Fields[$field[1]] = "{$field[1]} ({$field[0]})";
         }
+
+        $cf7Fields = apply_filters('w3s_cf7_zoho_cf7_fields', $cf7Fields);
+
         return $cf7Fields;
     }
 
@@ -198,6 +211,9 @@ class W3s_Cf7_Zoho_Conn {
             ZCRMRestClient::initialize($config);
             $oAuthClient = ZohoOAuth::getClientInstance();
             $oAuthTokens = $oAuthClient->generateAccessToken($grantToken);
+
+            do_action('w3s_cf7_zoho_after_token_generation');
+
             return true;
         }catch (ZCRMException $exception){
             add_action('admin_notices', array($this, 'noticeAdmin'));

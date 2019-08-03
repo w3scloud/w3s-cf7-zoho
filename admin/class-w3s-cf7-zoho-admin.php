@@ -501,7 +501,7 @@ class W3s_Cf7_Zoho_Admin {
                 $formData = array();
 
                 //check if the integration is for this contact form
-                if (  $contact->id() == $titan->getOption( 'cf7_form' , get_the_ID()) ){
+                if (  ($contact->id() == $titan->getOption( 'cf7_form' , get_the_ID()))  && $titan->getOption( 'is_enabled' , get_the_ID()) ){
 
                     $contact_form = WPCF7_Submission::get_instance();
                     $formData = $contact_form->get_posted_data();
@@ -547,7 +547,6 @@ class W3s_Cf7_Zoho_Admin {
                     }else {
                         $zoho->createRecord($recordsArray);
                     }
-
 
 
                 }
