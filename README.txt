@@ -1,7 +1,7 @@
 === W3SCloud Contact Form 7 to Zoho CRM ===
 Contributors: w3scloud, shohag121
 Donate link: https://w3scloud.com/contact/
-Tags: Zoho CRM, Zoho, Contact form 7, API, Leads
+Tags: Zoho CRM, Zoho, Contact form 7, API, Leads, CRM, W3SCloud
 Requires at least: 4.5
 Tested up to: 5.2.2
 Stable tag: trunk
@@ -14,6 +14,34 @@ Zoho CRM Integration with Contact Form 7. Add Leads from Contact form 7 form ent
 == Description ==
 
 This plugin integrate Zoho CRM with Contact Form 7 plugin. Whenever user submit a Contact Form 7 form, if a integration is created for the form then form entry will be inserted to CRM automatically.
+
+= Unlimited From Submission =
+This plugin works well with forms created by Contact form 7. Just select the form and ready to map.
+
+= Easy Setting Instructions =
+Instructions are provided on the plugin settings page. Follow the instruction and create a new Zoho Client, there you will get the credentials.
+
+= Easy to Map Zoho CRM fields =
+Map easily to contact form 7 fields to substitute Zoho CRM Lead module fields. No limitation on number of fields.
+
+= Map Custom Fields =
+Map custom fields easily to Zoho CRM Lead module fields and map any numbers of custom fields.
+
+= On-click Enable and Disable Option =
+You can enable or disable integration by your choice only one click.
+
+= Multiple Integrations =
+This plugin also work fine with one form with multiple ingratiation.
+
+= Zoho logs (Premium feature) =
+View a detailed log of each contact form 7 submission submit into Zoho CRM and easily resend contact form 7 submission to Zoho CRM.
+
+= Create Or Update Contact in Zoho(Premium feature) =
+If an entry already exists in Zoho CRM, update it otherwise create a new entry in Zoho CRM.
+
+= Others Zoho CRM Modules (Premium feature) =
+In our premium plugin its working on Zoho CRM others module (Contacts, Account, Lead, Order, Case) and also work fine with custom module as well
+
 
 
 == Installation ==
@@ -31,24 +59,27 @@ follow the instruction below:
 == Frequently Asked Questions ==
 
 = Is this plugin FREE? =
-
 Yes, this plugin is completely free but we have a pro version for extended functionality.
 
 = How to get Zoho Client Credentials? =
-
 Please follow the instruction on the plugin settings page and create a new Zoho Client, there you will get the credentials.
 
 = In which modules of Zoho CRM this plugin can insert data? =
-
 At this moment we only support inserting into the "Leads" module.
 
 
 == Screenshots ==
 
-1. This screen shot description corresponds to screenshot-1.(png|jpg|jpeg|gif).
-2. This is the second screen shot
+1. The Zoho Auth Settings Information to create a API Client.
+2. API Client Authentication settings form.
+3. New Integration page.
+4. Field Mapping Process for integration.
 
 == Changelog ==
+
+= 1.1.0 =
+Minor Bug fixed.
+Custom hooks introduced.
 
 = 1.0.1 =
 Minor Bug fixed.
