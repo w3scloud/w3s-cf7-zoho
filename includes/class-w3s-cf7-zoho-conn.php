@@ -68,6 +68,12 @@ class W3s_Cf7_Zoho_Conn {
         }
     }
 
+    /**
+     * this function creates record to Zoho CRM selected module
+     *
+     * @param $dataArray
+     * @param string $module
+     */
     public function createRecord($dataArray, $module = 'Leads'){
         try{
 
@@ -96,6 +102,12 @@ class W3s_Cf7_Zoho_Conn {
         }
     }
 
+    /**
+     * this function create or update zoho records
+     *
+     * @param $dataArray
+     * @param string $module
+     */
     public function upsertRecord($dataArray, $module = 'Leads'){
         try{
 

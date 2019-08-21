@@ -506,7 +506,6 @@ class W3s_Cf7_Zoho_Admin {
                     $contact_form = WPCF7_Submission::get_instance();
                     $formData = $contact_form->get_posted_data();
 
-
                     $entries = get_post_meta( get_the_ID(), 'w3s_cf7_fields_repeat_group', true );
 
                     $record = array();
