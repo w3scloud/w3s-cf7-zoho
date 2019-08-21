@@ -175,7 +175,9 @@ class W3s_Cf7_Zoho_Conn {
         $re = '/(?<=\[)([^\]]+)/';
         preg_match_all($re, $form, $matches, PREG_SET_ORDER, 0);
         $cf7Fields = array();
+//        die(var_dump($matches));
         foreach ($matches as $match){
+            if ($match[0] == '/acceptance') continue;
             $field =  explode(" ", str_replace("*","", $match[0]) );
             if ($field[0] == 'submit') continue;
             $cf7Fields[$field[1]] = "{$field[1]} ({$field[0]})";
