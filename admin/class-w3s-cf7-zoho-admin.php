@@ -529,9 +529,9 @@ class W3s_Cf7_Zoho_Admin {
 
                         // if we are entering manual value
                         if ( $custom != ''){
-                            $record[$zohoField] = $custom;
+                            $record[$zohoField] = array( 'text', $custom);
                         } else {
-                            $record[$zohoField] = $formData[$cf7_field];
+                            $record[$zohoField] = array( $zoho->getDataType($cf7_field), $formData[$zoho->removeDataType($cf7_field)]);
                         }
 
                     }

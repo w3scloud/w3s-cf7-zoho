@@ -84,10 +84,18 @@ class W3s_Cf7_Zoho_Conn {
 
 
             foreach ($dataArray as $data){
-                $record = ZCRMRecord::getInstance("leads",null);
+                $record = ZCRMRecord::getInstance( $module,null);
 
                 foreach ($data as $key => $value){
-                    $record->setFieldValue( $key, $value );
+
+                    $record->setFieldValue(
+                            $this->removeDataType($key),
+                            $this->prepareData(
+                                    $value[0],
+                                    $this->getDataType($key),
+                                    $value[1]
+                            )
+                    );
                 }
 
                 array_push($records, $record);
@@ -118,10 +126,17 @@ class W3s_Cf7_Zoho_Conn {
 
 
             foreach ($dataArray as $data){
-                $record = ZCRMRecord::getInstance("leads",null);
+                $record = ZCRMRecord::getInstance( $module,null);
 
                 foreach ($data as $key => $value){
-                    $record->setFieldValue( $key, $value );
+                    $record->setFieldValue(
+                        $this->removeDataType($key),
+                        $this->prepareData(
+                            $value[0],
+                            $this->getDataType($key),
+                            $value[1]
+                        )
+                    );
                 }
 
                 array_push($records, $record);
@@ -152,7 +167,9 @@ class W3s_Cf7_Zoho_Conn {
             $formatedFields = array();
 
             foreach ($fields as $field) {
-                $formatedFields[$field->getApiName()] = "{$field->getApiName()} ({$field->getDataType()})";
+                // get api name and data type
+                $apiName = $field->getApiName(); $apiDataType = $field->getDataType();
+                $formatedFields["{$apiDataType}_{$apiName}"] = "{$apiName} ({$apiDataType})";
             }
 
             return $formatedFields;
@@ -175,18 +192,53 @@ class W3s_Cf7_Zoho_Conn {
         $re = '/(?<=\[)([^\]]+)/';
         preg_match_all($re, $form, $matches, PREG_SET_ORDER, 0);
         $cf7Fields = array();
-//        die(var_dump($matches));
+
         foreach ($matches as $match){
             if ($match[0] == '/acceptance') continue;
             $field =  explode(" ", str_replace("*","", $match[0]) );
             if ($field[0] == 'submit') continue;
-            $cf7Fields[$field[1]] = "{$field[1]} ({$field[0]})";
+            $cf7Fields["{$field[0]}_{$field[1]}"] = "{$field[1]} ({$field[0]})";
         }
 
         $cf7Fields = apply_filters('w3s_cf7_zoho_cf7_fields', $cf7Fields);
 
         return $cf7Fields;
     }
+
+    private function prepareData($sourceDataType, $zohoDataType, $data)
+    {
+        // TODO: manipulate data and produce data with zoho data type.
+
+        return $data;
+    }
+
+    /**
+     * remove datatype at start of the string and return actual key
+     *
+     * @since   1.1.2
+     * @param $key
+     * @return string
+     */
+    public function removeDataType($key)
+    {
+        $keyArray = explode('_', $key, 2);
+        return $keyArray[1];
+    }
+
+
+    /**
+     * return only data type from start of the key
+     *
+     * @since    1.1.2
+     * @param $key
+     * @return string
+     */
+    public function getDataType($key)
+    {
+        $keyArray = explode('_', $key, 2);
+        return $keyArray[0];
+    }
+
 
 
     private function setConfig(){
