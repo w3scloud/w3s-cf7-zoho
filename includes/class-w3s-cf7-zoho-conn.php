@@ -38,10 +38,35 @@ use zcrmsdk\oauth\ZohoOAuth;
 
 class W3s_Cf7_Zoho_Conn {
 
+    /**
+     * TitanFramework instance
+     *
+     * @since 1.0.0
+     * @var TitanFramework
+     */
     private $titanInstant;
+
+    /**
+     * Zoho Settings configuration
+     *
+     * @since 1.0.0
+     * @var array
+     */
     public $zohoConfig = array();
+
+    /**
+     * Zoho Authentication
+     *
+     * @since 1.0.0
+     * @var bool|mixed
+     */
     private $auth = false;
 
+    /**
+     * W3s_Cf7_Zoho_Conn constructor.
+     *
+     * @since 1.0.0
+     */
     public function __construct(){
      
         $this->titanInstant = TitanFramework::getInstance( 'w3s-cf7-zoho' );
@@ -49,12 +74,24 @@ class W3s_Cf7_Zoho_Conn {
         $this->setConfig();
     }
 
-
+    /**
+     * this function include the vendor auto load file
+     * and initialize the Zoho functionality
+     *
+     * @since 1.0.0
+     * @return void
+     */
     private function include_zoho(){
         require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/vendor/autoload.php';
         $this->init_zoho();
     }
 
+    /**
+     * this function initialize ZCRMRestClient
+     *
+     * @since 1.0.0
+     * @return void
+     */
     private function init_zoho(){
         if ($this->auth) {
             try{
@@ -69,18 +106,20 @@ class W3s_Cf7_Zoho_Conn {
     }
 
     /**
-     * this function creates record to Zoho CRM selected module
+     * this function creates or update record to Zoho CRM on selected module
      *
-     * @param $dataArray
+     * @param array $dataArray
+     * @param bool $upsert
      * @param string $module
+     * @param array $files
      */
-    public function createRecord($dataArray, $module = 'Leads'){
+    public function createRecord($dataArray, $upsert = false, $module = 'Leads', $files = array()){
         try{
 
             $this->include_zoho();
 
             $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module);
-            $records=array();
+            $records = array();
 
 
             foreach ($dataArray as $data){
@@ -101,50 +140,29 @@ class W3s_Cf7_Zoho_Conn {
                 array_push($records, $record);
             }
 
-            $responseIn = $moduleIns->createRecords($records);
-
-            do_action('w3s_cf7_zoho_on_create_record', $responseIn);
-
-        } catch (ZCRMException $exception){
-            add_action('admin_notices', array($this, 'noticeAdmin'));
-        }
-    }
-
-    /**
-     * this function create or update zoho records
-     *
-     * @param $dataArray
-     * @param string $module
-     */
-    public function upsertRecord($dataArray, $module = 'Leads'){
-        try{
-
-            $this->include_zoho();
-
-            $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance($module);
-            $records=array();
-
-
-            foreach ($dataArray as $data){
-                $record = ZCRMRecord::getInstance( $module,null);
-
-                foreach ($data as $key => $value){
-                    $record->setFieldValue(
-                        $this->removeDataType($key),
-                        $this->prepareData(
-                            $value[0],
-                            $this->getDataType($key),
-                            $value[1]
-                        )
-                    );
-                }
-
-                array_push($records, $record);
+            if (!$upsert){
+                $responseIn = $moduleIns->createRecords($records);
+                do_action('w3s_cf7_zoho_on_create_record', $responseIn);
+            } else {
+                $responseIn = $moduleIns->upsertRecords($records);
+                do_action('w3s_cf7_zoho_on_update_record', $responseIn);
             }
 
-            $responseIn = $moduleIns->upsertRecords($records);
 
-            do_action('w3s_cf7_zoho_on_update_record', $responseIn);
+            $entityResponse = $responseIn->getEntityResponses()[0];
+            if ("success" == $entityResponse->getStatus()){
+                $createdRecordInstance = $entityResponse->getData();
+                $entityID = $createdRecordInstance->getEntityId();
+
+                if (!empty($files)){
+                    foreach ($files as $fileName => $filePath){
+                        $recordToUpload = ZCRMRecord::getInstance($module, $entityID);
+                        $fileresponseIns = $recordToUpload->uploadAttachment($filePath);
+                    }
+                }
+
+
+            }
 
         } catch (ZCRMException $exception){
             add_action('admin_notices', array($this, 'noticeAdmin'));
@@ -152,6 +170,9 @@ class W3s_Cf7_Zoho_Conn {
     }
 
     /**
+     * get all the fields of selected module
+     *
+     * @since 1.0.0
      * @param string $module
      * @return array
      */
@@ -161,8 +182,8 @@ class W3s_Cf7_Zoho_Conn {
             $this->include_zoho();
 
             $moduleIns = ZCRMModule::getInstance($module);
-            $apiResponse=$moduleIns->getAllFields();
-            $fields=$apiResponse->getData();
+            $apiResponse = $moduleIns->getAllFields();
+            $fields = $apiResponse->getData();
 
             $formatedFields = array();
 
@@ -182,6 +203,13 @@ class W3s_Cf7_Zoho_Conn {
     }
 
 
+    /**
+     * get the fields of selected contact form
+     *
+     * @since 1.0.0
+     * @param $cf7_id
+     * @return array|mixed|void
+     */
     public function getCF7Fields($cf7_id)
     {
         if ($cf7_id == null ){
@@ -197,6 +225,7 @@ class W3s_Cf7_Zoho_Conn {
             if ($match[0] == '/acceptance') continue;
             $field =  explode(" ", str_replace("*","", $match[0]) );
             if ($field[0] == 'submit') continue;
+            if ($field[0] == 'file') continue;
             $cf7Fields["{$field[0]}_{$field[1]}"] = "{$field[1]} ({$field[0]})";
         }
 
@@ -205,6 +234,15 @@ class W3s_Cf7_Zoho_Conn {
         return $cf7Fields;
     }
 
+
+    /**
+     *
+     * @since 1.1.2
+     * @param string $sourceDataType
+     * @param string $zohoDataType
+     * @param mixed $data
+     * @return mixed
+     */
     private function prepareData($sourceDataType, $zohoDataType, $data)
     {
         // TODO: manipulate data and produce data with zoho data type.

@@ -541,11 +541,18 @@ class W3s_Cf7_Zoho_Admin {
                     // check if its upsert
                     $upsert = $titan->getOption( 'is_upsert' , get_the_ID());
 
-                    if ($upsert){
-                        $zoho->upsertRecord($recordsArray);
-                    }else {
-                        $zoho->createRecord($recordsArray);
+                    // multiple module support
+                    $module = $titan->getOption( 'zoho_module' , get_the_ID());
+
+                    // support file upload
+                    $enableFileUpload = $titan->getOption( 'enable_file' , get_the_ID());
+                    $files = array();
+                    if ($enableFileUpload) {
+                        $files = $contact_form->uploaded_files();
                     }
+
+                    $zoho->createRecord($recordsArray, $upsert ,$module, $files);
+
 
 
                 }
