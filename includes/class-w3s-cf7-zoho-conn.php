@@ -164,6 +164,8 @@ class W3s_Cf7_Zoho_Conn {
 
             }
 
+            do_action('w3s_cf7_zoho_after_create_or_update_record', $responseIn);
+
         } catch (ZCRMException $exception){
             add_action('admin_notices', array($this, 'noticeAdmin'));
         }
@@ -232,6 +234,35 @@ class W3s_Cf7_Zoho_Conn {
         $cf7Fields = apply_filters('w3s_cf7_zoho_cf7_fields', $cf7Fields);
 
         return $cf7Fields;
+    }
+
+    /**
+     * get all modules
+     *
+     * @since 1.1.2
+     * @return array
+     */
+    public function getModules()
+    {
+        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/vendor/autoload.php';
+        try{
+
+            $formatedModules = array();
+
+            $ins = ZCRMRestClient::getInstance($this->zohoConfig);
+            $moduleArr = $ins->getAllModules()->getData();
+            foreach ($moduleArr as $module) {
+                if ($module->getAPIName() == 'Leads') continue;
+                $formatedModules[$module->getAPIName()] = $module->getModuleName();
+            }
+
+            return $formatedModules;
+        }
+        catch (ZCRMException $e)
+        {
+            add_action('admin_notices', array($this, 'noticeAdmin'));
+            return array();
+        }
     }
 
 
