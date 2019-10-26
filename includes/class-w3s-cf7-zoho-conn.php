@@ -158,6 +158,7 @@ class W3s_Cf7_Zoho_Conn {
                     foreach ($files as $fileName => $filePath){
                         $recordToUpload = ZCRMRecord::getInstance($module, $entityID);
                         $fileresponseIns = $recordToUpload->uploadAttachment($filePath);
+                        do_action('w3s_cf7_zoho_after_file_uploaded_to_record', $responseIn);
                     }
                 }
 
