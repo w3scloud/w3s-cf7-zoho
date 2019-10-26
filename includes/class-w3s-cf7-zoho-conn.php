@@ -165,7 +165,7 @@ class W3s_Cf7_Zoho_Conn {
 
             }
 
-            do_action('w3s_cf7_zoho_after_create_or_update_record', $responseIn);
+            do_action('w3s_cf7_zoho_after_create_or_update_record', $responseIn, $module);
 
         } catch (ZCRMException $exception){
             add_action('admin_notices', array($this, 'noticeAdmin'));
