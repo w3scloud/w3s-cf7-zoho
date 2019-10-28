@@ -311,7 +311,7 @@ class W3s_Cf7_Zoho_Admin {
             'Leads' => 'Leads',
         );
 
-//        $zohoModules = apply_filters('w3s_cf7_zoho_module_filter', $zohoModules );
+        $zohoModules = apply_filters('w3s_cf7_zoho_module_filter', $zohoModules );
 
         $metaBox->createOption( array(
             'name' => 'Zoho CRM Module',
