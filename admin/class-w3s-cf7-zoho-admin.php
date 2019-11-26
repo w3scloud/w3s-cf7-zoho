@@ -41,10 +41,6 @@ class W3s_Cf7_Zoho_Admin {
     private $version;
 
 
-
-
-
-
     /**
      * Initialize the class and set its properties.
      *
@@ -350,7 +346,7 @@ class W3s_Cf7_Zoho_Admin {
 
         $cf7fields = array();
         $zohoFields = array();
-
+        $zoho_conn = null;
         if (isset($_GET[ 'post' ])){
             $post_id = intval(sanitize_text_field($_GET[ 'post' ]));
 
@@ -371,7 +367,7 @@ class W3s_Cf7_Zoho_Admin {
             'id'          => 'w3s_cf7_fields_repeat_group',
             'type'        => 'group',
             'description' => __( 'Map Contact form 7 fields to Zoho CRM fields', 'w3s-cf7-zoho' ),
-            // 'repeatable'  => false, // use false if you want non-repeatable group
+            // 'repeatable'  => false, // use false if you want non-repeatable gro                                                   up
             'options'     => array(
                 'group_title'       => __( 'Field Map {#}', 'w3s-cf7-zoho' ), // since version 1.1.4, {#} gets replaced by row number
                 'add_button'        => __( 'Map Another Field', 'w3s-cf7-zoho' ),

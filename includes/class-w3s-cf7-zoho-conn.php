@@ -30,6 +30,7 @@
 
 
 use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
+use zcrmsdk\crm\api\handler\MetaDataAPIHandler;
 use zcrmsdk\crm\exception\ZCRMException;
 use zcrmsdk\crm\crud\ZCRMModule;
 use zcrmsdk\crm\crud\ZCRMRecord;
@@ -52,7 +53,7 @@ class W3s_Cf7_Zoho_Conn {
      * @since 1.0.0
      * @var array
      */
-    public $zohoConfig = array();
+    private $zohoConfig = array();
 
     /**
      * Zoho Authentication
@@ -123,7 +124,7 @@ class W3s_Cf7_Zoho_Conn {
 
 
             foreach ($dataArray as $data){
-                $record = ZCRMRecord::getInstance( $module,null);
+                $record = ZCRMRecord::getInstance( $module, null);
 
                 foreach ($data as $key => $value){
 
@@ -245,15 +246,14 @@ class W3s_Cf7_Zoho_Conn {
      */
     public function getModules()
     {
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/vendor/autoload.php';
+
         try{
-
+            $this->include_zoho();
             $formatedModules = array();
-
-            $ins = ZCRMRestClient::getInstance($this->zohoConfig);
-            $moduleArr = $ins->getAllModules()->getData();
+            $moduleArr = ZCRMRestClient::getInstance()->getAllModules()->getData();
             foreach ($moduleArr as $module) {
-                if ($module->getAPIName() == 'Leads') continue;
+                if (!($module->isEditable() && $module->isViewable() && $module->isCreatable()) ) continue;
+
                 $formatedModules[$module->getAPIName()] = $module->getModuleName();
             }
 
@@ -320,7 +320,7 @@ class W3s_Cf7_Zoho_Conn {
 
             $confFile = $upload_dir .'/config.php';
 
-            $conf = require_once $confFile;
+            $conf = require $confFile;
             if(!empty($conf)){
                 $this->auth = true;
                 $this->zohoConfig = $conf;
