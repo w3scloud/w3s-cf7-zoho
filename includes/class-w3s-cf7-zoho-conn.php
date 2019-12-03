@@ -254,7 +254,7 @@ class W3s_Cf7_Zoho_Conn {
             foreach ($moduleArr as $module) {
                 if (!($module->isEditable() && $module->isViewable() && $module->isCreatable()) ) continue;
 
-                $formatedModules[$module->getAPIName()] = $module->getModuleName();
+                $formatedModules[$module->getAPIName()] = $module->getPluralLabel();
             }
 
             return $formatedModules;
