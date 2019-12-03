@@ -277,9 +277,229 @@ class W3s_Cf7_Zoho_Conn {
      */
     private function prepareData($sourceDataType, $zohoDataType, $data)
     {
-        // TODO: manipulate data and produce data with zoho data type.
+        switch ($zohoDataType) {
+            case "textarea":
+            case "picklist":
+            case "email":
+            case "phone":
+            case "website":
+            case "lookup":
+            case "wonerlookup":
+            case "bigint":
+            case "text":
+                if ($sourceDataType == 'text') {
+                    return $data;
+                } elseif ($sourceDataType == 'email') {
+                    return $data;
+                } elseif ($sourceDataType == 'url') {
+                    return $data;
+                } elseif ($sourceDataType == 'tel') {
+                    return $data;
+                } elseif ($sourceDataType == 'number') {
+                    return $data;
+                } elseif ($sourceDataType == 'date') {
+                    return $data;
+                } elseif ($sourceDataType == 'textarea') {
+                    return $data;
+                } elseif ($sourceDataType == 'select') {
+                    return $data;
+                } elseif ($sourceDataType == 'checkbox') {
+                    return implode(", ", $data);
+                } elseif ($sourceDataType == 'radio') {
+                    return $data[0];
+                } elseif ($sourceDataType == 'acceptance') {
+                    return $data;
+                } elseif ($sourceDataType == 'quiz') {
+                    return $data;
+                } else {
+                    return $data;
+                }
+                break;
 
-        return $data;
+            case "multiselectpicklist":
+                if ($sourceDataType == 'text') {
+                    return array($data);
+                } elseif ($sourceDataType == 'email') {
+                    return array($data);
+                } elseif ($sourceDataType == 'url') {
+                    return array($data);
+                } elseif ($sourceDataType == 'tel') {
+                    return array($data);
+                } elseif ($sourceDataType == 'number') {
+                    return array($data);
+                } elseif ($sourceDataType == 'date') {
+                    return array($data);
+                } elseif ($sourceDataType == 'textarea') {
+                    return array($data);
+                } elseif ($sourceDataType == 'select') {
+                    return array($data);
+                } elseif ($sourceDataType == 'checkbox') {
+                    return $data;
+                } elseif ($sourceDataType == 'radio') {
+                    return $data;
+                } elseif ($sourceDataType == 'acceptance') {
+                    return array($data);
+                } elseif ($sourceDataType == 'quiz') {
+                    return array($data);
+                } else {
+                    return array($data);
+                }
+                break;
+
+            case "date":
+                if ($sourceDataType == 'text') {
+                    return date('Y-m-d', strtotime($data));
+                } elseif ($sourceDataType == 'email') {
+                    return null;
+                } elseif ($sourceDataType == 'url') {
+                    return null;
+                } elseif ($sourceDataType == 'tel') {
+                    return null;
+                } elseif ($sourceDataType == 'number') {
+                    return null;
+                } elseif ($sourceDataType == 'date') {
+                    return date('Y-m-d', strtotime($data));
+                } elseif ($sourceDataType == 'textarea') {
+                    return date('Y-m-d', strtotime($data));
+                } elseif ($sourceDataType == 'select') {
+                    return $data;
+                } elseif ($sourceDataType == 'checkbox') {
+                    return null;
+                } elseif ($sourceDataType == 'radio') {
+                    return date('Y-m-d', strtotime($data[0]));
+                } elseif ($sourceDataType == 'acceptance') {
+                    return date('Y-m-d', strtotime($data));
+                } elseif ($sourceDataType == 'quiz') {
+                    return date('Y-m-d', strtotime($data));
+                } else {
+                    return date('Y-m-d', strtotime($data));
+                }
+                break;
+
+            case "datetime":
+                date_default_timezone_set(get_option('timezone_string'));
+                if ($sourceDataType == 'text') {
+                    return date('c', strtotime($data));
+                } elseif ($sourceDataType == 'email') {
+                    return null;
+                } elseif ($sourceDataType == 'url') {
+                    return null;
+                } elseif ($sourceDataType == 'tel') {
+                    return null;
+                } elseif ($sourceDataType == 'number') {
+                    return null;
+                } elseif ($sourceDataType == 'date') {
+                    return date('c', strtotime($data));
+                } elseif ($sourceDataType == 'textarea') {
+                    return date('c', strtotime($data));
+                } elseif ($sourceDataType == 'select') {
+                    return $data;
+                } elseif ($sourceDataType == 'checkbox') {
+                    return null;
+                } elseif ($sourceDataType == 'radio') {
+                    return date('c', strtotime($data[0]));
+                } elseif ($sourceDataType == 'acceptance') {
+                    return date('c', strtotime($data));
+                } elseif ($sourceDataType == 'quiz') {
+                    return date('c', strtotime($data));
+                } else {
+                    return date('c', strtotime($data));
+                }
+                break;
+
+            case "integer":
+                if ($sourceDataType == 'text') {
+                    return (int)$data;
+                } elseif ($sourceDataType == 'email') {
+                    return (int)$data;
+                } elseif ($sourceDataType == 'url') {
+                    return (int)$data;
+                } elseif ($sourceDataType == 'tel') {
+                    return (int)$data;
+                } elseif ($sourceDataType == 'number') {
+                    return (int)$data;
+                } elseif ($sourceDataType == 'date') {
+                    return (int)$data;
+                } elseif ($sourceDataType == 'textarea') {
+                    return (int)$data;
+                } elseif ($sourceDataType == 'select') {
+                    return (int)$data;
+                } elseif ($sourceDataType == 'checkbox') {
+                    return null;
+                } elseif ($sourceDataType == 'radio') {
+                    return (int)$data[0];
+                } elseif ($sourceDataType == 'acceptance') {
+                    return (int)$data;
+                } elseif ($sourceDataType == 'quiz') {
+                    return (int)$data;
+                } else {
+                    return intval($data);
+                }
+                break;
+
+            case "boolean":
+                if ($sourceDataType == 'text') {
+                    return boolval($data);
+                } elseif ($sourceDataType == 'email') {
+                    return boolval($data);
+                } elseif ($sourceDataType == 'url') {
+                    return boolval($data);
+                } elseif ($sourceDataType == 'tel') {
+                    return boolval($data);
+                } elseif ($sourceDataType == 'number') {
+                    return boolval($data);
+                } elseif ($sourceDataType == 'date') {
+                    return boolval($data);
+                } elseif ($sourceDataType == 'textarea') {
+                    return boolval($data);
+                } elseif ($sourceDataType == 'select') {
+                    return boolval($data);
+                } elseif ($sourceDataType == 'checkbox') {
+                    return boolval($data[0]);
+                } elseif ($sourceDataType == 'radio') {
+                    return boolval($data[0]);
+                } elseif ($sourceDataType == 'acceptance') {
+                    return boolval($data);
+                } elseif ($sourceDataType == 'quiz') {
+                    return boolval($data);
+                } else {
+                    return boolval($data);
+                }
+                break;
+
+            case "double":
+                if ($sourceDataType == 'text') {
+                    return floatval($data);
+                } elseif ($sourceDataType == 'email') {
+                    return null;
+                } elseif ($sourceDataType == 'url') {
+                    return null;
+                } elseif ($sourceDataType == 'tel') {
+                    return floatval($data);
+                } elseif ($sourceDataType == 'number') {
+                    return floatval($data);
+                } elseif ($sourceDataType == 'date') {
+                    return null;
+                } elseif ($sourceDataType == 'textarea') {
+                    return floatval($data);
+                } elseif ($sourceDataType == 'select') {
+                    return floatval($data);
+                } elseif ($sourceDataType == 'checkbox') {
+                    return floatval($data[0]);
+                } elseif ($sourceDataType == 'radio') {
+                    return floatval($data[0]);
+                } elseif ($sourceDataType == 'acceptance') {
+                    return floatval($data);
+                } elseif ($sourceDataType == 'quiz') {
+                    return floatval($data);
+                } else {
+                    return floatval($data);
+                }
+                break;
+
+            default:
+                return $data;
+        }
     }
 
     /**
