@@ -30,17 +30,20 @@ class W3s_Cf7_Zoho_Activator {
 	 * @since    1.0.0
 	 */
 	public static function activate() {
-
-        $upload = wp_upload_dir();
-        $upload_dir = $upload['basedir'];
-        $upload_dir = $upload_dir . '/w3s-cf7-zoho';
-        if(!file_exists($upload_dir)) wp_mkdir_p($upload_dir);
-
-        $filename = $upload_dir.'/zcrm_oauthtokens.txt';
-
-        if(!file_exists($filename)) touch($filename);
-
-
+		global $wpdb;
+		$ifTableExist = $wpdb->query( "SHOW TABLES LIKE '{$wpdb->prefix}cf7tozoholog'" );
+		if ( ! $ifTableExist ) {
+			$table_name      = $wpdb->prefix . 'cf7tozoholog';
+			$charset_collate = $wpdb->get_charset_collate();
+			$sql             = "CREATE TABLE $table_name (
+                id bigint(20) NOT NULL AUTO_INCREMENT,
+                date datetime NULL DEFAULT NULL,
+                text text NULL,
+                PRIMARY KEY  (id)
+            ) $charset_collate;";
+			require_once ABSPATH . 'wp-admin/includes/upgrade.php';
+			dbDelta( $sql );
+		}
 	}
 
 }

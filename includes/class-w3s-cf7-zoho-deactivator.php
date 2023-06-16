@@ -32,5 +32,4 @@ class W3s_Cf7_Zoho_Deactivator {
 	public static function deactivate() {
 
 	}
-
 }

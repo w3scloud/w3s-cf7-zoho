@@ -1,4 +1,23 @@
-/**
- * All of the CSS for your admin-specific functionality should be
- * included in this file.
- */
+.zoho-auth-info input[type='text'],
+.zoho-auth-info input[type='password'] {
+    width: 100%;
+    max-width: 400px;
+}
+
+.zoho-auth-info h3 {
+    border-bottom: 2px solid #666;
+    padding-bottom: 5px;
+    display: inline-block;
+}
+
+.zoho-auth-info .guid {
+    margin: 0 0 10px 0;
+}
+
+.zoho-auth-info .zci,
+.zoho-auth-info .zcs {
+    margin: 0;
+}
+.postbox .cmb-repeat-group-field {
+    padding: 10px 0 !important;
+}

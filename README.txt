@@ -1,11 +1,11 @@
 === W3SCloud Contact Form 7 to Zoho CRM ===
-Contributors: w3scloud, shohag121
+Contributors: w3scloud, amdad121
 Donate link: https://w3scloud.com/contact/
 Tags: Zoho CRM, Zoho, Contact form 7, API, Leads, CRM, W3SCloud
-Requires at least: 4.5
-Tested up to: 5.3
+Requires at least: 5.2
+Tested up to: 6.2
 Stable tag: trunk
-Requires PHP: 5.6
+Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,10 +51,11 @@ W3SCloud Contact Form 7 to Zoho CRM plugin require "Contact Form 7" plugin to wo
 follow the instruction below:
 
 1. Upload the plugin files to the `/wp-content/plugins/w3s-cf7-zoho` directory, or install the plugin through the WordPress plugins screen directly.
-1. Activate the plugin through the 'Plugins' screen in WordPress
-1. Use the Integrations->Zoho Auth Settings screen to authenticate Zoho CRM
-1. Create and insert Zoho Credentials using displayed Information then save.
-1. Press Grant Access button to authorize Zoho CRM For this Integration.
+2. Activate the plugin through the 'Plugins' screen in WordPress
+3. Use the Integrations->Zoho Auth Settings screen to authenticate Zoho CRM
+4. Create and insert Zoho Credentials using displayed Information then save.
+5. Press Grant Access button to authorize Zoho CRM For this Integration.
+6. See Video for more <a href='https://www.youtube.com/watch?v=8lsIHkOHxWY'>https://www.youtube.com/watch?v=8lsIHkOHxWY</a>
 
 == Frequently Asked Questions ==
 
@@ -75,7 +76,27 @@ At this moment we only support inserting into the "Leads" module.
 3. New Integration page.
 4. Field Mapping Process for integration.
 
+
 == Changelog ==
+
+= 2.3 =
+Zoho CRM PHP SDK updated.
+PHP 8.1 support.
+Freeminus Updated.
+JavaScript Bug fixed.
+Spelling Fixed.
+Changed some options.
+Security Fixed
+And more
+
+= 2.2 =
+Minor Bug fixed.
+Changed some options.
+
+= 2.1.0 =
+Implement new framework with zoho crm API version 2.
+Removed Titan framework.
+Changed some options.
 
 = 1.1.0 =
 Minor Bug fixed.
