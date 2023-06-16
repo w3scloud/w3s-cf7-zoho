@@ -26,7 +26,6 @@
  */
 class W3s_Cf7_Zoho_i18n {
 
-
 	/**
 	 * Load the plugin text domain for translation.
 	 *
@@ -41,7 +40,4 @@ class W3s_Cf7_Zoho_i18n {
 		);
 
 	}
-
-
-
 }

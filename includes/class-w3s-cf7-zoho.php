@@ -73,13 +73,13 @@ class W3s_Cf7_Zoho {
 			$this->version = '1.0.0';
 		}
 		$this->plugin_name = 'w3s-cf7-zoho';
-        $this->load_dependencies();
+		$this->load_dependencies();
 
-        if ($this->cf7_dependency_check()){
-            $this->set_locale();
-            $this->define_admin_hooks();
-            $this->define_public_hooks();
-        }
+		if ( $this->cf7_dependency_check() ) {
+			$this->set_locale();
+			$this->define_admin_hooks();
+			$this->define_public_hooks();
+		}
 
 	}
 
@@ -88,7 +88,6 @@ class W3s_Cf7_Zoho {
 	 *
 	 * Include the following files that make up the plugin:
 	 *
-	 * - TitanFrameworkEmbedder. 
 	 * - W3s_Cf7_Zoho_Loader. Orchestrates the hooks of the plugin.
 	 * - W3s_Cf7_Zoho_i18n. Defines internationalization functionality.
 	 * - W3s_Cf7_Zoho_Admin. Defines all hooks for the admin area.
@@ -102,11 +101,8 @@ class W3s_Cf7_Zoho {
 	 */
 	private function load_dependencies() {
 
-		/**
-		 * The class responsible for loading Titan framework to the
-		 * core plugin.
-		 */
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/titan-framework/titan-framework-embedder.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/ss/admin-menus-for-zoho.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/ss/zoho-auth-infos.php';
 
 		/**
 		 * The class responsible for loading CMB2 to the
@@ -137,14 +133,12 @@ class W3s_Cf7_Zoho {
 		 */
 		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'public/class-w3s-cf7-zoho-public.php';
 
-        /**
-         * This class include the Zoho related functionality
-         */
-        require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-w3s-cf7-zoho-conn.php';
+		/**
+		 * This class include the Zoho related functionality
+		 */
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/class-w3s-cf7-zoho-conn.php';
 
-
-
-        $this->loader = new W3s_Cf7_Zoho_Loader();
+		$this->loader = new W3s_Cf7_Zoho_Loader();
 
 	}
 
@@ -203,7 +197,7 @@ class W3s_Cf7_Zoho {
 	 * @since    1.0.0
 	 */
 	public function run() {
-	    $this->loader->run();
+		$this->loader->run();
 	}
 
 	/**
@@ -237,27 +231,21 @@ class W3s_Cf7_Zoho {
 		return $this->version;
 	}
 
-    private function cf7_dependency_check()
-    {
-        include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-        if ( is_plugin_active( 'contact-form-7/wp-contact-form-7.php' ) ) {
-            return true;
-        } else {
-            add_action( 'admin_notices', array($this, 'admin_notice' ));
-            return false;
+	private function cf7_dependency_check() {
+		include_once ABSPATH . 'wp-admin/includes/plugin.php';
+		if ( is_plugin_active( 'contact-form-7/wp-contact-form-7.php' ) ) {
+			return true;
+		} else {
+			add_action( 'admin_notices', array( $this, 'admin_notice' ) );
+			return false;
 
-        }
-    }
+		}
+	}
 
-    public function admin_notice()
-    {
-        ?>
-        <div class="notice notice-error is-dismissible">
-            <p><?php _e( 'Whoops! Zoho with Contact Form 7 Plugin needs  <strong><em>Contact Form 7</em></strong> to work.', 'w3s-cf7-zoho' ); ?></p>
-        </div>
-        <?php
-    }
-
-
-
+	public function admin_notice() {        ?>
+		<div class="notice notice-error is-dismissible">
+			<p><?php _e( 'Whoops! Zoho with Contact Form 7 Plugin needs  <strong><em>Contact Form 7</em></strong> to work.', 'w3s-cf7-zoho' ); ?></p>
+		</div>
+		<?php
+	}
 }
