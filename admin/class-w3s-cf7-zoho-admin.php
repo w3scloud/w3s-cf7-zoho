@@ -411,6 +411,8 @@ class W3s_Cf7_Zoho_Admin {
 
 		if ( isset( $_GET['code'] ) ) {
 
+			
+
 			$thisPageUrl = admin_url( 'edit.php?post_type=w3s_cf7&page=w3s-cf7-zoho' );
 
 			try {
@@ -420,15 +422,15 @@ class W3s_Cf7_Zoho_Admin {
 				$apiBase = '';
 
 				if ( $_GET['location'] == 'us' ) {
-					$apiBase = 'www.zohoapis.com';
+					$apiBase = 'https://www.zohoapis.com';
 				} elseif ( $_GET['location'] == 'eu' ) {
-					$apiBase = 'www.zohoapis.eu';
+					$apiBase = 'https://www.zohoapis.eu';
 				} elseif ( $_GET['location'] == 'cn' ) {
-					$apiBase = 'www.zohoapis.com.cn';
+					$apiBase = 'https://www.zohoapis.com.cn';
 				} elseif ( $_GET['location'] == 'in' ) {
-					$apiBase = 'www.zohoapis.in';
+					$apiBase = 'https://www.zohoapis.in';
 				} else {
-					$apiBase = 'www.zohoapis.com';
+					$apiBase = 'https://www.zohoapis.com';
 				}
 
 				$accountURL = esc_url( $_GET['accounts-server'] );
@@ -445,30 +447,35 @@ class W3s_Cf7_Zoho_Admin {
 					'redirect_uri'     => $redirectURLEncoded,
 					'accounts_url'     => $accountURL,
 					'currentUserEmail' => $infos->getInfo( 'zoho_user_email' ),
-					// 'token_persistence_path'=> $upload_dir,
-					// 'applicationLogFilePath'=> $upload_dir,
+					'code'			   => sanitize_text_field( $_GET['code'] ),
+					'code_use'		   => false,
 					'access_type'      => 'offline',
 					'apiVersion'       => 'v2',
 					'time'             => time(), // ss00 # no need this column. just for change every authentication
 				);
 
-				// Generating access tokens
+			
 
 				$zoho_conn = new W3s_Cf7_Zoho_Conn();
-				$conn      = $zoho_conn->genToken( sanitize_text_field( $_GET['code'] ), $config );
+				$conn = true;//$zoho_conn->genToken($config);
 
-				if ( $conn ) {
-					$infos->setInfo( 'zoho_authorized', true )->storeInfo();// ss00
-					$storeConfigs = update_option( '_zoho_config', serialize( $config ) ); // ss00
+				
 
-					if ( $storeConfigs ) {
-						add_action( 'admin_notices', array( $this, 'admin_notice_on_success' ) );
-					} else {
-						add_action( 'admin_notices', array( $this, 'admin_notice_on_error' ) );
-					}
-				} else {
-					add_action( 'admin_notices', array( $this, 'admin_notice_on_error' ) );
-				}
+
+				// if ( $conn ) {
+				// 	// var_dump($conn);die;
+				// 	$infos->setInfo( 'zoho_authorized', true )->storeInfo();// ss00
+				// 	$storeConfigs = update_option( '_zoho_config', serialize( $config ) ); // ss00
+
+				// 	if ( $storeConfigs ) {
+				// 		add_action( 'admin_notices', array( $this, 'admin_notice_on_success' ) );
+				// 	} else {
+				// 		add_action( 'admin_notices', array( $this, 'admin_notice_on_error' ) );
+				// 	}
+				// } else {
+				// 	// var_dump("stop");die;
+				// 	add_action( 'admin_notices', array( $this, 'admin_notice_on_error' ) );
+				// }
 			} catch ( Exception $e ) {
 				add_action( 'admin_notices', array( $this, 'admin_notice_on_error2' ) );
 			}
@@ -480,25 +487,25 @@ class W3s_Cf7_Zoho_Admin {
 	}
 
 	public function admin_notice_on_success() {         ?>
-		<div class="notice notice-success is-dismissible">
-			<p><?php _e( 'Zoho Authentication Successful!', 'w3s-cf7-zoho' ); ?></p>
-		</div>
-		<?php
+<div class="notice notice-success is-dismissible">
+    <p><?php _e( 'Zoho Authentication Successful!', 'w3s-cf7-zoho' ); ?></p>
+</div>
+<?php
 	}
 
 	public function admin_notice_on_error() {
 		?>
-		<div class="notice notice-error is-dismissible">
-			<p><?php _e( 'Zoho Authentication Error! Please check your credentials and try again. ', 'w3s-cf7-zoho' ); ?></p>
-		</div>
-		<?php
+<div class="notice notice-error is-dismissible">
+    <p><?php _e( 'Zoho Authentication Error! Please check your credentials and try again. ', 'w3s-cf7-zoho' ); ?></p>
+</div>
+<?php
 	}
 
 	public function admin_notice_on_error2() {
 		?>
-		<div class="notice notice-error is-dismissible">
-			<p><?php _e( 'Already authenticated or something wrong!', 'w3s-cf7-zoho' ); ?></p>
-		</div>
-		<?php
+<div class="notice notice-error is-dismissible">
+    <p><?php _e( 'Already authenticated or something wrong!', 'w3s-cf7-zoho' ); ?></p>
+</div>
+<?php
 	}
 }

@@ -1,5 +1,5 @@
 === W3SCloud Contact Form 7 to Zoho CRM ===
-Contributors: w3scloud, amdad121
+Contributors: w3scloud
 Donate link: https://w3scloud.com/contact/
 Tags: Zoho CRM, Zoho, Contact form 7, API, Leads, CRM, W3SCloud
 Requires at least: 5.2
@@ -78,6 +78,15 @@ At this moment we only support inserting into the "Leads" module.
 
 
 == Changelog ==
+
+= 3.0 =
+Zoho CRM PHP SDK Remove.
+Build Auth system using API
+PHP 8.2 support.
+Minor Bug fixed.
+Security Fixed
+And more
+
 
 = 2.3 =
 Zoho CRM PHP SDK updated.

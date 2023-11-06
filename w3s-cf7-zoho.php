@@ -8,9 +8,9 @@
  *
  * @wordpress-plugin
  * Plugin Name:       W3SCloud Contact Form 7 to Zoho CRM
- * Plugin URI:        https://w3scloud.com/cf7-zoho/
+ * Plugin URI:        https://w3scloud.com
  * Description:       Zoho CRM Integration with Contact Form 7. Add Leads from Contact form 7 form entry.
- * Version:           2.3
+ * Version:           3.0
  * Author:            W3SCloud Technology
  * Author URI:        https://w3scloud.com/
  * License:           GPL-2.0+
@@ -24,59 +24,13 @@ if ( ! defined( 'WPINC' ) ) {
 	die;
 }
 
-// if ( ! function_exists( 'w3sccf7z_fs' ) ) {
-// 	// Create a helper function for easy SDK access.
-// 	function w3sccf7z_fs() {
-// 		global $w3sccf7z_fs;
 
-// 		if ( ! isset( $w3sccf7z_fs ) ) {
-// 			// Include Freemius SDK.
-// 			require_once dirname( __FILE__ ) . '/freemius/start.php';
-
-// 			$w3sccf7z_fs = fs_dynamic_init(
-// 				array(
-// 					'id'                  => '8858',
-// 					'slug'                => 'w3s-cf7-zoho',
-// 					'premium_slug'        => 'w3s-cf7-zoho-premium',
-// 					'type'                => 'plugin',
-// 					'public_key'          => 'pk_472c69ca65f1be708ce325706ae1b',
-// 					'is_premium'          => false,
-// 					'has_addons'          => false,
-// 					// If your plugin is a serviceware, set this option to false.
-// 					'has_premium_version' => false,
-// 					'has_paid_plans'      => false,
-// 					'is_org_compliant'    => false,
-// 					'menu'                => array(
-// 						'first-path' => 'edit.php?post_type=w3s_cf7&page=w3s-cf7-zoho',
-// 						'account'    => false,
-// 						'contact'    => false,
-// 						'support'    => false,
-// 						'slug'       => 'w3s-cf7-zoho',
-// 						'parent'     => array(
-// 							'slug' => 'edit.php?post_type=w3s_cf7',
-// 						),
-// 					),
-// 					// Set the SDK to work in a sandbox mode (for development & testing).
-// 					// IMPORTANT: MAKE SURE TO REMOVE SECRET KEY BEFORE DEPLOYMENT.
-// 					// 'secret_key'          => 'sk_ubb4yN3mzqGR2x8#P7r5&@*xC$utE',
-// 				)
-// 			);
-// 		}
-
-// 		return $w3sccf7z_fs;
-// 	}
-
-// 	// Init Freemius.
-// 	w3sccf7z_fs();
-// 	// Signal that SDK was initiated.
-// 	do_action( 'w3sccf7z_fs_loaded' );
-// }
 
 /**
  * Currently plugin version.
  * Start at version 1.0.0 and use SemVer - https://semver.org
  */
-define( 'W3S_CF7_ZOHO_VERSION', '2.3' );
+define( 'W3S_CF7_ZOHO_VERSION', '3.0' );
 
 /**
  * The code that runs during plugin activation.

@@ -29,13 +29,6 @@
  */
 
 
-use zcrmsdk\crm\setup\restclient\ZCRMRestClient;
-use zcrmsdk\crm\api\handler\MetaDataAPIHandler;
-use zcrmsdk\crm\exception\ZCRMException;
-use zcrmsdk\crm\crud\ZCRMModule;
-use zcrmsdk\crm\crud\ZCRMRecord;
-use zcrmsdk\oauth\ZohoOAuth;
-
 
 class W3s_Cf7_Zoho_Conn {
 
@@ -68,35 +61,8 @@ class W3s_Cf7_Zoho_Conn {
 		$this->setConfig();
 	}
 
-	/**
-	 * this function include the vendor auto load file
-	 * and initialize the Zoho functionality
-	 *
-	 * @since 1.0.0
-	 * @return void
-	 */
-	private function include_zoho() {
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/vendor/autoload.php';
-		$this->init_zoho();
-	}
 
-	/**
-	 * this function initialize ZCRMRestClient
-	 *
-	 * @since 1.0.0
-	 * @return void
-	 */
-	private function init_zoho() {
-		if ( $this->auth ) {
-			try {
-				ZCRMRestClient::initialize( $this->zohoConfig );
-			} catch ( ZCRMException $exception ) {
-				$this->auth = false;
-				add_action( 'admin_notices', array( $this, 'noticeAdmin' ) );
-				exit;
-			}
-		}
-	}
+
 
 	/**
 	 * this function creates or update record to Zoho CRM on selected module
@@ -108,55 +74,56 @@ class W3s_Cf7_Zoho_Conn {
 	 */
 	public function createRecord( $dataArray, $upsert = false, $module = 'Leads', $files = array() ) {
 		try {
-
-			$this->include_zoho();
-
-			$moduleIns = ZCRMRestClient::getInstance()->getModuleInstance( $module );
+			
+			// $moduleIns = ZCRMRestClient::getInstance()->getModuleInstance( $module );
 			$records   = array();
-
+	
 			foreach ( $dataArray as $data ) {
-				$record = ZCRMRecord::getInstance( $module, null );
 
 				foreach ( $data as $key => $value ) {
 
-					$record->setFieldValue(
-						$this->removeDataType( $key ),
-						$this->prepareData(
-							$value[0],
-							$this->getDataType( $key ),
-							$value[1]
-						)
+					$api_name = $this->removeDataType( $key );
+					$form_value =$this->prepareData(
+						$value[0],
+						$this->getDataType( $key ),
+						$value[1]
 					);
+					$records[$api_name] = $form_value;
+				
 				}
 
-				array_push( $records, $record );
 			}
+			if(!empty($records)){
 
-			if ( ! $upsert ) {
-				$responseIn = $moduleIns->createRecords( $records );
-				do_action( 'w3s_cf7_zoho_on_create_record', $responseIn );
-			} else {
-				$responseIn = $moduleIns->upsertRecords( $records );
-				do_action( 'w3s_cf7_zoho_on_update_record', $responseIn );
-			}
-
-			$entityResponse = $responseIn->getEntityResponses()[0];
-			if ( 'success' == $entityResponse->getStatus() ) {
-				$createdRecordInstance = $entityResponse->getData();
-				$entityID              = $createdRecordInstance->getEntityId();
-
-				if ( ! empty( $files ) ) {
-					foreach ( $files as $fileName => $filePath ) {
-						$recordToUpload  = ZCRMRecord::getInstance( $module, $entityID );
-						$fileresponseIns = $recordToUpload->uploadAttachment( $filePath );
-						do_action( 'w3s_cf7_zoho_after_file_uploaded_to_record', $fileresponseIns );
-					}
+				if ( ! $upsert ) {
+					$responseIn = $this->authInfoInstance->zohoUpsert($module,$records);
+					do_action( 'w3s_cf7_zoho_on_create_record', $responseIn );
+				} else {
+					$responseIn =  $this->authInfoInstance->zohoUpsert($module,$records);
+					do_action( 'w3s_cf7_zoho_on_update_record', $responseIn );
 				}
 			}
+	
+			// var_dump($records);die;
+			
 
-			do_action( 'w3s_cf7_zoho_after_create_or_update_record', $responseIn, $module );
+			// $entityResponse = $responseIn->getEntityResponses()[0];
+			// if ( 'success' == $entityResponse->getStatus() ) {
+			// 	$createdRecordInstance = $entityResponse->getData();
+			// 	$entityID              = $createdRecordInstance->getEntityId();
 
-		} catch ( ZCRMException $exception ) {
+			// 	if ( ! empty( $files ) ) {
+			// 		foreach ( $files as $fileName => $filePath ) {
+			// 			$recordToUpload  = ZCRMRecord::getInstance( $module, $entityID );
+			// 			$fileresponseIns = $recordToUpload->uploadAttachment( $filePath );
+			// 			do_action( 'w3s_cf7_zoho_after_file_uploaded_to_record', $fileresponseIns );
+			// 		}
+			// 	}
+			// }
+
+			// do_action( 'w3s_cf7_zoho_after_create_or_update_record', $responseIn, $module );
+
+		} catch ( Exception $exception ) {
 			add_action( 'admin_notices', array( $this, 'noticeAdmin' ) );
 		}
 	}
@@ -171,23 +138,20 @@ class W3s_Cf7_Zoho_Conn {
 	public function getZohoFields( $module = 'Leads' ) {
 
 		try {
-			$this->include_zoho();
+		
+			$fields = $this->authInfoInstance->zohoFields($module);
 
-			$moduleIns   = ZCRMModule::getInstance( $module );
-			$apiResponse = $moduleIns->getAllFields();
-			$fields      = $apiResponse->getData();
 
 			$formatedFields = array();
 
 			foreach ( $fields as $field ) {
-				// get api name and data type
-				$apiName                                       = $field->getApiName();
-				$apiDataType                                   = $field->getDataType();
+				$apiName                                       = $field['api_name'];
+				$apiDataType                                   = $field['data_type'];
 				$formatedFields[ "{$apiDataType}_{$apiName}" ] = "{$apiName} ({$apiDataType})";
 			}
 
 			return $formatedFields;
-		} catch ( ZCRMException $e ) {
+		} catch ( Exception $e ) {
 			add_action( 'admin_notices', array( $this, 'noticeAdmin' ) );
 			return array();
 		}
@@ -236,25 +200,6 @@ class W3s_Cf7_Zoho_Conn {
 	 * @since 1.1.2
 	 * @return array
 	 */
-	public function getModules() {
-		try {
-			$this->include_zoho();
-			$formatedModules = array();
-			$moduleArr       = ZCRMRestClient::getInstance()->getAllModules()->getData();
-			foreach ( $moduleArr as $module ) {
-				if ( ! ( $module->isEditable() && $module->isViewable() && $module->isCreatable() ) ) {
-					continue;
-				}
-
-				$formatedModules[ $module->getAPIName() ] = $module->getModuleName();
-			}
-
-			return $formatedModules;
-		} catch ( ZCRMException $e ) {
-			add_action( 'admin_notices', array( $this, 'noticeAdmin' ) );
-			return array();
-		}
-	}
 
 
 	/**
@@ -519,23 +464,7 @@ class W3s_Cf7_Zoho_Conn {
 
 
 	private function setConfig() {
-		/*
-		$upload = wp_upload_dir();
-		$upload_dir = $upload['basedir'];
-		$upload_dir = $upload_dir . '/w3s-cf7-zoho';
 
-		if (file_exists($upload_dir.'/config.php')){
-
-			$confFile = $upload_dir .'/config.php';
-
-			$conf = require $confFile;
-			if(!empty($conf)){
-				$this->auth = true;
-				$this->zohoConfig = $conf;
-			}
-		} else {
-			$this->auth = false;
-		}*/// ss00;
 
 		$getConfig = get_option( '_zoho_config' );// ss00
 		if ( $getConfig ) {
@@ -549,25 +478,24 @@ class W3s_Cf7_Zoho_Conn {
 
 	public function noticeAdmin() {
 		?>
-		<div class="notice notice-error is-dismissible">
-			<p><?php _e( 'Problem in your Zoho Authentication.', 'w3s-cf7-zoho' ); ?></p>
-		</div>
-		<?php
+<div class="notice notice-error is-dismissible">
+    <p><?php _e( 'Problem in your Zoho Authentication.', 'w3s-cf7-zoho' ); ?></p>
+</div>
+<?php
 	}
 
-	public function genToken( $grantToken, $config ) {
+	public function genToken($config ) {
 
-		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho-conn/vendor/autoload.php';
+		require_once plugin_dir_path( dirname( __FILE__ ) ) . 'includes/zoho.php';
 
 		try {
-			ZCRMRestClient::initialize( $config );
-			$oAuthClient = ZohoOAuth::getClientInstance();
-			$oAuthTokens = $oAuthClient->generateAccessToken( $grantToken );
+			$oAuthTokens = zAuth($config);
+			$this->authInfoInstance->setInfo('refresh_token', true)->storeInfo();
 
-			do_action( 'w3s_cf7_zoho_after_token_generation' );
+			$infos->setInfo( 'zoho_authorized', true )->storeInfo();
 
 			return true;
-		} catch ( ZCRMException $exception ) {
+		} catch ( Exception $exception ) {
 			add_action( 'admin_notices', array( $this, 'noticeAdmin' ) );
 			return false;
 		}
