@@ -3,7 +3,7 @@ Contributors: w3scloud
 Donate link: https://w3scloud.com/contact/
 Tags: Zoho CRM, Zoho, Contact form 7, API, Leads, CRM, W3SCloud
 Requires at least: 5.2
-Tested up to: 6.2
+Tested up to: 6.6.2
 Stable tag: trunk
 Requires PHP: 7.4
 License: GPLv2 or later
