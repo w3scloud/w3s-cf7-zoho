@@ -1,7 +1,7 @@
 === W3SCloud Contact Form 7 to Zoho CRM ===
 Contributors: w3scloud
 Donate link: https://w3scloud.com/contact/
-Tags: Zoho CRM, Zoho, Contact form 7, API, Leads, CRM, W3SCloud
+Tags: Zoho CRM, Zoho, Contact form 7, crm, w3scloud
 Requires at least: 5.2
 Tested up to: 6.6.2
 Stable tag: trunk
