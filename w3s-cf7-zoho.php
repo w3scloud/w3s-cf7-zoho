@@ -13,6 +13,8 @@
  * Version:           3.0
  * Author:            W3SCloud Technology
  * Author URI:        https://w3scloud.com/
+ * Developer:         Mohammad Hasan
+ * Developer URI:     https://github.com/hm91hassan
  * License:           GPL-2.0+
  * License URI:       http://www.gnu.org/licenses/gpl-2.0.txt
  * Text Domain:       w3s-cf7-zoho

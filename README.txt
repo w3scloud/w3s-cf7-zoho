@@ -1,5 +1,5 @@
 === W3SCloud Contact Form 7 to Zoho CRM ===
-Contributors: w3scloud
+Contributors: w3scloud, hm91hassan
 Donate link: https://w3scloud.com/contact/
 Tags: Zoho CRM, Zoho, Contact form 7, crm, w3scloud
 Requires at least: 5.2
@@ -76,6 +76,11 @@ At this moment we only support inserting into the "Leads" module.
 3. New Integration page.
 4. Field Mapping Process for integration.
 
+
+== Credits ==
+
+**Developer:**
+Mohammad Hasan - https://github.com/hm91hassan
 
 == Changelog ==
 

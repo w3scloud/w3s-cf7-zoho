@@ -238,22 +238,32 @@ class ZohoAuthInfos {
 		  CURLOPT_HTTPHEADER => $headers,
 		));
 		$response = curl_exec($curl);
-		
+		$statusCode = curl_getinfo($curl, CURLINFO_HTTP_CODE);
 		curl_close($curl);
 		$responseBody = json_decode($response, true);
 
-		if(isset($responseBody['data'][0]['status'])){
-			return $responseBody['data'][0]['message'];
+		// Return full response data including status and message
+		$result = array(
+			'status_code' => $statusCode,
+			'response_body' => $responseBody,
+			'raw_response' => $response,
+		);
 
+		if(isset($responseBody['data'][0]['status'])){
+			$result['status'] = $responseBody['data'][0]['status'];
+			$result['message'] = $responseBody['data'][0]['message'];
+			$result['details'] = isset($responseBody['data'][0]['details']) ? $responseBody['data'][0]['details'] : array();
 		}else{
 			if(isset($responseBody['message'])){
-				return $responseBody['message'];
+				$result['status'] = 'error';
+				$result['message'] = $responseBody['message'];
 			}else{
-				return 'something worng';
+				$result['status'] = 'error';
+				$result['message'] = 'something wrong';
 			}
-			
 		}
 		
+		return $result;
        
     }
 

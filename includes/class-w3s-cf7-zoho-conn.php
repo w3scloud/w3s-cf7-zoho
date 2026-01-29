@@ -102,6 +102,12 @@ class W3s_Cf7_Zoho_Conn {
 					$responseIn =  $this->authInfoInstance->zohoUpsert($module,$records);
 					do_action( 'w3s_cf7_zoho_on_update_record', $responseIn );
 				}
+				
+				// Return response with records data for logging
+				return array(
+					'response' => $responseIn,
+					'records_sent' => $records,
+				);
 			}
 	
 			// var_dump($records);die;
@@ -125,7 +131,10 @@ class W3s_Cf7_Zoho_Conn {
 
 		} catch ( Exception $exception ) {
 			add_action( 'admin_notices', array( $this, 'noticeAdmin' ) );
+			return 'Error: ' . $exception->getMessage();
 		}
+		
+		return '';
 	}
 
 	/**

@@ -59,6 +59,9 @@ class W3s_Cf7_Zoho_Admin {
 		add_action( 'load-w3s_cf7_page_w3s-cf7-zoho', array( $this, 'processTokenGeneration' ), 0 );
 		add_filter( 'plugin_action_links_w3s-cf7-zoho/w3s-cf7-zoho.php', array( $this, 'w3s_cf7_add_plugin_page_settings_link' ) );
 		add_action( 'wpcf7_before_send_mail', array( $this, 'run_on_cf7_submit' ), 10, 1 );
+		
+		// Add log view menu
+		add_action( 'admin_menu', array( $this, 'add_log_view_menu' ), 20 );
 	}
 
 	/**
@@ -281,7 +284,7 @@ class W3s_Cf7_Zoho_Admin {
 		$labels = array(
 			'name'                  => _x( 'Integrations', 'Post Type General Name', 'w3s-cf7-zoho' ),
 			'singular_name'         => _x( 'Integration', 'Post Type Singular Name', 'w3s-cf7-zoho' ),
-			'menu_name'             => __( 'Integrations', 'w3s-cf7-zoho' ),
+			'menu_name'             => __( 'W3S CF7 to CRM', 'w3s-cf7-zoho' ),
 			'name_admin_bar'        => __( 'Integration', 'w3s-cf7-zoho' ),
 			'archives'              => __( 'Integration Archives', 'w3s-cf7-zoho' ),
 			'attributes'            => __( 'Integration Attributes', 'w3s-cf7-zoho' ),
@@ -379,7 +382,30 @@ class W3s_Cf7_Zoho_Admin {
 							if ( $custom != '' ) {
 								$record[ $zohoField ] = array( 'text', $custom );
 							} else {
-								$record[ $zohoField ] = array( $zoho->getDataType( $cf7_field ), $formData[ $zoho->removeDataType( $cf7_field ) ] );
+								// Extract the actual field name from the CF7 field mapping
+								$cf7_field_name = $zoho->removeDataType( $cf7_field );
+								
+								// Check if the field exists in the posted form data
+								if ( isset( $formData[ $cf7_field_name ] ) ) {
+									$field_value = $formData[ $cf7_field_name ];
+									
+									// Get the Zoho data type to determine if empty values should be allowed
+									$zoho_data_type = $zoho->getDataType( $zohoField );
+									
+									// For textarea and text fields, allow empty strings (user might want to clear a field)
+									// For other fields, skip if empty to avoid sending invalid data
+									$allow_empty = in_array( $zoho_data_type, array( 'textarea', 'text' ), true );
+									
+									// Add to record if value is not null and (empty is allowed OR value is not empty)
+									if ( $field_value !== null && ( $allow_empty || $field_value !== '' ) ) {
+										$record[ $zohoField ] = array( $zoho->getDataType( $cf7_field ), $field_value );
+									}
+								} else {
+									// Field not found in form data - log for debugging but don't break
+									if ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+										error_log( 'W3S CF7 Zoho: Field "' . $cf7_field_name . '" not found in form data. CF7 Field: ' . $cf7_field . ', Zoho Field: ' . $zohoField );
+									}
+								}
 							}
 						}
 					}
@@ -399,7 +425,52 @@ class W3s_Cf7_Zoho_Admin {
 						$files = $contact_form->uploaded_files();
 					}
 
-					$zoho->createRecord( $recordsArray, $upsert, $module, $files );
+					$result = $zoho->createRecord( $recordsArray, $upsert, $module, $files );
+					
+					// Extract response and data sent
+					if ( is_array( $result ) && isset( $result['response'] ) && isset( $result['records_sent'] ) ) {
+						$zoho_response = $result['response'];
+						$data_sent_to_zoho = $result['records_sent'];
+						
+						// Determine status from Zoho response
+						$status = 'error';
+						$zoho_message = '';
+						
+						if ( is_array( $zoho_response ) ) {
+							// Check status field first (most reliable)
+							if ( isset( $zoho_response['status'] ) ) {
+								$status = strtolower( $zoho_response['status'] ) === 'success' ? 'success' : 'error';
+							}
+							// Check HTTP status code
+							elseif ( isset( $zoho_response['status_code'] ) && $zoho_response['status_code'] >= 200 && $zoho_response['status_code'] < 300 ) {
+								$status = 'success';
+							}
+							// Check response body for success indicators
+							elseif ( isset( $zoho_response['response_body']['data'][0]['status'] ) ) {
+								$status = strtolower( $zoho_response['response_body']['data'][0]['status'] ) === 'success' ? 'success' : 'error';
+							}
+							
+							// Get the message from response
+							if ( isset( $zoho_response['message'] ) ) {
+								$zoho_message = $zoho_response['message'];
+							} elseif ( isset( $zoho_response['response_body']['data'][0]['message'] ) ) {
+								$zoho_message = $zoho_response['response_body']['data'][0]['message'];
+							}
+						} elseif ( is_string( $zoho_response ) ) {
+							// If response is a string, check for success keywords
+							$zoho_message = $zoho_response;
+							$success_keywords = array( 'success', 'created', 'updated', 'record added', 'record created', 'record updated' );
+							foreach ( $success_keywords as $keyword ) {
+								if ( stripos( $zoho_response, $keyword ) !== false ) {
+									$status = 'success';
+									break;
+								}
+							}
+						}
+						
+						// Log the transfer with actual data sent to Zoho
+						$this->log_data_transfer( $data_sent_to_zoho, $module, $zoho_response, $status, $cf7ID, $zoho_message );
+					}
 				}
 			}
 		}
@@ -505,6 +576,215 @@ class W3s_Cf7_Zoho_Admin {
 		?>
 <div class="notice notice-error is-dismissible">
     <p><?php _e( 'Already authenticated or something wrong!', 'w3s-cf7-zoho' ); ?></p>
+</div>
+<?php
+	}
+
+	/**
+	 * Add log view menu page
+	 */
+	public function add_log_view_menu() {
+		add_submenu_page(
+			'edit.php?post_type=w3s_cf7',
+			'Data Transfer Logs',
+			'Data Transfer Logs',
+			'manage_options',
+			'w3s-cf7-zoho-logs',
+			array( $this, 'render_log_view_page' )
+		);
+	}
+
+	/**
+	 * Log data transfer to database
+	 *
+	 * @param array  $data_sent Data sent to Zoho (actual API payload)
+	 * @param string $module Zoho module name
+	 * @param mixed  $response Full response from Zoho
+	 * @param string $status Status (success/error)
+	 * @param int    $cf7_form_id Contact Form 7 form ID
+	 * @param string $zoho_message Zoho response message
+	 */
+	public function log_data_transfer( $data_sent, $module, $response, $status = 'success', $cf7_form_id = 0, $zoho_message = '' ) {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'cf7tozoholog';
+		
+		$log_data = array(
+			'date' => current_time( 'mysql' ),
+			'data_sent' => $data_sent, // Store actual data sent to Zoho API
+			'module' => $module,
+			'response' => $response, // Store full response
+			'status' => $status,
+			'cf7_form_id' => $cf7_form_id,
+			'zoho_message' => $zoho_message, // Store Zoho message separately
+		);
+		
+		$log_entry = json_encode( $log_data );
+		
+		$wpdb->insert(
+			$table_name,
+			array(
+				'date' => current_time( 'mysql' ),
+				'text' => base64_encode( $log_entry ),
+			),
+			array( '%s', '%s' )
+		);
+	}
+
+	/**
+	 * Render log view page
+	 */
+	public function render_log_view_page() {
+		global $wpdb;
+		$table_name = $wpdb->prefix . 'cf7tozoholog';
+		
+		// Handle log deletion
+		if ( isset( $_GET['action'] ) && $_GET['action'] === 'delete' && isset( $_GET['log_id'] ) && check_admin_referer( 'delete_log_' . $_GET['log_id'] ) ) {
+			$log_id = intval( $_GET['log_id'] );
+			$wpdb->delete( $table_name, array( 'id' => $log_id ), array( '%d' ) );
+			echo '<div class="notice notice-success is-dismissible"><p>Log deleted successfully.</p></div>';
+		}
+		
+		// Handle clear all logs
+		if ( isset( $_POST['clear_all_logs'] ) && check_admin_referer( 'clear_all_logs' ) ) {
+			$wpdb->query( "TRUNCATE TABLE {$table_name}" );
+			echo '<div class="notice notice-success is-dismissible"><p>All logs cleared successfully.</p></div>';
+		}
+		
+		// Get logs
+		$per_page = 20;
+		$current_page = isset( $_GET['paged'] ) ? max( 1, intval( $_GET['paged'] ) ) : 1;
+		$offset = ( $current_page - 1 ) * $per_page;
+		
+		$total_logs = $wpdb->get_var( "SELECT COUNT(*) FROM {$table_name}" );
+		$logs = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table_name} ORDER BY date DESC LIMIT %d OFFSET %d", $per_page, $offset ) );
+		
+		?>
+<div class="wrap">
+    <h1><?php _e( 'Data Transfer Logs', 'w3s-cf7-zoho' ); ?></h1>
+
+    <div style="margin: 20px 0;">
+        <form method="post" style="display: inline;">
+            <?php wp_nonce_field( 'clear_all_logs' ); ?>
+            <input type="submit" name="clear_all_logs" class="button button-secondary" value="Clear All Logs"
+                onclick="return confirm('Are you sure you want to delete all logs? This action cannot be undone.');">
+        </form>
+        <span style="margin-left: 20px;">Total Logs: <strong><?php echo esc_html( $total_logs ); ?></strong></span>
+    </div>
+
+    <table class="wp-list-table widefat fixed striped">
+        <thead>
+            <tr>
+                <th style="width: 10%;">Date/Time</th>
+                <th style="width: 15%;">Module</th>
+                <th style="width: 10%;">Status</th>
+                <th style="width: 35%;">Data Sent</th>
+                <th style="width: 20%;">Response</th>
+                <th style="width: 10%;">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php if ( empty( $logs ) ) : ?>
+            <tr>
+                <td colspan="6" style="text-align: center; padding: 20px;">
+                    <em><?php _e( 'No logs found.', 'w3s-cf7-zoho' ); ?></em>
+                </td>
+            </tr>
+            <?php else : ?>
+            <?php foreach ( $logs as $log ) : 
+							$log_data = json_decode( base64_decode( $log->text ), true );
+							if ( ! $log_data ) {
+								// Fallback for old log format
+								$log_data = array(
+									'date' => $log->date,
+									'data_sent' => '',
+									'module' => 'Unknown',
+									'response' => base64_decode( $log->text ),
+									'status' => 'info',
+									'cf7_form_id' => 0,
+									'zoho_message' => '',
+								);
+							}
+							// Handle both old format (JSON string) and new format (array)
+							$data_sent = is_array( $log_data['data_sent'] ) ? $log_data['data_sent'] : ( is_string( $log_data['data_sent'] ) ? json_decode( $log_data['data_sent'], true ) : array() );
+							$status = isset( $log_data['status'] ) ? $log_data['status'] : 'info';
+							$module = isset( $log_data['module'] ) ? $log_data['module'] : 'Unknown';
+							$response = isset( $log_data['response'] ) ? $log_data['response'] : '';
+							$zoho_message = isset( $log_data['zoho_message'] ) ? $log_data['zoho_message'] : '';
+							
+							// Extract message from response if not stored separately
+							if ( empty( $zoho_message ) && is_array( $response ) ) {
+								$zoho_message = isset( $response['message'] ) ? $response['message'] : '';
+							} elseif ( empty( $zoho_message ) && is_string( $response ) ) {
+								$zoho_message = $response;
+							}
+						?>
+            <tr>
+                <td><?php echo esc_html( $log->date ); ?></td>
+                <td><strong><?php echo esc_html( $module ); ?></strong></td>
+                <td>
+                    <span style="padding: 3px 8px; border-radius: 3px; font-size: 11px; font-weight: bold; 
+										<?php 
+										if ( $status === 'success' ) {
+											echo 'background: #46b450; color: white;';
+										} elseif ( $status === 'error' ) {
+											echo 'background: #dc3232; color: white;';
+										} else {
+											echo 'background: #00a0d2; color: white;';
+										}
+										?>">
+                        <?php echo esc_html( strtoupper( $status ) ); ?>
+                    </span>
+                </td>
+                <td>
+                    <details>
+                        <summary style="cursor: pointer; color: #0073aa;">View Data
+                            (<?php echo is_array( $data_sent ) ? count( $data_sent ) : 0; ?> fields)</summary>
+                        <pre
+                            style="max-height: 200px; overflow: auto; background: #f5f5f5; padding: 10px; margin: 5px 0; border: 1px solid #ddd; font-size: 11px;"><?php echo esc_html( print_r( $data_sent, true ) ); ?></pre>
+                    </details>
+                </td>
+                <td>
+                    <?php if ( ! empty( $zoho_message ) ) : ?>
+                    <div
+                        style="margin-bottom: 5px; font-weight: bold; color: <?php echo $status === 'success' ? '#46b450' : '#dc3232'; ?>;">
+                        <?php echo esc_html( $zoho_message ); ?>
+                    </div>
+                    <?php endif; ?>
+                    <details>
+                        <summary style="cursor: pointer; color: #0073aa;">View Full Response</summary>
+                        <pre
+                            style="max-height: 150px; overflow: auto; background: #f5f5f5; padding: 10px; margin: 5px 0; border: 1px solid #ddd; font-size: 11px;"><?php echo esc_html( is_string( $response ) ? $response : print_r( $response, true ) ); ?></pre>
+                    </details>
+                </td>
+                <td>
+                    <a href="<?php echo esc_url( wp_nonce_url( admin_url( 'edit.php?post_type=w3s_cf7&page=w3s-cf7-zoho-logs&action=delete&log_id=' . $log->id ), 'delete_log_' . $log->id ) ); ?>"
+                        class="button button-small"
+                        onclick="return confirm('Are you sure you want to delete this log?');">Delete</a>
+                </td>
+            </tr>
+            <?php endforeach; ?>
+            <?php endif; ?>
+        </tbody>
+    </table>
+
+    <?php
+			// Pagination
+			if ( $total_logs > $per_page ) {
+				$total_pages = ceil( $total_logs / $per_page );
+				echo '<div class="tablenav">';
+				echo '<div class="tablenav-pages">';
+				echo paginate_links( array(
+					'base' => add_query_arg( 'paged', '%#%' ),
+					'format' => '',
+					'prev_text' => '&laquo;',
+					'next_text' => '&raquo;',
+					'total' => $total_pages,
+					'current' => $current_page,
+				) );
+				echo '</div>';
+				echo '</div>';
+			}
+			?>
 </div>
 <?php
 	}
