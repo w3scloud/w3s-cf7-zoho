@@ -84,6 +84,10 @@ Mohammad Hasan - https://github.com/hm91hassan
 
 == Changelog ==
 
+= 3.1 =
+Response log added.
+Minor bug fixed.
+
 = 3.0 =
 Zoho CRM PHP SDK Remove.
 Build Auth system using API
